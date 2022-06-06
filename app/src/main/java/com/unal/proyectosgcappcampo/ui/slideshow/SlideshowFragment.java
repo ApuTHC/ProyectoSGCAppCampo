@@ -93,6 +93,8 @@ public class SlideshowFragment extends Fragment {
     List<List<EditText>> ListaEditText = new ArrayList<List<EditText>>();
     List<List<Spinner>> ListaSpinner = new ArrayList<List<Spinner>>();
 
+    boolean subida = false;
+
 
     //Format UGS
     List<Integer> listContDiscontinuidades = new ArrayList<Integer>();
@@ -244,7 +246,7 @@ public class SlideshowFragment extends Fragment {
 
             Button bAcordion = new Button(mcont);
             bAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+            bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
             bAcordion.setText("Formato UGS Rocas");
             bAcordion.setTag(idLinear);
             listBtnAcordion.add(bAcordion);
@@ -254,13 +256,13 @@ public class SlideshowFragment extends Fragment {
             liForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             liForm.setOrientation(LinearLayout.VERTICAL);
             liForm.setBackgroundColor(0x33333300);
-            liForm.setVisibility(View.GONE);
+            //liForm.setVisibility(View.GONE);
 
             bAcordion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    if (liForm.getVisibility() == View.VISIBLE) {
+                    Log.d("jaaj", "onClick: "+listFormularios);
+                    if (listLiForm.get(Integer.parseInt(v.getTag().toString())).getVisibility() == View.VISIBLE) {
                         ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
                         animation.setDuration(220);
                         animation.setFillAfter(true);
@@ -270,23 +272,23 @@ public class SlideshowFragment extends Fragment {
                             }
                             @Override
                             public void onAnimationEnd(Animation animation) {
-                                liForm.setVisibility(View.GONE);
-                                bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.GONE);
+                                listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
                             }
                             @Override
                             public void onAnimationRepeat(Animation animation) {
                             }
                         });
-                        liForm.startAnimation(animation);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
 
                     }
                     else {
                         ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
                         animation.setDuration(220);
                         animation.setFillAfter(true);
-                        liForm.startAnimation(animation);
-                        liForm.setVisibility(View.VISIBLE);
-                        bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
+                        listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
                     }
 
                 }
@@ -304,19 +306,6 @@ public class SlideshowFragment extends Fragment {
             tvTitulo.setPadding(0, 70, 0, 70);
             liForm.addView(tvTitulo);
 
-            Button bBorrarForm = new Button(mcont);
-            bBorrarForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            bBorrarForm.setText("Borrar Este Formulario");
-            bBorrarForm.setTag(idLinear);
-            bBorrarForm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listLiForm.get(Integer.parseInt(v.getTag().toString())).removeAllViews();
-                    liFormularios.removeView(listBtnAcordion.get(Integer.parseInt(v.getTag().toString())));
-                    listFormularios.set(Integer.parseInt(v.getTag().toString()), "Ninguno");
-                }
-            });
-            liForm.addView(bBorrarForm);
 
             //------------> Numero de Formato
 
@@ -1507,17 +1496,20 @@ public class SlideshowFragment extends Fragment {
             Button bFotosAnexas = new Button(mcont);
             bFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             bFotosAnexas.setText("Añadir Foto");
+            bFotosAnexas.setTag(idLinear);
             bFotosAnexas.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.plus_circle, 0);
             bFotosAnexas.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listContFotosAnexas.set(idLinear, listContFotosAnexas.get(idLinear) + 1);
+                    listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
 
                     Button bFotosAnexasAcordion = new Button(mcont);
                     bFotosAnexasAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
-                    bFotosAnexasAcordion.setText("Foto "+ listContFotosAnexas.get(idLinear));
-                    bFotosAnexasAcordion.setTag(idLinear);
+
+                    String foto = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
+                    bFotosAnexasAcordion.setText(foto);
+                    bFotosAnexasAcordion.setTag(Integer.parseInt(v.getTag().toString()));
                     liFormFotosAnexas.addView(bFotosAnexasAcordion);
 
                     LinearLayout liFotosAnexas = new LinearLayout(mcont);
@@ -1530,7 +1522,7 @@ public class SlideshowFragment extends Fragment {
 
                     bFotosAnexasAcordion.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View vi) {
 
                             if (liFotosAnexas.getVisibility() == View.VISIBLE) {
                                 ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
@@ -1566,7 +1558,8 @@ public class SlideshowFragment extends Fragment {
 
                     TextView tvNameFotos = new TextView(mcont);
                     tvNameFotos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvNameFotos.setText("Foto "+ listContFotosAnexas.get(idLinear));
+                    String foto1 = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
+                    tvNameFotos.setText(foto1);
                     tvNameFotos.setTextAppearance(R.style.TituloFormato);
                     tvNameFotos.setPadding(0, 100, 0, 50);
                     liFotosAnexas.addView(tvNameFotos);
@@ -1610,6 +1603,22 @@ public class SlideshowFragment extends Fragment {
             liForm.addView(bFotosAnexas);
 
 
+            Button bBorrarForm = new Button(mcont);
+            bBorrarForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bBorrarForm.setText("Borrar Este Formulario");
+            bBorrarForm.setTag(idLinear);
+            bBorrarForm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("jaaj", "BOrrarRocas: "+listFormularios);
+                    listLiForm.get(Integer.parseInt(v.getTag().toString())).removeAllViews();
+                    liFormularios.removeView(listBtnAcordion.get(Integer.parseInt(v.getTag().toString())));
+                    listFormularios.set(Integer.parseInt(v.getTag().toString()), "Ninguno");
+                }
+            });
+            liForm.addView(bBorrarForm);
+
+
             listLiForm.add(liForm);
             liFormularios.addView(liForm);
         }
@@ -1618,7 +1627,7 @@ public class SlideshowFragment extends Fragment {
 
             Button bAcordion = new Button(mcont);
             bAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+            bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
             bAcordion.setText("Formato UGS Suelos");
             bAcordion.setTag(idLinear);
             listBtnAcordion.add(bAcordion);
@@ -1628,13 +1637,14 @@ public class SlideshowFragment extends Fragment {
             liForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             liForm.setOrientation(LinearLayout.VERTICAL);
             liForm.setBackgroundColor(0x33333300);
-            liForm.setVisibility(View.GONE);
+            //liForm.setVisibility(View.GONE);
+            liForm.setTag(idLinear);
 
             bAcordion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    if (liForm.getVisibility() == View.VISIBLE) {
+                    Log.d("jaaj", "onClick: "+listFormularios);
+                    if (listLiForm.get(Integer.parseInt(v.getTag().toString())).getVisibility() == View.VISIBLE) {
                         ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
                         animation.setDuration(220);
                         animation.setFillAfter(true);
@@ -1644,23 +1654,23 @@ public class SlideshowFragment extends Fragment {
                             }
                             @Override
                             public void onAnimationEnd(Animation animation) {
-                                liForm.setVisibility(View.GONE);
-                                bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.GONE);
+                                listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
                             }
                             @Override
                             public void onAnimationRepeat(Animation animation) {
                             }
                         });
-                        liForm.startAnimation(animation);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
 
                     }
                     else {
                         ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
                         animation.setDuration(220);
                         animation.setFillAfter(true);
-                        liForm.startAnimation(animation);
-                        liForm.setVisibility(View.VISIBLE);
-                        bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
+                        listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
                     }
 
                 }
@@ -1678,19 +1688,6 @@ public class SlideshowFragment extends Fragment {
             tvTitulo.setPadding(0, 70, 0, 70);
             liForm.addView(tvTitulo);
 
-            Button bBorrarForm = new Button(mcont);
-            bBorrarForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            bBorrarForm.setText("Borrar Este Formulario");
-            bBorrarForm.setTag(idLinear);
-            bBorrarForm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listLiForm.get(Integer.parseInt(v.getTag().toString())).removeAllViews();
-                    liFormularios.removeView(listBtnAcordion.get(Integer.parseInt(v.getTag().toString())));
-                    listFormularios.set(Integer.parseInt(v.getTag().toString()), "Ninguno");
-                }
-            });
-            liForm.addView(bBorrarForm);
 
             //------------> Numero de Formato
 
@@ -2331,79 +2328,6 @@ public class SlideshowFragment extends Fragment {
             liForm.addView(sEstructurasRelictas2);
 
 
-
-            //------------> Grado meteorización  1
-
-            TextView tvGradoMeteo1 = new TextView(mcont);
-            tvGradoMeteo1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvGradoMeteo1.setText("Grado de Meteorización Litología 1");
-            tvGradoMeteo1.setTextAppearance(R.style.TituloItem);
-            tvGradoMeteo1.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvGradoMeteo1);
-
-            Spinner sGradoMeteo1 = new Spinner(mcont);
-            sGradoMeteo1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter9 = ArrayAdapter.createFromResource(mcont, R.array.GradoMeteo1, android.R.layout.simple_spinner_item);
-            adapter9.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sGradoMeteo1.setAdapter(adapter9);
-            sGradoMeteo1.setTag("gradometeo1");
-            ListaSpinner.get(idLinear).add(sGradoMeteo1);
-            liForm.addView(sGradoMeteo1);
-
-            //------------> Grado meteorización  2
-
-            TextView tvGradoMeteo2 = new TextView(mcont);
-            tvGradoMeteo2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvGradoMeteo2.setText("Grado de Meteorización Litología 2");
-            tvGradoMeteo2.setTextAppearance(R.style.TituloItem);
-            tvGradoMeteo2.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvGradoMeteo2);
-
-            Spinner sGradoMeteo2 = new Spinner(mcont);
-            sGradoMeteo2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter10 = ArrayAdapter.createFromResource(mcont, R.array.GradoMeteo2, android.R.layout.simple_spinner_item);
-            adapter10.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sGradoMeteo2.setAdapter(adapter10);
-            sGradoMeteo2.setTag("gradometeo2");
-            ListaSpinner.get(idLinear).add(sGradoMeteo2);
-            liForm.addView(sGradoMeteo2);
-
-            //------------> Resistenca a la compresion  1
-
-            TextView tvResistenciaComp1 = new TextView(mcont);
-            tvResistenciaComp1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvResistenciaComp1.setText("Resistencia a la Compresión Simple (Mpa) Litología 1");
-            tvResistenciaComp1.setTextAppearance(R.style.TituloItem);
-            tvResistenciaComp1.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvResistenciaComp1);
-
-            Spinner sResistenciaComp1 = new Spinner(mcont);
-            sResistenciaComp1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter11 = ArrayAdapter.createFromResource(mcont, R.array.ResistenciaCompresionSimple1, android.R.layout.simple_spinner_item);
-            adapter11.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sResistenciaComp1.setAdapter(adapter11);
-            sResistenciaComp1.setTag("resistenciacomp1");
-            ListaSpinner.get(idLinear).add(sResistenciaComp1);
-            liForm.addView(sResistenciaComp1);
-
-            //------------> Resistenca a la compresion  2
-
-            TextView tvResistenciaComp2 = new TextView(mcont);
-            tvResistenciaComp2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvResistenciaComp2.setText("Resistencia a la Compresión Simple (Mpa) Litología 2");
-            tvResistenciaComp2.setTextAppearance(R.style.TituloItem);
-            tvResistenciaComp2.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvResistenciaComp2);
-
-            Spinner sResistenciaComp2 = new Spinner(mcont);
-            sResistenciaComp2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter12 = ArrayAdapter.createFromResource(mcont, R.array.ResistenciaCompresionSimple2, android.R.layout.simple_spinner_item);
-            adapter12.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sResistenciaComp2.setAdapter(adapter12);
-            sResistenciaComp2.setTag("resistenciacomp2");
-            ListaSpinner.get(idLinear).add(sResistenciaComp2);
-            liForm.addView(sResistenciaComp2);
-
             //------------> Color 1
 
             TextView tvColor1 = new TextView(mcont);
@@ -2421,359 +2345,793 @@ public class SlideshowFragment extends Fragment {
             ListaEditText.get(idLinear).add(etColor1);
             liForm.addView(etColor1);
 
+            //------------> Color 2
+
+            TextView tvColor2 = new TextView(mcont);
+            tvColor2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvColor2.setText("Color Litología 2");
+            tvColor2.setTextAppearance(R.style.TituloItem);
+            tvColor2.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvColor2);
+
+            EditText etColor2 = new EditText(mcont);
+            etColor2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            etColor2.setHint("Color Litología 2");
+            etColor2.setEms(10);
+            etColor2.setTag("color2");
+            ListaEditText.get(idLinear).add(etColor2);
+            liForm.addView(etColor2);
 
 
-
-            //------------> LEVANTAMIENTO DE DISCONTINUIDADES
+            //------------> Caracteristicas clastos
 
             TextView tvLevantamientoDisc = new TextView(mcont);
             tvLevantamientoDisc.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvLevantamientoDisc.setText("LEVANTAMIENTO DE DISCONTINUIDADES");
+            tvLevantamientoDisc.setText("CARACTERÍSTICAS DE LOS CLASTOS");
             tvLevantamientoDisc.setTextAppearance(R.style.TituloFormato);
             tvLevantamientoDisc.setPadding(0, mtop, 0, 20);
             liForm.addView(tvLevantamientoDisc);
 
-            liFormDiscontinuidades = new LinearLayout(mcont);
-            liFormDiscontinuidades.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liFormDiscontinuidades.setOrientation(LinearLayout.VERTICAL);
-            liForm.addView(liFormDiscontinuidades);
+            //------------> GRANULOMETRÍA ASTM (%)  1
 
-            Button bAnadirDiscont = new Button(mcont);
-            bAnadirDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            bAnadirDiscont.setText("Añadir Discontinuidad");
-            bAnadirDiscont.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    LinearLayout liDiscontinuidades = new LinearLayout(mcont);
-                    liDiscontinuidades.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    liDiscontinuidades.setOrientation(LinearLayout.VERTICAL);
-                    liFormDiscontinuidades.addView(liDiscontinuidades);
-                    listDiscontinuidades.add(liDiscontinuidades);
+            TextView tvGranulometria1 = new TextView(mcont);
+            tvGranulometria1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvGranulometria1.setText("Granulometria Litología 1");
+            tvGranulometria1.setTextAppearance(R.style.TituloItem);
+            tvGranulometria1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvGranulometria1);
 
+            Spinner sGranulometria1 = new Spinner(mcont);
+            sGranulometria1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter9 = ArrayAdapter.createFromResource(mcont, R.array.Granulometria1, android.R.layout.simple_spinner_item);
+            adapter9.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sGranulometria1.setAdapter(adapter9);
+            sGranulometria1.setTag("granulometria1");
+            ListaSpinner.get(idLinear).add(sGranulometria1);
+            liForm.addView(sGranulometria1);
 
-                    listContDiscontinuidades.set(idLinear, listContDiscontinuidades.get(idLinear) + 1);
+            //------------> GRANULOMETRÍA ASTM (%)  2
 
+            TextView tvGranulometria2 = new TextView(mcont);
+            tvGranulometria2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvGranulometria2.setText("Granulometria Litología 2");
+            tvGranulometria2.setTextAppearance(R.style.TituloItem);
+            tvGranulometria2.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvGranulometria2);
 
-                    TextView tvNameDiscont = new TextView(mcont);
-                    tvNameDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvNameDiscont.setText("Discontinuidad "+ listContDiscontinuidades.get(idLinear));
-                    tvNameDiscont.setTextAppearance(R.style.TituloFormato);
-                    tvNameDiscont.setPadding(0, 100, 0, 50);
-                    liDiscontinuidades.addView(tvNameDiscont);
-
-
-                    //------------> Tipo
-
-                    TextView tvTipoDiscont = new TextView(mcont);
-                    tvTipoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvTipoDiscont.setText("Tipo");
-                    tvTipoDiscont.setTextAppearance(R.style.TituloItem);
-                    tvTipoDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvTipoDiscont);
-
-                    Spinner sTipoDiscont = new Spinner(mcont);
-                    sTipoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, R.array.TipoDiscont, android.R.layout.simple_spinner_item);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sTipoDiscont.setAdapter(adapter);
-                    sTipoDiscont.setTag("TipoDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaSpinner.get(idLinear).add(sTipoDiscont);
-                    liDiscontinuidades.addView(sTipoDiscont);
+            Spinner sGranulometria2 = new Spinner(mcont);
+            sGranulometria2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter10 = ArrayAdapter.createFromResource(mcont, R.array.Granulometria2, android.R.layout.simple_spinner_item);
+            adapter10.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sGranulometria2.setAdapter(adapter10);
+            sGranulometria2.setTag("granulometria2");
+            ListaSpinner.get(idLinear).add(sGranulometria2);
+            liForm.addView(sGranulometria2);
 
 
-                    //------------> Dir Buzamiento
+            //------------>  Forma 1
 
-                    TextView tvDirBuzamiento = new TextView(mcont);
-                    tvDirBuzamiento.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvDirBuzamiento.setText("Dir. Buzamiento (Az. Bz.) ");
-                    tvDirBuzamiento.setTextAppearance(R.style.TituloItem);
-                    tvDirBuzamiento.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvDirBuzamiento);
+            TextView tvForma1 = new TextView(mcont);
+            tvForma1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvForma1.setText("Forma Litología 1");
+            tvForma1.setTextAppearance(R.style.TituloItem);
+            tvForma1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvForma1);
 
-                    EditText etDirBuzamiento = new EditText(mcont);
-                    etDirBuzamiento.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etDirBuzamiento.setHint("Dir. Buzamiento (Az. Bz.) ");
-                    etDirBuzamiento.setEms(10);
-                    etDirBuzamiento.setTag("DirBuzamiento"+ listContDiscontinuidades.get(idLinear));
-                    ListaEditText.get(idLinear).add(etDirBuzamiento);
-                    liDiscontinuidades.addView(etDirBuzamiento);
+            Spinner sForma1 = new Spinner(mcont);
+            sForma1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter11 = ArrayAdapter.createFromResource(mcont, R.array.Forma1, android.R.layout.simple_spinner_item);
+            adapter11.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sForma1.setAdapter(adapter11);
+            sForma1.setTag("forma1");
+            ListaSpinner.get(idLinear).add(sForma1);
+            liForm.addView(sForma1);
 
-                    //------------> Buzamiento
+            //------------>  Forma 2
 
-                    TextView tvBuzamiento = new TextView(mcont);
-                    tvBuzamiento.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvBuzamiento.setText("Buzamiento (Bz.)");
-                    tvBuzamiento.setTextAppearance(R.style.TituloItem);
-                    tvBuzamiento.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvBuzamiento);
+            TextView tvForma2 = new TextView(mcont);
+            tvForma2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvForma2.setText("Forma Litología 2");
+            tvForma2.setTextAppearance(R.style.TituloItem);
+            tvForma2.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvForma2);
 
-                    EditText etBuzamiento = new EditText(mcont);
-                    etBuzamiento.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etBuzamiento.setHint("Buzamiento (Bz.)");
-                    etBuzamiento.setEms(10);
-                    etBuzamiento.setTag("Buzamiento"+ listContDiscontinuidades.get(idLinear));
-                    ListaEditText.get(idLinear).add(etBuzamiento);
-                    liDiscontinuidades.addView(etBuzamiento);
+            Spinner sForma2 = new Spinner(mcont);
+            sForma2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter12 = ArrayAdapter.createFromResource(mcont, R.array.Forma2, android.R.layout.simple_spinner_item);
+            adapter12.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sForma2.setAdapter(adapter12);
+            sForma2.setTag("forma2");
+            ListaSpinner.get(idLinear).add(sForma2);
+            liForm.addView(sForma2);
 
 
-                    //------------> Persistencia
+            //------------> Redondez   1
 
-                    TextView tvPersistenciaDiscont = new TextView(mcont);
-                    tvPersistenciaDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvPersistenciaDiscont.setText("Persistencia");
-                    tvPersistenciaDiscont.setTextAppearance(R.style.TituloItem);
-                    tvPersistenciaDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvPersistenciaDiscont);
+            TextView tvRedondez1 = new TextView(mcont);
+            tvRedondez1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvRedondez1.setText("Redondez Litología 1");
+            tvRedondez1.setTextAppearance(R.style.TituloItem);
+            tvRedondez1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvRedondez1);
 
-                    Spinner sPersistenciaDiscont = new Spinner(mcont);
-                    sPersistenciaDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(mcont, R.array.PersistenciaDiscont, android.R.layout.simple_spinner_item);
-                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sPersistenciaDiscont.setAdapter(adapter1);
-                    sPersistenciaDiscont.setTag("PersistenciaDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaSpinner.get(idLinear).add(sPersistenciaDiscont);
-                    liDiscontinuidades.addView(sPersistenciaDiscont);
+            Spinner sRedondez1 = new Spinner(mcont);
+            sRedondez1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter13 = ArrayAdapter.createFromResource(mcont, R.array.Redondez1, android.R.layout.simple_spinner_item);
+            adapter13.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sRedondez1.setAdapter(adapter13);
+            sRedondez1.setTag("redondez1");
+            ListaSpinner.get(idLinear).add(sRedondez1);
+            liForm.addView(sRedondez1);
 
-                    //------------> Ancho de Abertura
+            //------------> Redondez   2
 
-                    TextView tvAnchoAberDiscont = new TextView(mcont);
-                    tvAnchoAberDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvAnchoAberDiscont.setText("Ancho de Abertura");
-                    tvAnchoAberDiscont.setTextAppearance(R.style.TituloItem);
-                    tvAnchoAberDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvAnchoAberDiscont);
+            TextView tvRedondez2 = new TextView(mcont);
+            tvRedondez2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvRedondez2.setText("Redondez Litología 2");
+            tvRedondez2.setTextAppearance(R.style.TituloItem);
+            tvRedondez2.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvRedondez2);
 
-                    Spinner sAnchoAberDiscont = new Spinner(mcont);
-                    sAnchoAberDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(mcont, R.array.AnchoAberturaDiscont, android.R.layout.simple_spinner_item);
-                    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sAnchoAberDiscont.setAdapter(adapter2);
-                    sAnchoAberDiscont.setTag("AnchoAberDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaSpinner.get(idLinear).add(sAnchoAberDiscont);
-                    liDiscontinuidades.addView(sAnchoAberDiscont);
+            Spinner sRedondez2 = new Spinner(mcont);
+            sRedondez2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter14 = ArrayAdapter.createFromResource(mcont, R.array.Redondez2, android.R.layout.simple_spinner_item);
+            adapter14.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sRedondez2.setAdapter(adapter14);
+            sRedondez2.setTag("redondez2");
+            ListaSpinner.get(idLinear).add(sRedondez2);
+            liForm.addView(sRedondez2);
 
-                    //------------> Tipo de Relleno
 
-                    TextView tvTipoRellenoDiscont = new TextView(mcont);
-                    tvTipoRellenoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvTipoRellenoDiscont.setText("Tipo de Relleno");
-                    tvTipoRellenoDiscont.setTextAppearance(R.style.TituloItem);
-                    tvTipoRellenoDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvTipoRellenoDiscont);
+            //------------> Orientacion Clastos 1
 
-                    Spinner sTipoRellenoDiscont = new Spinner(mcont);
-                    sTipoRellenoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(mcont, R.array.TipoRellenoDiscont, android.R.layout.simple_spinner_item);
-                    adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sTipoRellenoDiscont.setAdapter(adapter3);
-                    sTipoRellenoDiscont.setTag("TipoRellenoDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaSpinner.get(idLinear).add(sTipoRellenoDiscont);
-                    liDiscontinuidades.addView(sTipoRellenoDiscont);
+            TextView tvOrientacion1 = new TextView(mcont);
+            tvOrientacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvOrientacion1.setText("Orientacion Litología 1");
+            tvOrientacion1.setTextAppearance(R.style.TituloItem);
+            tvOrientacion1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvOrientacion1);
 
-                    //------------> Rugosidad de la Superficie
+            Spinner sOrientacion1 = new Spinner(mcont);
+            sOrientacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter15 = ArrayAdapter.createFromResource(mcont, R.array.OrientacionClastos1, android.R.layout.simple_spinner_item);
+            adapter15.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sOrientacion1.setAdapter(adapter15);
+            sOrientacion1.setTag("orientacion1");
+            ListaSpinner.get(idLinear).add(sOrientacion1);
+            liForm.addView(sOrientacion1);
 
-                    TextView tvRugosidadSuperDiscont = new TextView(mcont);
-                    tvRugosidadSuperDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvRugosidadSuperDiscont.setText("Rugosidad de la Superficie");
-                    tvRugosidadSuperDiscont.setTextAppearance(R.style.TituloItem);
-                    tvRugosidadSuperDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvRugosidadSuperDiscont);
+            //------------> Orientacion Clastos 2
 
-                    Spinner sRugosidadSuperDiscont = new Spinner(mcont);
-                    sRugosidadSuperDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(mcont, R.array.RugosidadDiscont, android.R.layout.simple_spinner_item);
-                    adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sRugosidadSuperDiscont.setAdapter(adapter4);
-                    sRugosidadSuperDiscont.setTag("RugosidadSuperDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaSpinner.get(idLinear).add(sRugosidadSuperDiscont);
-                    liDiscontinuidades.addView(sRugosidadSuperDiscont);
+            TextView tvOrientacion2 = new TextView(mcont);
+            tvOrientacion2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvOrientacion2.setText("Orientacion Litología 2");
+            tvOrientacion2.setTextAppearance(R.style.TituloItem);
+            tvOrientacion2.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvOrientacion2);
 
-                    //------------> Forma de la Superficie
+            Spinner sOrientacion2 = new Spinner(mcont);
+            sOrientacion2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter16 = ArrayAdapter.createFromResource(mcont, R.array.OrientacionClastos2, android.R.layout.simple_spinner_item);
+            adapter16.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sOrientacion2.setAdapter(adapter16);
+            sOrientacion2.setTag("orientacion2");
+            ListaSpinner.get(idLinear).add(sOrientacion2);
+            liForm.addView(sOrientacion2);
 
-                    TextView tvFormaSuperDiscont = new TextView(mcont);
-                    tvFormaSuperDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvFormaSuperDiscont.setText("Forma de la Superficie");
-                    tvFormaSuperDiscont.setTextAppearance(R.style.TituloItem);
-                    tvFormaSuperDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvFormaSuperDiscont);
+            LinearLayout liFormdirimbri1 = new LinearLayout(mcont);
+            liFormdirimbri1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormdirimbri1.setOrientation(LinearLayout.VERTICAL);
 
-                    Spinner sFormaSuperDiscont = new Spinner(mcont);
-                    sFormaSuperDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter5 = ArrayAdapter.createFromResource(mcont, R.array.FormaSuperficieDiscont, android.R.layout.simple_spinner_item);
-                    adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sFormaSuperDiscont.setAdapter(adapter5);
-                    sFormaSuperDiscont.setTag("FormaSuperDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaSpinner.get(idLinear).add(sFormaSuperDiscont);
-                    liDiscontinuidades.addView(sFormaSuperDiscont);
+            liForm.addView(liFormdirimbri1);
 
-                    //------------> Humedad en Diaclasas
+            sOrientacion1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> spn, android.view.View v, int posicion, long id) {
+                    String selectForm = spn.getItemAtPosition(posicion).toString();
+                    if (selectForm.equals("Imbricado")) {
+                        //------------> Color 1
 
-                    TextView tvHumedadDiscont = new TextView(mcont);
-                    tvHumedadDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvHumedadDiscont.setText("Humedad en Diaclasas");
-                    tvHumedadDiscont.setTextAppearance(R.style.TituloItem);
-                    tvHumedadDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvHumedadDiscont);
+                        TextView DirImbricacion1 = new TextView(mcont);
+                        DirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        DirImbricacion1.setText("Dirección de la Imbricación Litología 1");
+                        DirImbricacion1.setTextAppearance(R.style.TituloItem);
+                        DirImbricacion1.setPadding(0, mtop, 0, 0);
+                        liFormdirimbri1.addView(DirImbricacion1);
 
-                    Spinner sHumedadDiscont = new Spinner(mcont);
-                    sHumedadDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter6 = ArrayAdapter.createFromResource(mcont, R.array.HumedadDiaclasasDiscont, android.R.layout.simple_spinner_item);
-                    adapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sHumedadDiscont.setAdapter(adapter6);
-                    sHumedadDiscont.setTag("HumedadDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaSpinner.get(idLinear).add(sHumedadDiscont);
-                    liDiscontinuidades.addView(sHumedadDiscont);
-
-                    //------------> Espaciamiento
-
-                    TextView tvEspaciamientoDiscont = new TextView(mcont);
-                    tvEspaciamientoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvEspaciamientoDiscont.setText("Espaciamiento");
-                    tvEspaciamientoDiscont.setTextAppearance(R.style.TituloItem);
-                    tvEspaciamientoDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvEspaciamientoDiscont);
-
-                    Spinner sEspaciamientoDiscont = new Spinner(mcont);
-                    sEspaciamientoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter7 = ArrayAdapter.createFromResource(mcont, R.array.EspaciamientoDiscont, android.R.layout.simple_spinner_item);
-                    adapter7.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sEspaciamientoDiscont.setAdapter(adapter7);
-                    sEspaciamientoDiscont.setTag("EspaciamientoDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaSpinner.get(idLinear).add(sEspaciamientoDiscont);
-                    liDiscontinuidades.addView(sEspaciamientoDiscont);
-
-                    //------------> Meteorización
-
-                    TextView tvMeteorizacionDiscont = new TextView(mcont);
-                    tvMeteorizacionDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvMeteorizacionDiscont.setText("Meteorizacion");
-                    tvMeteorizacionDiscont.setTextAppearance(R.style.TituloItem);
-                    tvMeteorizacionDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvMeteorizacionDiscont);
-
-                    Spinner sMeteorizacionDiscont = new Spinner(mcont);
-                    sMeteorizacionDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter8 = ArrayAdapter.createFromResource(mcont, R.array.MeteorizacionDiscont, android.R.layout.simple_spinner_item);
-                    adapter8.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sMeteorizacionDiscont.setAdapter(adapter8);
-                    sMeteorizacionDiscont.setTag("MeteorizacionDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaSpinner.get(idLinear).add(sMeteorizacionDiscont);
-                    liDiscontinuidades.addView(sMeteorizacionDiscont);
-
-                    //------------> Rake/Pitch
-
-                    TextView tvRakePitch = new TextView(mcont);
-                    tvRakePitch.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvRakePitch.setText("Rake/Pitch");
-                    tvRakePitch.setTextAppearance(R.style.TituloItem);
-                    tvRakePitch.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvRakePitch);
-
-                    EditText etRakePitch = new EditText(mcont);
-                    etRakePitch.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etRakePitch.setHint("Rake/Pitch");
-                    etRakePitch.setEms(10);
-                    etRakePitch.setTag("RakePitch"+ listContDiscontinuidades.get(idLinear));
-                    ListaEditText.get(idLinear).add(etRakePitch);
-                    liDiscontinuidades.addView(etRakePitch);
-
-                    //------------> Dir. del Rake/Pitch
-
-                    TextView tvDirRakePitch = new TextView(mcont);
-                    tvDirRakePitch.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvDirRakePitch.setText("Dir. del Rake/Pitch");
-                    tvDirRakePitch.setTextAppearance(R.style.TituloItem);
-                    tvDirRakePitch.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvDirRakePitch);
-
-                    EditText etDirRakePitch = new EditText(mcont);
-                    etDirRakePitch.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etDirRakePitch.setHint("Dir. del Rake/Pitch");
-                    etDirRakePitch.setEms(10);
-                    etDirRakePitch.setTag("DirRakePitch"+ listContDiscontinuidades.get(idLinear));
-                    ListaEditText.get(idLinear).add(etDirRakePitch);
-                    liDiscontinuidades.addView(etDirRakePitch);
-
-                    //------------> Orientación talud/ladera
-
-                    TextView tvOrientacion = new TextView(mcont);
-                    tvOrientacion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvOrientacion.setText("Orientación talud/ladera");
-                    tvOrientacion.setTextAppearance(R.style.TituloItem);
-                    tvOrientacion.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvOrientacion);
-
-                    //------------> Az Bz/Bz 1
-
-                    TextView tvAzBzBz1 = new TextView(mcont);
-                    tvAzBzBz1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvAzBzBz1.setText("Az Bz/Bz");
-                    tvAzBzBz1.setTextAppearance(R.style.TituloItem);
-                    tvAzBzBz1.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvAzBzBz1);
-
-                    EditText etAzBzBz1 = new EditText(mcont);
-                    etAzBzBz1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etAzBzBz1.setHint("Az Bz/Bz");
-                    etAzBzBz1.setEms(10);
-                    etAzBzBz1.setTag("AzBzBz1"+ listContDiscontinuidades.get(idLinear));
-                    ListaEditText.get(idLinear).add(etAzBzBz1);
-                    liDiscontinuidades.addView(etAzBzBz1);
-
-                    //------------> Az Bz/Bz 2
-
-                    TextView tvAzBzBz2 = new TextView(mcont);
-                    tvAzBzBz2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvAzBzBz2.setText("Az Bz/Bz");
-                    tvAzBzBz2.setTextAppearance(R.style.TituloItem);
-                    tvAzBzBz2.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvAzBzBz2);
-
-                    EditText etAzBzBz2 = new EditText(mcont);
-                    etAzBzBz2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etAzBzBz2.setHint("Az Bz/Bz");
-                    etAzBzBz2.setEms(10);
-                    etAzBzBz2.setTag("AzBzBz2"+ listContDiscontinuidades.get(idLinear));
-                    ListaEditText.get(idLinear).add(etAzBzBz2);
-                    liDiscontinuidades.addView(etAzBzBz2);
-
-                    //------------> Altura
-
-                    TextView tvAltura = new TextView(mcont);
-                    tvAltura.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvAltura.setText("Altura");
-                    tvAltura.setTextAppearance(R.style.TituloItem);
-                    tvAltura.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvAltura);
-
-                    EditText etAltura = new EditText(mcont);
-                    etAltura.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etAltura.setHint("Altura");
-                    etAltura.setEms(10);
-                    etAltura.setTag("AlturaDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaEditText.get(idLinear).add(etAltura);
-                    liDiscontinuidades.addView(etAltura);
-
-                    //------------> Observaciones
-
-                    TextView tvObservacionesDiscont = new TextView(mcont);
-                    tvObservacionesDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvObservacionesDiscont.setText("Observaciones");
-                    tvObservacionesDiscont.setTextAppearance(R.style.TituloItem);
-                    tvObservacionesDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvObservacionesDiscont);
-
-                    EditText etObservacionesDiscont = new EditText(mcont);
-                    etObservacionesDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etObservacionesDiscont.setHint("Observaciones");
-                    etObservacionesDiscont.setEms(10);
-                    etObservacionesDiscont.setTag("ObservacionesDiscont"+ listContDiscontinuidades.get(idLinear));
-                    ListaEditText.get(idLinear).add(etObservacionesDiscont);
-                    liDiscontinuidades.addView(etObservacionesDiscont);
-
+                        EditText etDirImbricacion1 = new EditText(mcont);
+                        etDirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etDirImbricacion1.setHint("Dirección de la Imbricación Litología 1");
+                        etDirImbricacion1.setEms(10);
+                        etDirImbricacion1.setTag("dirimbricacion1");
+                        ListaEditText.get(idLinear).add(etDirImbricacion1);
+                        liFormdirimbri1.addView(etDirImbricacion1);
+                    }
+                }
+                public void onNothingSelected(AdapterView<?> spn) {
                 }
             });
-            liForm.addView(bAnadirDiscont);
+
+            LinearLayout liFormdirimbri2 = new LinearLayout(mcont);
+            liFormdirimbri2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormdirimbri2.setOrientation(LinearLayout.VERTICAL);
+
+            liForm.addView(liFormdirimbri2);
+
+            sOrientacion2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> spn, android.view.View v, int posicion, long id) {
+                    String selectForm = spn.getItemAtPosition(posicion).toString();
+                    if (selectForm.equals("Imbricado")) {
+
+
+                        TextView DirImbricacion2 = new TextView(mcont);
+                        DirImbricacion2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        DirImbricacion2.setText("Dirección de la Imbricación Litología 2");
+                        DirImbricacion2.setTextAppearance(R.style.TituloItem);
+                        DirImbricacion2.setPadding(0, mtop, 0, 0);
+                        liFormdirimbri2.addView(DirImbricacion2);
+
+                        EditText etDirImbricacion2 = new EditText(mcont);
+                        etDirImbricacion2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etDirImbricacion2.setHint("Dirección de la Imbricación Litología 2");
+                        etDirImbricacion2.setEms(10);
+                        etDirImbricacion2.setTag("dirimbricacion2");
+                        ListaEditText.get(idLinear).add(etDirImbricacion2);
+                        liFormdirimbri2.addView(etDirImbricacion2);
+                    }
+                }
+                public void onNothingSelected(AdapterView<?> spn) {
+                }
+            });
+
+
+            //------------> Meteorizacion Clastos  1
+
+            TextView tvMeteorizacionClastos1 = new TextView(mcont);
+            tvMeteorizacionClastos1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvMeteorizacionClastos1.setText("Meteorizacion Clastos Litología 1");
+            tvMeteorizacionClastos1.setTextAppearance(R.style.TituloItem);
+            tvMeteorizacionClastos1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvMeteorizacionClastos1);
+
+            Spinner sMeteorizacionClastos1 = new Spinner(mcont);
+            sMeteorizacionClastos1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter17 = ArrayAdapter.createFromResource(mcont, R.array.MeteorizacionClastos1, android.R.layout.simple_spinner_item);
+            adapter17.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sMeteorizacionClastos1.setAdapter(adapter17);
+            sMeteorizacionClastos1.setTag("meteorizacionclastos1");
+            ListaSpinner.get(idLinear).add(sMeteorizacionClastos1);
+            liForm.addView(sMeteorizacionClastos1);
+
+            //------------> Meteorizacion Clastos  2
+
+            TextView tvMeteorizacionClastos2 = new TextView(mcont);
+            tvMeteorizacionClastos2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvMeteorizacionClastos2.setText("Meteorizacion Clastos Litología 2");
+            tvMeteorizacionClastos2.setTextAppearance(R.style.TituloItem);
+            tvMeteorizacionClastos2.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvMeteorizacionClastos2);
+
+            Spinner sMeteorizacionClastos2 = new Spinner(mcont);
+            sMeteorizacionClastos2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter18 = ArrayAdapter.createFromResource(mcont, R.array.MeteorizacionClastos2, android.R.layout.simple_spinner_item);
+            adapter18.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sMeteorizacionClastos2.setAdapter(adapter18);
+            sMeteorizacionClastos2.setTag("meteorizacionclastos2");
+            ListaSpinner.get(idLinear).add(sMeteorizacionClastos2);
+            liForm.addView(sMeteorizacionClastos2);
+
+
+
+            //------------> Caracteristicas Matriz
+
+            TextView tvCaracteristicasMatriz = new TextView(mcont);
+            tvCaracteristicasMatriz.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvCaracteristicasMatriz.setText("CARACTERÍSTICAS DE LA MATRIZ");
+            tvCaracteristicasMatriz.setTextAppearance(R.style.TituloFormato);
+            tvCaracteristicasMatriz.setPadding(0, mtop, 0, 20);
+            liForm.addView(tvCaracteristicasMatriz);
+
+            //------------> Granulometría de la Matriz   1
+
+            TextView tvGranulometriaSuelos1 = new TextView(mcont);
+            tvGranulometriaSuelos1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvGranulometriaSuelos1.setText("Granulometría de la Matriz Litología 1");
+            tvGranulometriaSuelos1.setTextAppearance(R.style.TituloItem);
+            tvGranulometriaSuelos1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvGranulometriaSuelos1);
+
+            Spinner sGranulometriaSuelos1 = new Spinner(mcont);
+            sGranulometriaSuelos1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter19 = ArrayAdapter.createFromResource(mcont, R.array.GranulometriaMatriz1, android.R.layout.simple_spinner_item);
+            adapter19.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sGranulometriaSuelos1.setAdapter(adapter19);
+            sGranulometriaSuelos1.setTag("granulometriamatriz1");
+            ListaSpinner.get(idLinear).add(sGranulometriaSuelos1);
+            liForm.addView(sGranulometriaSuelos1);
+
+            //------------> Granulometría de la Matriz   2
+
+            TextView tvGranulometriaSuelos2 = new TextView(mcont);
+            tvGranulometriaSuelos2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvGranulometriaSuelos2.setText("Granulometría de la Matriz Litología 2");
+            tvGranulometriaSuelos2.setTextAppearance(R.style.TituloItem);
+            tvGranulometriaSuelos2.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvGranulometriaSuelos2);
+
+            Spinner sGranulometriaSuelos2 = new Spinner(mcont);
+            sGranulometriaSuelos2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter20 = ArrayAdapter.createFromResource(mcont, R.array.GranulometriaMatriz2, android.R.layout.simple_spinner_item);
+            adapter20.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sGranulometriaSuelos2.setAdapter(adapter20);
+            sGranulometriaSuelos2.setTag("granulometriamatriz2");
+            ListaSpinner.get(idLinear).add(sGranulometriaSuelos2);
+            liForm.addView(sGranulometriaSuelos2);
+
+
+            //------------> Gradacion  1
+
+            TextView tvGradacion1 = new TextView(mcont);
+            tvGradacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvGradacion1.setText("Gradacion Litología 1");
+            tvGradacion1.setTextAppearance(R.style.TituloItem);
+            tvGradacion1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvGradacion1);
+
+            Spinner sGradacion1 = new Spinner(mcont);
+            sGradacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter21 = ArrayAdapter.createFromResource(mcont, R.array.Gradacion1, android.R.layout.simple_spinner_item);
+            adapter21.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sGradacion1.setAdapter(adapter21);
+            sGradacion1.setTag("gradacion1");
+            ListaSpinner.get(idLinear).add(sGradacion1);
+            liForm.addView(sGradacion1);
+
+            //------------> Gradacion  1
+
+            TextView tvGradacion2 = new TextView(mcont);
+            tvGradacion2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvGradacion2.setText("Gradacion Litología 2");
+            tvGradacion2.setTextAppearance(R.style.TituloItem);
+            tvGradacion2.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvGradacion2);
+
+            Spinner sGradacion2 = new Spinner(mcont);
+            sGradacion2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter22 = ArrayAdapter.createFromResource(mcont, R.array.Gradacion2, android.R.layout.simple_spinner_item);
+            adapter22.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sGradacion2.setAdapter(adapter22);
+            sGradacion2.setTag("gradacion2");
+            ListaSpinner.get(idLinear).add(sGradacion2);
+            liForm.addView(sGradacion2);
+
+            //------------> Seleccion  1
+
+            TextView tvSeleccion1 = new TextView(mcont);
+            tvSeleccion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvSeleccion1.setText("Seleccion Litología 1");
+            tvSeleccion1.setTextAppearance(R.style.TituloItem);
+            tvSeleccion1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvSeleccion1);
+
+            Spinner sSeleccion1 = new Spinner(mcont);
+            sSeleccion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(mcont, R.array.Seleccion1, android.R.layout.simple_spinner_item);
+            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sSeleccion1.setAdapter(adapter2);
+            sSeleccion1.setTag("seleccion1");
+            ListaSpinner.get(idLinear).add(sSeleccion1);
+            liForm.addView(sSeleccion1);
+
+            //------------> Seleccion  2
+
+            TextView tvSeleccion2 = new TextView(mcont);
+            tvSeleccion2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvSeleccion2.setText("Seleccion Litología 2");
+            tvSeleccion2.setTextAppearance(R.style.TituloItem);
+            tvSeleccion2.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvSeleccion2);
+
+            Spinner sSeleccion2 = new Spinner(mcont);
+            sSeleccion2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter23 = ArrayAdapter.createFromResource(mcont, R.array.Seleccion2, android.R.layout.simple_spinner_item);
+            adapter23.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sSeleccion2.setAdapter(adapter23);
+            sSeleccion2.setTag("seleccion2");
+            ListaSpinner.get(idLinear).add(sSeleccion2);
+            liForm.addView(sSeleccion2);
+
+
+            //------------> Plasticidad  1
+
+            TextView tvPlasticidad1 = new TextView(mcont);
+            tvPlasticidad1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvPlasticidad1.setText("Plasticidad Litología 1");
+            tvPlasticidad1.setTextAppearance(R.style.TituloItem);
+            tvPlasticidad1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvPlasticidad1);
+
+            Spinner sPlasticidad1 = new Spinner(mcont);
+            sPlasticidad1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter24 = ArrayAdapter.createFromResource(mcont, R.array.Plasticidad1, android.R.layout.simple_spinner_item);
+            adapter24.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sPlasticidad1.setAdapter(adapter24);
+            sPlasticidad1.setTag("plasticidad1");
+            ListaSpinner.get(idLinear).add(sPlasticidad1);
+            liForm.addView(sPlasticidad1);
+
+            //------------> Plasticidad  2
+
+            TextView tvPlasticidad2 = new TextView(mcont);
+            tvPlasticidad2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvPlasticidad2.setText("Plasticidad Litología 1");
+            tvPlasticidad2.setTextAppearance(R.style.TituloItem);
+            tvPlasticidad2.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvPlasticidad2);
+
+            Spinner sPlasticidad2 = new Spinner(mcont);
+            sPlasticidad2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ArrayAdapter<CharSequence> adapter25 = ArrayAdapter.createFromResource(mcont, R.array.Plasticidad1, android.R.layout.simple_spinner_item);
+            adapter25.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sPlasticidad2.setAdapter(adapter25);
+            sPlasticidad2.setTag("plasticidad2");
+            ListaSpinner.get(idLinear).add(sPlasticidad2);
+            liForm.addView(sPlasticidad2);
+
+
+            LinearLayout liFormgranu1 = new LinearLayout(mcont);
+            liFormgranu1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormgranu1.setOrientation(LinearLayout.VERTICAL);
+
+            liForm.addView(liFormgranu1);
+
+            LinearLayout liFormgranu2 = new LinearLayout(mcont);
+            liFormgranu2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormgranu2.setOrientation(LinearLayout.VERTICAL);
+
+            liForm.addView(liFormgranu2);
+
+            sGranulometriaSuelos1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> spn, android.view.View v, int posicion, long id) {
+                    String selectForm = spn.getItemAtPosition(posicion).toString();
+                    Log.d("jaaja", "onItemSelected: "+selectForm);
+                    liFormgranu1.removeAllViews();
+                    if (selectForm.equals("Finos (Limos-Arcillas Menores de 0,075 mm)")) {
+
+                        //------------> SUELOS FINOS LITOLOGÍA 1
+
+                        TextView tvSuelosFinos = new TextView(mcont);
+                        tvSuelosFinos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvSuelosFinos.setText("SUELOS FINOS LITOLOGÍA 1");
+                        tvSuelosFinos.setTextAppearance(R.style.TituloFormato);
+                        tvSuelosFinos.setPadding(0, mtop, 0, 20);
+                        liFormgranu1.addView(tvSuelosFinos);
+
+                        //------------> RESISTENCIA AL CORTE NO DRENADO kN/m2 (CONSISTENCIA)  1
+
+                        TextView tvResisCorte1 = new TextView(mcont);
+                        tvResisCorte1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvResisCorte1.setText("RESISTENCIA AL CORTE NO DRENADO kN/m2 (CONSISTENCIA) Litología 1");
+                        tvResisCorte1.setTextAppearance(R.style.TituloItem);
+                        tvResisCorte1.setPadding(0, mtop, 0, 0);
+                        liFormgranu1.addView(tvResisCorte1);
+
+                        Spinner sResisCorte1 = new Spinner(mcont);
+                        sResisCorte1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(mcont, R.array.ResistenciaAlCorte1, android.R.layout.simple_spinner_item);
+                        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sResisCorte1.setAdapter(adapter2);
+                        sResisCorte1.setTag("resiscorte1");
+                        ListaSpinner.get(idLinear).add(sResisCorte1);
+                        liFormgranu1.addView(sResisCorte1);
+
+                    }
+                    else{
+                        //------------> SUELOS GRUESOS LITOLOGÍA 1
+
+                        TextView tvSuelosGruesos = new TextView(mcont);
+                        tvSuelosGruesos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvSuelosGruesos.setText("SUELOS GRUESOS LITOLOGÍA 1");
+                        tvSuelosGruesos.setTextAppearance(R.style.TituloFormato);
+                        tvSuelosGruesos.setPadding(0, mtop, 0, 20);
+                        liFormgranu1.addView(tvSuelosGruesos);
+                        //------------> Forma  1
+
+                        TextView tvForma1 = new TextView(mcont);
+                        tvForma1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvForma1.setText("Forma de la Matriz Litología 1");
+                        tvForma1.setTextAppearance(R.style.TituloItem);
+                        tvForma1.setPadding(0, mtop, 0, 0);
+                        liFormgranu1.addView(tvForma1);
+
+                        Spinner sForma1 = new Spinner(mcont);
+                        sForma1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(mcont, R.array.FormaSuelos1, android.R.layout.simple_spinner_item);
+                        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sForma1.setAdapter(adapter2);
+                        sForma1.setTag("formasuelosgruesos1");
+                        ListaSpinner.get(idLinear).add(sForma1);
+                        liFormgranu1.addView(sForma1);
+
+                        //------------> Redondez  1
+
+                        TextView tvRedondez1 = new TextView(mcont);
+                        tvRedondez1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvRedondez1.setText("Redondez de la Matriz Litología 1");
+                        tvRedondez1.setTextAppearance(R.style.TituloItem);
+                        tvRedondez1.setPadding(0, mtop, 0, 0);
+                        liFormgranu1.addView(tvRedondez1);
+
+                        Spinner sRedondez1 = new Spinner(mcont);
+                        sRedondez1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(mcont, R.array.RedondezSuelos1, android.R.layout.simple_spinner_item);
+                        adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sRedondez1.setAdapter(adapter3);
+                        sRedondez1.setTag("redondezsuelosgruesos1");
+                        ListaSpinner.get(idLinear).add(sRedondez1);
+                        liFormgranu1.addView(sRedondez1);
+
+                        //------------> Orientacion Matriz  1
+
+                        TextView tvOrientacion1 = new TextView(mcont);
+                        tvOrientacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvOrientacion1.setText("Orientación de la Matriz Litología 1");
+                        tvOrientacion1.setTextAppearance(R.style.TituloItem);
+                        tvOrientacion1.setPadding(0, mtop, 0, 0);
+                        liFormgranu1.addView(tvOrientacion1);
+
+                        Spinner sOrientacion1 = new Spinner(mcont);
+                        sOrientacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(mcont, R.array.OrientacionSuelos1, android.R.layout.simple_spinner_item);
+                        adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sOrientacion1.setAdapter(adapter4);
+                        sOrientacion1.setTag("orientacionsuelosgruesos1");
+                        ListaSpinner.get(idLinear).add(sOrientacion1);
+                        liFormgranu1.addView(sOrientacion1);
+
+                        LinearLayout liFormdirimbri1 = new LinearLayout(mcont);
+                        liFormdirimbri1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormdirimbri1.setOrientation(LinearLayout.VERTICAL);
+
+                        liFormgranu1.addView(liFormdirimbri1);
+
+                        sOrientacion1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            public void onItemSelected(AdapterView<?> spn, android.view.View v, int posicion, long id) {
+                                String selectForm = spn.getItemAtPosition(posicion).toString();
+                                if (selectForm.equals("Imbricado")) {
+                                    //------------> Color 1
+
+                                    TextView DirImbricacion1 = new TextView(mcont);
+                                    DirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    DirImbricacion1.setText("Dirección de la Imbricación Matriz Litología 1");
+                                    DirImbricacion1.setTextAppearance(R.style.TituloItem);
+                                    DirImbricacion1.setPadding(0, mtop, 0, 0);
+                                    liFormdirimbri1.addView(DirImbricacion1);
+
+                                    EditText etDirImbricacion1 = new EditText(mcont);
+                                    etDirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    etDirImbricacion1.setHint("Dirección de la Imbricación Matriz Litología 1");
+                                    etDirImbricacion1.setEms(10);
+                                    etDirImbricacion1.setTag("dirimbricacionmatriz1");
+                                    ListaEditText.get(idLinear).add(etDirImbricacion1);
+                                    liFormdirimbri1.addView(etDirImbricacion1);
+                                }
+                            }
+                            public void onNothingSelected(AdapterView<?> spn) {
+                            }
+                        });
+
+                        //------------> Compacidad Matriz  1
+
+                        TextView tvCompacidad1 = new TextView(mcont);
+                        tvCompacidad1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvCompacidad1.setText("Compacidad de la Matriz Litología 1");
+                        tvCompacidad1.setTextAppearance(R.style.TituloItem);
+                        tvCompacidad1.setPadding(0, mtop, 0, 0);
+                        liFormgranu1.addView(tvCompacidad1);
+
+                        Spinner sCompacidad1 = new Spinner(mcont);
+                        sCompacidad1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter5 = ArrayAdapter.createFromResource(mcont, R.array.Compacidad1, android.R.layout.simple_spinner_item);
+                        adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sCompacidad1.setAdapter(adapter5);
+                        sCompacidad1.setTag("orientacionsuelosgruesos1");
+                        ListaSpinner.get(idLinear).add(sCompacidad1);
+                        liFormgranu1.addView(sCompacidad1);
+
+                    }
+                }
+                public void onNothingSelected(AdapterView<?> spn) {
+                }
+            });
+
+            sGranulometriaSuelos2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> spn, android.view.View v, int posicion, long id) {
+                    String selectForm = spn.getItemAtPosition(posicion).toString();
+                    liFormgranu2.removeAllViews();
+                    if (selectForm.equals("Finos (Limos-Arcillas Menores de 0,075 mm)")) {
+
+                        //------------> SUELOS FINOS LITOLOGÍA 2
+
+                        TextView tvSuelosFinos2 = new TextView(mcont);
+                        tvSuelosFinos2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvSuelosFinos2.setText("SUELOS FINOS LITOLOGÍA 2");
+                        tvSuelosFinos2.setTextAppearance(R.style.TituloFormato);
+                        tvSuelosFinos2.setPadding(0, mtop, 0, 20);
+                        liFormgranu2.addView(tvSuelosFinos2);
+
+                        //------------> RESISTENCIA AL CORTE NO DRENADO kN/m2 (CONSISTENCIA)  2
+
+                        TextView tvResisCorte2 = new TextView(mcont);
+                        tvResisCorte2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvResisCorte2.setText("RESISTENCIA AL CORTE NO DRENADO kN/m2 (CONSISTENCIA) Litología 2");
+                        tvResisCorte2.setTextAppearance(R.style.TituloItem);
+                        tvResisCorte2.setPadding(0, mtop, 0, 0);
+                        liFormgranu2.addView(tvResisCorte2);
+
+                        Spinner sResisCorte1 = new Spinner(mcont);
+                        sResisCorte1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(mcont, R.array.ResistenciaAlCorte1, android.R.layout.simple_spinner_item);
+                        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sResisCorte1.setAdapter(adapter2);
+                        sResisCorte1.setTag("resiscorte2");
+                        ListaSpinner.get(idLinear).add(sResisCorte1);
+                        liFormgranu2.addView(sResisCorte1);
+
+                    }
+                    else if (!selectForm.equals("No Aplica")){
+                        //------------> SUELOS GRUESOS LITOLOGÍA 1
+
+                        TextView tvSuelosGruesos2 = new TextView(mcont);
+                        tvSuelosGruesos2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvSuelosGruesos2.setText("SUELOS GRUESOS LITOLOGÍA 2");
+                        tvSuelosGruesos2.setTextAppearance(R.style.TituloFormato);
+                        tvSuelosGruesos2.setPadding(0, mtop, 0, 20);
+                        liFormgranu2.addView(tvSuelosGruesos2);
+                        //------------> Forma  1
+
+                        TextView tvForma1 = new TextView(mcont);
+                        tvForma1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvForma1.setText("Forma de la Matriz Litología 2");
+                        tvForma1.setTextAppearance(R.style.TituloItem);
+                        tvForma1.setPadding(0, mtop, 0, 0);
+                        liFormgranu2.addView(tvForma1);
+
+                        Spinner sForma1 = new Spinner(mcont);
+                        sForma1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(mcont, R.array.FormaSuelos1, android.R.layout.simple_spinner_item);
+                        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sForma1.setAdapter(adapter2);
+                        sForma1.setTag("formasuelosgruesos2");
+                        ListaSpinner.get(idLinear).add(sForma1);
+                        liFormgranu2.addView(sForma1);
+
+                        //------------> Redondez  1
+
+                        TextView tvRedondez1 = new TextView(mcont);
+                        tvRedondez1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvRedondez1.setText("Redondez de la Matriz Litología 2");
+                        tvRedondez1.setTextAppearance(R.style.TituloItem);
+                        tvRedondez1.setPadding(0, mtop, 0, 0);
+                        liFormgranu2.addView(tvRedondez1);
+
+                        Spinner sRedondez1 = new Spinner(mcont);
+                        sRedondez1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(mcont, R.array.RedondezSuelos1, android.R.layout.simple_spinner_item);
+                        adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sRedondez1.setAdapter(adapter3);
+                        sRedondez1.setTag("redondezsuelosgruesos2");
+                        ListaSpinner.get(idLinear).add(sRedondez1);
+                        liFormgranu2.addView(sRedondez1);
+
+                        //------------> Orientacion Matriz  1
+
+                        TextView tvOrientacion1 = new TextView(mcont);
+                        tvOrientacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvOrientacion1.setText("Orientación de la Matriz Litología 2");
+                        tvOrientacion1.setTextAppearance(R.style.TituloItem);
+                        tvOrientacion1.setPadding(0, mtop, 0, 0);
+                        liFormgranu2.addView(tvOrientacion1);
+
+                        Spinner sOrientacion1 = new Spinner(mcont);
+                        sOrientacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(mcont, R.array.OrientacionSuelos1, android.R.layout.simple_spinner_item);
+                        adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sOrientacion1.setAdapter(adapter4);
+                        sOrientacion1.setTag("orientacionsuelosgruesos2");
+                        ListaSpinner.get(idLinear).add(sOrientacion1);
+                        liFormgranu2.addView(sOrientacion1);
+
+                        LinearLayout liFormdirimbri1 = new LinearLayout(mcont);
+                        liFormdirimbri1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormdirimbri1.setOrientation(LinearLayout.VERTICAL);
+
+                        liFormgranu2.addView(liFormdirimbri1);
+
+                        sOrientacion1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            public void onItemSelected(AdapterView<?> spn, android.view.View v, int posicion, long id) {
+                                String selectForm = spn.getItemAtPosition(posicion).toString();
+                                if (selectForm.equals("Imbricado")) {
+                                    //------------> Color 1
+
+                                    TextView DirImbricacion1 = new TextView(mcont);
+                                    DirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    DirImbricacion1.setText("Dirección de la Imbricación Matriz Litología 2");
+                                    DirImbricacion1.setTextAppearance(R.style.TituloItem);
+                                    DirImbricacion1.setPadding(0, mtop, 0, 0);
+                                    liFormdirimbri1.addView(DirImbricacion1);
+
+                                    EditText etDirImbricacion1 = new EditText(mcont);
+                                    etDirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    etDirImbricacion1.setHint("Dirección de la Imbricación Matriz Litología 2");
+                                    etDirImbricacion1.setEms(10);
+                                    etDirImbricacion1.setTag("dirimbricacionmatriz2");
+                                    ListaEditText.get(idLinear).add(etDirImbricacion1);
+                                    liFormdirimbri1.addView(etDirImbricacion1);
+                                }
+                            }
+                            public void onNothingSelected(AdapterView<?> spn) {
+                            }
+                        });
+
+                        //------------> Compacidad Matriz  1
+
+                        TextView tvCompacidad1 = new TextView(mcont);
+                        tvCompacidad1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvCompacidad1.setText("Compacidad de la Matriz Litología 2");
+                        tvCompacidad1.setTextAppearance(R.style.TituloItem);
+                        tvCompacidad1.setPadding(0, mtop, 0, 0);
+                        liFormgranu2.addView(tvCompacidad1);
+
+                        Spinner sCompacidad1 = new Spinner(mcont);
+                        sCompacidad1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter5 = ArrayAdapter.createFromResource(mcont, R.array.Compacidad1, android.R.layout.simple_spinner_item);
+                        adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sCompacidad1.setAdapter(adapter5);
+                        sCompacidad1.setTag("orientacionsuelosgruesos2");
+                        ListaSpinner.get(idLinear).add(sCompacidad1);
+                        liFormgranu2.addView(sCompacidad1);
+
+                    }
+                }
+                public void onNothingSelected(AdapterView<?> spn) {
+                }
+            });
+
+
+            //------------> Observaciones 1
+
+            TextView tvObservacionesSuelos1 = new TextView(mcont);
+            tvObservacionesSuelos1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvObservacionesSuelos1.setText("Observaciones");
+            tvObservacionesSuelos1.setTextAppearance(R.style.TituloItem);
+            tvObservacionesSuelos1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvObservacionesSuelos1);
+
+            EditText etObservacionesSuelos1 = new EditText(mcont);
+            etObservacionesSuelos1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            etObservacionesSuelos1.setHint("OBSERVACIONES");
+            etObservacionesSuelos1.setEms(10);
+            etObservacionesSuelos1.setTag("observacionessuelos");
+            ListaEditText.get(idLinear).add(etObservacionesSuelos1);
+            liForm.addView(etObservacionesSuelos1);
+
+            //------------> Descripción 1
+
+            TextView tvDescripcionSuelos1 = new TextView(mcont);
+            tvDescripcionSuelos1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvDescripcionSuelos1.setText("DESCRIPCIÓN COMPOSICIÓN PARTÍCULAS DEL SUELO");
+            tvDescripcionSuelos1.setTextAppearance(R.style.TituloItem);
+            tvDescripcionSuelos1.setPadding(0, mtop, 0, 0);
+            liForm.addView(tvDescripcionSuelos1);
+
+            EditText etDescripcionSuelos1 = new EditText(mcont);
+            etDescripcionSuelos1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            etDescripcionSuelos1.setHint("Descripción Composición Partículas del Suelo");
+            etDescripcionSuelos1.setEms(10);
+            etDescripcionSuelos1.setTag("descripcionsuelos");
+            ListaEditText.get(idLinear).add(etDescripcionSuelos1);
+            liForm.addView(etDescripcionSuelos1);
+
 
             //------------> Fotografías Anexas
 
@@ -2784,29 +3142,78 @@ public class SlideshowFragment extends Fragment {
             tvFotosAnexas.setPadding(0, mtop, 0, 20);
             liForm.addView(tvFotosAnexas);
 
-            liFormFotosAnexas = new LinearLayout(mcont);
-            liFormFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liFormFotosAnexas.setOrientation(LinearLayout.VERTICAL);
-            liForm.addView(liFormFotosAnexas);
+            LinearLayout liFormFotosAnexasSuelos = new LinearLayout(mcont);
+            liFormFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormFotosAnexasSuelos.setOrientation(LinearLayout.VERTICAL);
+            liForm.addView(liFormFotosAnexasSuelos);
 
 
-            Button bFotosAnexas = new Button(mcont);
-            bFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            bFotosAnexas.setText("Añadir Foto");
-            bFotosAnexas.setOnClickListener(new View.OnClickListener() {
+            Button bFotosAnexasSuelos = new Button(mcont);
+            bFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bFotosAnexasSuelos.setText("Añadir Foto");
+            bFotosAnexasSuelos.setTag(idLinear);
+            bFotosAnexasSuelos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.plus_circle, 0);
+            bFotosAnexasSuelos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
+
+                    Button bFotosAnexasAcordion = new Button(mcont);
+                    bFotosAnexasAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                    String foto = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
+                    bFotosAnexasAcordion.setText(foto);
+                    bFotosAnexasAcordion.setTag(idLinear);
+                    liFormFotosAnexasSuelos.addView(bFotosAnexasAcordion);
+
                     LinearLayout liFotosAnexas = new LinearLayout(mcont);
                     liFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     liFotosAnexas.setOrientation(LinearLayout.VERTICAL);
-                    liFormFotosAnexas.addView(liFotosAnexas);
+                    liFotosAnexas.setBackgroundColor(0x22222200);
+                    liFotosAnexas.setVisibility(View.GONE);
+                    liFormFotosAnexasSuelos.addView(liFotosAnexas);
                     listFotosAnexas.add(liFotosAnexas);
 
-                    listContFotosAnexas.set(idLinear, listContFotosAnexas.get(idLinear) + 1);
+                    bFotosAnexasAcordion.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (liFotosAnexas.getVisibility() == View.VISIBLE) {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(true);
+                                animation.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                    }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        liFotosAnexas.setVisibility(View.GONE);
+                                        bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                    }
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+                                    }
+                                });
+                                liFotosAnexas.startAnimation(animation);
+
+                            }
+                            else {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(true);
+                                liFotosAnexas.startAnimation(animation);
+                                liFotosAnexas.setVisibility(View.VISIBLE);
+                                bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                            }
+
+                        }
+                    });
 
                     TextView tvNameFotos = new TextView(mcont);
                     tvNameFotos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvNameFotos.setText("Foto "+ listContFotosAnexas.get(idLinear));
+                    String foto1 = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
+                    tvNameFotos.setText(foto1);
                     tvNameFotos.setTextAppearance(R.style.TituloFormato);
                     tvNameFotos.setPadding(0, 100, 0, 50);
                     liFotosAnexas.addView(tvNameFotos);
@@ -2831,23 +3238,38 @@ public class SlideshowFragment extends Fragment {
 
                     //------------> Descripción
 
-                    TextView tvDescriFotosAnexas = new TextView(mcont);
-                    tvDescriFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvDescriFotosAnexas.setText("Descripción de la Foto");
-                    tvDescriFotosAnexas.setTextAppearance(R.style.TituloItem);
-                    tvDescriFotosAnexas.setPadding(0, 70, 0, 0);
-                    liFotosAnexas.addView(tvDescriFotosAnexas);
+                    TextView tvDescriFotosAnexas1 = new TextView(mcont);
+                    tvDescriFotosAnexas1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvDescriFotosAnexas1.setText("Descripción de la Foto");
+                    tvDescriFotosAnexas1.setTextAppearance(R.style.TituloItem);
+                    tvDescriFotosAnexas1.setPadding(0, 70, 0, 0);
+                    liFotosAnexas.addView(tvDescriFotosAnexas1);
 
-                    EditText etDescriFotosAnexas = new EditText(mcont);
-                    etDescriFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etDescriFotosAnexas.setHint("Descripción de la Foto");
-                    etDescriFotosAnexas.setEms(10);
-                    etDescriFotosAnexas.setTag("DescriFotosAnexas"+listContFotosAnexas.get(idLinear));
-                    ListaEditText.get(idLinear).add(etDescriFotosAnexas);
-                    liFotosAnexas.addView(etDescriFotosAnexas);
+                    EditText etDescriFotosAnexas1 = new EditText(mcont);
+                    etDescriFotosAnexas1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    etDescriFotosAnexas1.setHint("Descripción de la Foto");
+                    etDescriFotosAnexas1.setEms(10);
+                    etDescriFotosAnexas1.setTag("DescriFotosAnexas"+listContFotosAnexas.get(idLinear));
+                    ListaEditText.get(idLinear).add(etDescriFotosAnexas1);
+                    liFotosAnexas.addView(etDescriFotosAnexas1);
                 }
             });
-            liForm.addView(bFotosAnexas);
+            liForm.addView(bFotosAnexasSuelos);
+
+            Button bBorrarForm = new Button(mcont);
+            bBorrarForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bBorrarForm.setText("Borrar Este Formulario");
+            bBorrarForm.setTag(idLinear);
+            bBorrarForm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("jaaj", "BOrrar: "+listFormularios);
+                    listLiForm.get(Integer.parseInt(v.getTag().toString())).removeAllViews();
+                    liFormularios.removeView(listBtnAcordion.get(Integer.parseInt(v.getTag().toString())));
+                    listFormularios.set(Integer.parseInt(v.getTag().toString()), "Ninguno");
+                }
+            });
+            liForm.addView(bBorrarForm);
 
 
             listLiForm.add(liForm);
@@ -2865,6 +3287,7 @@ public class SlideshowFragment extends Fragment {
     private void SubirForm() throws IOException,JSONException {
 
         if (auxTextExist && login){
+            subida = false;
             databaseReference.child("EstacionesCampo/cont/cont").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -2883,6 +3306,7 @@ public class SlideshowFragment extends Fragment {
                                 subido = Boolean.parseBoolean(form.getString("Subido"));
 
                                 if (!subido){
+                                    subida = true;
                                     String Estacion = form.getString("Estacion");
                                     String TipoEstacion = form.getString("TipoEstacion");
                                     String Este = form.getString("Este");
@@ -2895,7 +3319,6 @@ public class SlideshowFragment extends Fragment {
 
                                     FormFeature nuevaEstacion = new FormFeature(Estacion, TipoEstacion, Este, Norte, Altitud, Fotos, Observaciones, Fecha, Propietario);
 
-                                    form.put("Subido", true);
 
                                     databaseReference.child("EstacionesCampo/estacion_"+cont).setValue(nuevaEstacion);
 
@@ -2903,6 +3326,11 @@ public class SlideshowFragment extends Fragment {
                                     JSONObject counts = Formularios.getJSONObject("counts");
 
                                     int contUGS_Rocas = Integer.parseInt(counts.getString("UGS_Rocas"));
+                                    int contUGS_Suelos = Integer.parseInt(counts.getString("UGS_Suelos"));
+
+                                    databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_UGS_Rocas").setValue(contUGS_Rocas);
+                                    databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_UGS_Suelos").setValue(contUGS_Suelos);
+
 
                                     for (int j = 0; j < contUGS_Rocas; j++) {
                                         JSONObject FromatoAux = Formularios.getJSONObject("Form_UGS_Rocas_"+j);
@@ -2964,9 +3392,10 @@ public class SlideshowFragment extends Fragment {
 
                                         FormatUGSRocas nuevoFormatoUGSRocas = new FormatUGSRocas(noformato, municipios,  claseaflor,  gsi,  fabrica1,  fabrica2,  humedad1,  humedad2,  tamanograno1,  tamanograno2,  gradometeo1,  gradometeo2,  resistenciacomp1,  resistenciacomp2,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratiopt4orden,  secuenciaestratiopt4espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  perfilmeteorizacion,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  color1,  color2,  composicionmineral1,  composicionmineral2);
 
-                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas_"+j).setValue(nuevoFormatoUGSRocas);
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j).setValue(nuevoFormatoUGSRocas);
 
                                         int contDiscont = Integer.parseInt(FromatoAux.getString("Discontinuidades"));
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j+"/Discontinuidades/count").setValue(contDiscont);
                                         for (int k = 1; k <= contDiscont; k++) {
                                             String TipoDiscont = SpinnersAux.getString("TipoDiscont"+k);
                                             String PersistenciaDiscont = SpinnersAux.getString("PersistenciaDiscont"+k);
@@ -2987,24 +3416,178 @@ public class SlideshowFragment extends Fragment {
                                             String ObservacionesDiscont = EditTextsAux.getString("ObservacionesDiscont"+k);
 
                                             FormatDiscont nuevoFormatoDiscont = new FormatDiscont( TipoDiscont,  PersistenciaDiscont,  AnchoAberDiscont,  TipoRellenoDiscont,  RugosidadSuperDiscont,  FormaSuperDiscont,  HumedadDiscont,  EspaciamientoDiscont,  MeteorizacionDiscont,  DirBuzamiento,  Buzamiento,  RakePitch,  DirRakePitch,  AzBzBz1,  AzBzBz2,  AlturaDiscont,  ObservacionesDiscont);
-                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas_"+j+"/Discontinuidades/Discont_"+k).setValue(nuevoFormatoDiscont);
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j+"/Discontinuidades/Discont_"+k).setValue(nuevoFormatoDiscont);
 
                                         }
 
                                         int contFotosAnexas = Integer.parseInt(FromatoAux.getString("FotosAnexas"));
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j+"/FotosAnexas/count").setValue(contFotosAnexas);
                                         for (int k = 1; k <= contFotosAnexas; k++) {
 
                                             String NombreFotosAnexas = EditTextsAux.getString("NombreFotosAnexas"+k);
                                             String DescriFotosAnexas = EditTextsAux.getString("DescriFotosAnexas"+k);
 
                                             FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas(NombreFotosAnexas, DescriFotosAnexas);
-                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
 
                                         }
 
                                     }
 
+                                    for (int j = 0; j < contUGS_Suelos; j++) {
+                                        JSONObject FromatoAux = Formularios.getJSONObject("Form_UGS_Suelos_"+j);
+                                        JSONObject SpinnersAux = FromatoAux.getJSONObject("Spinners");
+                                        JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
 
+
+                                        String municipios = SpinnersAux.getString("municipios");
+                                        String claseaflor = SpinnersAux.getString("claseaflor");
+                                        String estructurasoporte1 = SpinnersAux.getString("estructurasoporte1");
+                                        String estructurasoporte2 = SpinnersAux.getString("estructurasoporte2");
+                                        String condicionhumedad1 = SpinnersAux.getString("condicionhumedad1");
+                                        String condicionhumedad2 = SpinnersAux.getString("condicionhumedad2");
+                                        String estructurasrelictas1 = SpinnersAux.getString("estructurasrelictas1");
+                                        String estructurasrelictas2 = SpinnersAux.getString("estructurasrelictas2");
+                                        String granulometria1 = SpinnersAux.getString("granulometria1");
+                                        String granulometria2 = SpinnersAux.getString("granulometria2");
+                                        String forma1 = SpinnersAux.getString("forma1");
+                                        String forma2 = SpinnersAux.getString("forma2");
+                                        String redondez1 = SpinnersAux.getString("redondez1");
+                                        String redondez2 = SpinnersAux.getString("redondez2");
+                                        String orientacion1 = SpinnersAux.getString("orientacion1");
+                                        String orientacion2 = SpinnersAux.getString("orientacion2");
+
+                                        String dirimbricacion1 = "";
+                                        String dirimbricacion2 = "";
+
+                                        String elNuevoTexto = orientacion1;
+                                        if (elNuevoTexto.equals("Imbricado")){
+                                            dirimbricacion1 = EditTextsAux.getString("dirimbricacion1");
+                                        }
+
+                                        elNuevoTexto = orientacion2;
+                                        if (elNuevoTexto.equals("Imbricado")){
+                                            dirimbricacion2 = EditTextsAux.getString("dirimbricacion2");
+                                        }
+
+                                        String meteorizacionclastos1 = SpinnersAux.getString("meteorizacionclastos1");
+                                        String meteorizacionclastos2 = SpinnersAux.getString("meteorizacionclastos2");
+                                        String granulometriamatriz1 = SpinnersAux.getString("granulometriamatriz1");
+                                        String granulometriamatriz2 = SpinnersAux.getString("granulometriamatriz2");
+                                        String gradacion1 = SpinnersAux.getString("gradacion1");
+                                        String gradacion2 = SpinnersAux.getString("gradacion2");
+                                        String seleccion1 = SpinnersAux.getString("seleccion1");
+                                        String seleccion2 = SpinnersAux.getString("seleccion2");
+                                        String plasticidad1 = SpinnersAux.getString("plasticidad1");
+                                        String plasticidad2 = SpinnersAux.getString("plasticidad2");
+
+                                        String resiscorte1 = "";
+                                        String formasuelosgruesos1 = "";
+                                        String redondezsuelosgruesos1 = "";
+                                        String orientacionsuelosgruesos1 = "";
+                                        String dirimbricacionmatriz1 = "";
+
+                                        elNuevoTexto = granulometriamatriz1;
+                                        if (elNuevoTexto.equals("Finos (Limos-Arcillas Menores de 0,075 mm)")){
+                                            resiscorte1 = SpinnersAux.getString("resiscorte1");
+                                        } else {
+                                            formasuelosgruesos1 = SpinnersAux.getString("formasuelosgruesos1");
+                                            redondezsuelosgruesos1 = SpinnersAux.getString("redondezsuelosgruesos1");
+                                            orientacionsuelosgruesos1 = SpinnersAux.getString("orientacionsuelosgruesos1");
+
+                                            String elNuevoTexto2 = orientacionsuelosgruesos1;
+                                            elNuevoTexto2 = elNuevoTexto2.replace(" ","");
+                                            if (elNuevoTexto2.equals("Imbricado")){
+                                                dirimbricacionmatriz1 = EditTextsAux.getString("dirimbricacionmatriz1");
+                                            }
+                                        }
+
+                                        String resiscorte2 = "";
+                                        String formasuelosgruesos2 = "";
+                                        String redondezsuelosgruesos2 = "";
+                                        String orientacionsuelosgruesos2 = "";
+                                        String dirimbricacionmatriz2 = "";
+
+                                        elNuevoTexto = granulometriamatriz2;
+                                        if (elNuevoTexto.equals("Finos (Limos-Arcillas Menores de 0,075 mm)")){
+                                            resiscorte2 = SpinnersAux.getString("resiscorte2");
+                                        }else if (!elNuevoTexto.equals("No Aplica")){
+                                            formasuelosgruesos2 = SpinnersAux.getString("formasuelosgruesos2");
+                                            redondezsuelosgruesos2 = SpinnersAux.getString("redondezsuelosgruesos2");
+                                            orientacionsuelosgruesos2 = SpinnersAux.getString("orientacionsuelosgruesos2");
+
+                                            String elNuevoTexto2 = orientacionsuelosgruesos2;
+                                            elNuevoTexto2 = elNuevoTexto2.replace(" ","");
+                                            if (elNuevoTexto2.equals("Imbricado")){
+                                                dirimbricacionmatriz2 = EditTextsAux.getString("dirimbricacionmatriz2");
+                                            }
+                                        }
+
+                                        String noformato = EditTextsAux.getString("noformato");
+                                        String vereda = EditTextsAux.getString("vereda");
+                                        String noestacion = EditTextsAux.getString("noestacion");
+                                        String secuenciaestratiopt1orden = EditTextsAux.getString("secuenciaestratiopt1orden");
+                                        String secuenciaestratiopt1espesor = EditTextsAux.getString("secuenciaestratiopt1espesor");
+                                        String secuenciaestratiopt2orden = EditTextsAux.getString("secuenciaestratiopt2orden");
+                                        String secuenciaestratiopt2espesor = EditTextsAux.getString("secuenciaestratiopt2espesor");
+                                        String secuenciaestratiopt3orden = EditTextsAux.getString("secuenciaestratiopt3orden");
+                                        String secuenciaestratiopt3espesor = EditTextsAux.getString("secuenciaestratiopt3espesor");
+
+                                        String secuenciaestratisuelor1orden = "";
+                                        String secuenciaestratisuelor1espesor = "";
+                                        String secuenciaestratisuelor2orden = "";
+                                        String secuenciaestratisuelor2espesor = "";
+                                        String secuenciaestratisuelor3orden = "";
+                                        String secuenciaestratisuelor3espesor = "";
+
+                                        elNuevoTexto = secuenciaestratiopt2orden;
+                                        elNuevoTexto = elNuevoTexto.replace(" ","");
+                                        if (!elNuevoTexto.equals("")){
+                                            secuenciaestratisuelor1orden = EditTextsAux.getString("secuenciaestratisuelor1orden");
+                                            secuenciaestratisuelor1espesor = EditTextsAux.getString("secuenciaestratisuelor1espesor");
+                                            secuenciaestratisuelor2orden = EditTextsAux.getString("secuenciaestratisuelor2orden");
+                                            secuenciaestratisuelor2espesor = EditTextsAux.getString("secuenciaestratisuelor2espesor");
+                                            secuenciaestratisuelor3orden = EditTextsAux.getString("secuenciaestratisuelor3orden");
+                                            secuenciaestratisuelor3espesor = EditTextsAux.getString("secuenciaestratisuelor3espesor");
+                                        }
+
+                                        String litologiasasociadasopt1exist = EditTextsAux.getString("litologiasasociadasopt1exist");
+                                        String litologiasasociadasopt1espesor = EditTextsAux.getString("litologiasasociadasopt1espesor");
+                                        String litologiasasociadasopt2exist = EditTextsAux.getString("litologiasasociadasopt2exist");
+                                        String litologiasasociadasopt2espesor = EditTextsAux.getString("litologiasasociadasopt2espesor");
+                                        String nombreugs = EditTextsAux.getString("nombreugs");
+                                        String porcentajematriz1 = EditTextsAux.getString("porcentajematriz1");
+                                        String porcentajematriz2 = EditTextsAux.getString("porcentajematriz2");
+                                        String porcentajeclastos1 = EditTextsAux.getString("porcentajeclastos1");
+                                        String porcentajeclastos2 = EditTextsAux.getString("porcentajeclastos2");
+                                        String color1 = EditTextsAux.getString("color1");
+                                        String color2 = EditTextsAux.getString("color2");
+                                        String observacionessuelos = EditTextsAux.getString("observacionessuelos");
+                                        String descripcionsuelos = EditTextsAux.getString("descripcionsuelos");
+
+
+
+                                        FormatUGSSuelos NuevoFormatoUGSSuelos = new FormatUGSSuelos( municipios,  claseaflor,  estructurasoporte1,  estructurasoporte2,  condicionhumedad1,  condicionhumedad2,  estructurasrelictas1,  estructurasrelictas2,  granulometria1,  granulometria2,  forma1,  forma2,  redondez1,  redondez2,  orientacion1,  orientacion2,  dirimbricacion1,  dirimbricacion2,  meteorizacionclastos1,  meteorizacionclastos2,  granulometriamatriz1,  granulometriamatriz2,  gradacion1,  gradacion2,  seleccion1,  seleccion2,  plasticidad1,  plasticidad2,  resiscorte1,  resiscorte2,  formasuelosgruesos1,  formasuelosgruesos2,  redondezsuelosgruesos1,  redondezsuelosgruesos2,  orientacionsuelosgruesos1,  orientacionsuelosgruesos2,  dirimbricacionmatriz1,  dirimbricacionmatriz2,  noformato,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  porcentajematriz1,  porcentajematriz2,  porcentajeclastos1,  porcentajeclastos2,  color1,  color2,  observacionessuelos, descripcionsuelos);
+
+
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+j).setValue(NuevoFormatoUGSSuelos);
+
+
+                                        int contFotosAnexas = Integer.parseInt(FromatoAux.getString("FotosAnexas"));
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+j+"/FotosAnexas/count").setValue(contFotosAnexas);
+                                        for (int k = 1; k <= contFotosAnexas; k++) {
+
+                                            String NombreFotosAnexas = EditTextsAux.getString("NombreFotosAnexas"+k);
+                                            String DescriFotosAnexas = EditTextsAux.getString("DescriFotosAnexas"+k);
+
+                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas(NombreFotosAnexas, DescriFotosAnexas);
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
+
+                                        }
+
+                                    }
+
+                                    form.put("Subido", true);
 
                                     cont++;
                                 }
@@ -3027,7 +3610,11 @@ public class SlideshowFragment extends Fragment {
             file.write(String.valueOf(formComplete));
             file.flush();
             file.close();
-            Toast.makeText(mcont, "Subidos a la Base de Datos los Formularios Guardados\n", Toast.LENGTH_LONG).show();
+            if (subida){
+                Toast.makeText(mcont, "Subidos a la Base de Datos los Formularios Guardados\n", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(mcont, "Ya se encuentran Subidos Todos los Formularios Guardados\n", Toast.LENGTH_LONG).show();
+            }
         }else{
             if (login){
                 Toast.makeText(mcont, "No hay Formularios guardados para subir a la Base de Datos\n", Toast.LENGTH_LONG).show();
@@ -3080,6 +3667,26 @@ public class SlideshowFragment extends Fragment {
 
                 countFormatosUGSRocas++;
             }
+            if (listFormularios.get(i).equals("UGS Suelos")){
+                JSONObject FormatoTemp = new JSONObject()
+                        .put("FotosAnexas", listContFotosAnexas.get(i));
+
+                JSONObject spinnerList = new JSONObject();
+                for (int j = 0; j < ListaSpinner.get(i).size(); j++) {
+                    spinnerList.put(ListaSpinner.get(i).get(j).getTag().toString(), ListaSpinner.get(i).get(j).getSelectedItem().toString());
+                }
+                FormatoTemp.put("Spinners", spinnerList);
+
+                JSONObject editTextList = new JSONObject();
+                for (int k = 0; k < ListaEditText.get(i).size(); k++) {
+                    editTextList.put(ListaEditText.get(i).get(k).getTag().toString(), ListaEditText.get(i).get(k).getText().toString());
+                }
+                FormatoTemp.put("EditText", editTextList);
+
+                FormatosList.put("Form_UGS_Suelos_"+countFormatosUGSSuelos, FormatoTemp);
+
+                countFormatosUGSSuelos++;
+            }
         }
         countFormatos.put("UGS_Rocas", countFormatosUGSRocas);
         countFormatos.put("UGS_Suelos", countFormatosUGSSuelos);
@@ -3089,6 +3696,7 @@ public class SlideshowFragment extends Fragment {
 
 
 
+        auxTextExist = true;
 
         formComplete.put(attrForm);
         Log.d("jaaja", "GuardarForm3: "+formComplete);
@@ -3098,7 +3706,6 @@ public class SlideshowFragment extends Fragment {
 
         OutputStreamWriter file = new OutputStreamWriter(mcont.openFileOutput("listaForm.txt", Activity.MODE_PRIVATE));
         file.write(String.valueOf(formComplete));
-        //file.write("");
         file.flush();
         file.close();
         Toast.makeText(mcont, "Formulario Guardado\n", Toast.LENGTH_LONG).show();

@@ -257,6 +257,245 @@
         <item>Grietas</item>
     </string-array>
 
+    <string-array name="Granulometria1">
+        <item>Arena Media (0,425 - 2,0 mm)</item>
+        <item>Arena gruesa (2,0 - 4,75 mm)</item>
+        <item>Gravas Finas (4,75 - 19 mm)</item>
+        <item>Gravas Gruesas (19-75 mm)</item>
+        <item>Cantos (75 - 300 mm)</item>
+        <item>Bloques (> 300 mm)</item>
+    </string-array>
+
+    <string-array name="Granulometria2">
+        <item>No Aplica</item>
+        <item>Arena Media (0,425 - 2,0 mm)</item>
+        <item>Arena gruesa (2,0 - 4,75 mm)</item>
+        <item>Gravas Finas (4,75 - 19 mm)</item>
+        <item>Gravas Gruesas (19-75 mm)</item>
+        <item>Cantos (75 - 300 mm)</item>
+        <item>Bloques (> 300 mm)</item>
+    </string-array>
+
+    <string-array name="Forma1">
+        <item>Esférica</item>
+        <item>Equidimensional</item>
+        <item>Tabular</item>
+        <item>Plana-Alargada</item>
+        <item>Irregular</item>
+    </string-array>
+
+    <string-array name="Forma2">
+        <item>No Aplica</item>
+        <item>Esférica</item>
+        <item>Equidimensional</item>
+        <item>Tabular</item>
+        <item>Plana-Alargada</item>
+        <item>Irregular</item>
+    </string-array>
+
+
+    <string-array name="Redondez1">
+        <item>Bien Redondeada</item>
+        <item>Redondeada</item>
+        <item>Subredondeada</item>
+        <item>Subangular</item>
+        <item>Angular</item>
+        <item>Muy Angular</item>
+    </string-array>
+
+    <string-array name="Redondez2">
+        <item>No Aplica</item>
+        <item>Bien Redondeada</item>
+        <item>Redondeada</item>
+        <item>Subredondeada</item>
+        <item>Subangular</item>
+        <item>Angular</item>
+        <item>Muy Angular</item>
+    </string-array>
+
+    <string-array name="OrientacionClastos1">
+        <item>Isotropía</item>
+        <item>Anisotropía</item>
+        <item>Imbricado</item>
+    </string-array>
+
+    <string-array name="OrientacionClastos2">
+        <item>No Aplica</item>
+        <item>Isotropía</item>
+        <item>Anisotropía</item>
+        <item>Imbricado</item>
+    </string-array>
+
+    <string-array name="MeteorizacionClastos1">
+        <item>Ninguna</item>
+        <item>Débil</item>
+        <item>Moderada</item>
+        <item>Alta</item>
+        <item>Muy alta</item>
+    </string-array>
+
+    <string-array name="MeteorizacionClastos2">
+        <item>No Aplica</item>
+        <item>Ninguna</item>
+        <item>Débil</item>
+        <item>Moderada</item>
+        <item>Alta</item>
+        <item>Muy alta</item>
+    </string-array>
+
+    <string-array name="GranulometriaMatriz1">
+        <item>Finos (Limos-Arcillas Menores de 0,075 mm)</item>
+        <item>Arena Fina (0,075 - 0,425 mm)</item>
+        <item>Arena Media (0,425 - 2,0 mm)</item>
+        <item>Arena gruesa (2,0 - 4,75 mm)</item>
+        <item>Gravas Finas (4,75 - 19 mm)</item>
+        <item>Gravas Gruesas (19-75 mm)</item>
+        <item>Cantos (75 - 300 mm)</item>
+        <item>Bloques (> 300 mm)</item>
+    </string-array>
+
+    <string-array name="GranulometriaMatriz2">
+        <item>No Aplica</item>
+        <item>Finos (Limos-Arcillas Menores de 0,075 mm)</item>
+        <item>Arena Fina (0,075 - 0,425 mm)</item>
+        <item>Arena Media (0,425 - 2,0 mm)</item>
+        <item>Arena gruesa (2,0 - 4,75 mm)</item>
+        <item>Gravas Finas (4,75 - 19 mm)</item>
+        <item>Gravas Gruesas (19-75 mm)</item>
+        <item>Cantos (75 - 300 mm)</item>
+        <item>Bloques (> 300 mm)</item>
+    </string-array>
+
+
+    <string-array name="Gradacion1">
+        <item>Normal</item>
+        <item>Inversa</item>
+        <item>Normal, solo a la base</item>
+        <item>Normal,solo al techo</item>
+        <item>Sin gradación</item>
+        <item>Compuesto, simétrico</item>
+    </string-array>
+
+    <string-array name="Gradacion2">
+        <item>No Aplica</item>
+        <item>Normal</item>
+        <item>Inversa</item>
+        <item>Normal, solo a la base</item>
+        <item>Normal,solo al techo</item>
+        <item>Sin gradación</item>
+        <item>Compuesto, simétrico</item>
+    </string-array>
+
+
+    <string-array name="Seleccion1">
+        <item>Muy Pobremente Seleccionado</item>
+        <item>Pobremente Seleccionado</item>
+        <item>Moderadamente Seleccionado</item>
+        <item>Bien Seleccionado</item>
+        <item>Muy Bien Seleccionado</item>
+    </string-array>
+
+    <string-array name="Seleccion2">
+        <item>No Aplica</item>
+        <item>Muy Pobremente Seleccionado</item>
+        <item>Pobremente Seleccionado</item>
+        <item>Moderadamente Seleccionado</item>
+        <item>Bien Seleccionado</item>
+        <item>Muy Bien Seleccionado</item>
+    </string-array>
+
+    <string-array name="Plasticidad1">
+        <item>No plástico</item>
+        <item>Ligeramente Plástico</item>
+        <item>Plástico</item>
+        <item>Muy Plástico</item>
+    </string-array>
+
+    <string-array name="Plasticidad2">
+        <item>No Aplica</item>
+        <item>No plástico</item>
+        <item>Ligeramente Plástico</item>
+        <item>Plástico</item>
+        <item>Muy Plástico</item>
+    </string-array>
+
+    <string-array name="ResistenciaAlCorte1">
+        <item>Muy Blanda Menor a 20</item>
+        <item>Blanda 20-40</item>
+        <item>Media 40-75</item>
+        <item>Alta 75-150</item>
+        <item>Muy Alta 150-300</item>
+        <item>Dura > 300</item>
+    </string-array>
+
+    <string-array name="ResistenciaAlCorte2">
+        <item>Muy Blanda Menor a 20</item>
+        <item>Blanda 20-40</item>
+        <item>Media 40-75</item>
+        <item>Alta 75-150</item>
+        <item>Muy Alta 150-300</item>
+        <item>Dura > 300</item>
+    </string-array>
+
+    <string-array name="FormaSuelos1">
+        <item>Esférica</item>
+        <item>Equidimensional</item>
+        <item>Tabular</item>
+        <item>Plana-Alargada</item>
+        <item>Irregular</item>
+    </string-array>
+
+    <string-array name="FormaSuelos2">
+        <item>Esférica</item>
+        <item>Equidimensional</item>
+        <item>Tabular</item>
+        <item>Plana-Alargada</item>
+        <item>Irregular</item>
+    </string-array>
+
+    <string-array name="RedondezSuelos1">
+        <item>Bien Redondeada</item>
+        <item>Redondeada</item>
+        <item>Subredondeada</item>
+        <item>Subangular</item>
+        <item>Angular</item>
+        <item>Muy Angular</item>
+    </string-array>
+
+    <string-array name="RedondezSuelos2">
+        <item>Bien Redondeada</item>
+        <item>Redondeada</item>
+        <item>Subredondeada</item>
+        <item>Subangular</item>
+        <item>Angular</item>
+        <item>Muy Angular</item>
+    </string-array>
+
+    <string-array name="OrientacionSuelos1">
+        <item>Isotropía</item>
+        <item>Anisotropía</item>
+        <item>Imbricado</item>
+    </string-array>
+
+    <string-array name="OrientacionSuelos2">
+        <item>Isotropía</item>
+        <item>Anisotropía</item>
+        <item>Imbricado</item>
+    </string-array>
+
+    <string-array name="Compacidad1">
+        <item>Débil (suelta)</item>
+        <item>Moderada (Media)</item>
+        <item>Fuerte (Densa)</item>
+    </string-array>
+
+    <string-array name="Compacidad2">
+        <item>Débil (suelta)</item>
+        <item>Moderada (Media)</item>
+        <item>Fuerte (Densa)</item>
+    </string-array>
+
+
 
 
 
