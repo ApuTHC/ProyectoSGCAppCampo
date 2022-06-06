@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "629279692498",
+    "firebase_url": "https://visor-proyecto-sgc-default-rtdb.firebaseio.com",
+    "project_id": "visor-proyecto-sgc",
+    "storage_bucket": "visor-proyecto-sgc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629279692498:android:2021c12f35ce54d54abf0b",
+        "android_client_info": {
+          "package_name": "com.unal.proyectosgcappcampo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "629279692498-qmb79vh73rpghk3vlo6tvgq5pa5bde7o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA33hhGSENXkI46N5Q_sSHL_dIOLt6z1PQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "629279692498-qmb79vh73rpghk3vlo6tvgq5pa5bde7o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
