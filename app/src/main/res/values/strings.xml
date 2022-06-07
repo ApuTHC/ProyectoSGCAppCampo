@@ -46,6 +46,20 @@
         <item>Trinchera, Apique</item>
     </string-array>
 
+    <string-array name="SecuenciaEstratiRocas">
+        <item>Depósito de Gravedad</item>
+        <item>Suelo Transportado</item>
+        <item>Suelo Residual</item>
+        <item>Roca</item>
+    </string-array>
+
+    <string-array name="SecuenciaEstratiRocasSueloRes">
+        <item>III</item>
+        <item>II</item>
+        <item>I</item>
+    </string-array>
+
+
     <string-array name="GSI">
         <item>0-20</item>
         <item>20-40</item>

@@ -223,6 +223,7 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="20dp" />
+
             <Spinner
                 android:id="@+id/s_Formularios"
                 android:layout_width="match_parent"
