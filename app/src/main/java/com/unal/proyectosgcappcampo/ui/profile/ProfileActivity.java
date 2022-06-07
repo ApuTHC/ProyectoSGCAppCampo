@@ -127,6 +127,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (requestCode == RC_SING_IN){
             Log.d(TAG, "onActivityResult: Google Signin intent result");
+
             Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = accountTask.getResult(ApiException.class);

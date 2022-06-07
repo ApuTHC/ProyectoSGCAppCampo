@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "629279692498-9298h1i44gcv8o8cv73jsvstoo87v94l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unal.proyectosgcappcampo",
+            "certificate_hash": "6fc18ab29a6232b71d467f47a49ee737da1ab1c6"
+          }
+        },
+        {
           "client_id": "629279692498-qmb79vh73rpghk3vlo6tvgq5pa5bde7o.apps.googleusercontent.com",
           "client_type": 3
         }
