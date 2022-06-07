@@ -59,6 +59,23 @@
         <item>I</item>
     </string-array>
 
+    <string-array name="SecuenciaEstratiSuelos">
+        <item>Suelo Antrópico</item>
+        <item>Suelo Residual</item>
+        <item>Suelo Transportado</item>
+    </string-array>
+
+    <string-array name="Porcentajes">
+        <item>% Matriz</item>
+        <item>% Clastos</item>
+    </string-array>
+
+    <string-array name="SecuenciaEstratiSuelosSueloRes">
+        <item>VI (Suelo Residual Menor a 10% F.R.*)</item>
+        <item>V (Saprolito Fino 10%-35% F.R.*)</item>
+        <item>IV (Saprolito Grueso 35%-70% F.R.*)</item>
+    </string-array>
+
 
     <string-array name="GSI">
         <item>0-20</item>

@@ -90,6 +90,7 @@ public class SlideshowFragment extends Fragment {
     List<ElementoFormato> listaElementosUGSS = new ArrayList<ElementoFormato>();
 
     ElementoFormato ElementoSueloResidualUGSR = new ElementoFormato( "Horizonte",  "secuenciaestrati",  "secuenciaestratisuelor", R.array.SecuenciaEstratiRocasSueloRes);
+    ElementoFormato ElementoSueloResidualUGSS = new ElementoFormato( "Horizonte",  "secuenciaestrati",  "secuenciaestratisuelor", R.array.SecuenciaEstratiSuelosSueloRes);
 
 
 
@@ -103,6 +104,8 @@ public class SlideshowFragment extends Fragment {
     List<Spinner> listSpinner = new ArrayList<Spinner>();
     List<CheckBox> listCheckBox = new ArrayList<CheckBox>();
     List<RadioButton> listRadioBtn = new ArrayList<RadioButton>();
+    List<RadioButton> listRadioBtn1 = new ArrayList<RadioButton>();
+    List<RadioButton> listRadioBtn2 = new ArrayList<RadioButton>();
     List<RadioGroup> listRadioGrp = new ArrayList<RadioGroup>();
     List<Button> listBtnAcordion = new ArrayList<Button>();
 
@@ -110,6 +113,8 @@ public class SlideshowFragment extends Fragment {
     List<List<Spinner>> ListaSpinner = new ArrayList<List<Spinner>>();
     List<List<CheckBox>> ListaCheckBox = new ArrayList<List<CheckBox>>();
     List<List<RadioButton>> ListaRadioBtn = new ArrayList<List<RadioButton>>();
+    List<List<RadioButton>> ListaRadioBtn1 = new ArrayList<List<RadioButton>>();
+    List<List<RadioButton>> ListaRadioBtn2 = new ArrayList<List<RadioButton>>();
     List<List<RadioGroup>> ListaRadioGrp = new ArrayList<List<RadioGroup>>();
 
     boolean subida = false;
@@ -255,12 +260,16 @@ public class SlideshowFragment extends Fragment {
         listSpinner = new ArrayList<Spinner>();
         listCheckBox = new ArrayList<CheckBox>();
         listRadioBtn = new ArrayList<RadioButton>();
+        listRadioBtn1 = new ArrayList<RadioButton>();
+        listRadioBtn2 = new ArrayList<RadioButton>();
         listRadioGrp = new ArrayList<RadioGroup>();
 
         ListaEditText.add(listEditText);
         ListaSpinner.add(listSpinner);
         ListaCheckBox.add(listCheckBox);
         ListaRadioBtn.add(listRadioBtn);
+        ListaRadioBtn1.add(listRadioBtn1);
+        ListaRadioBtn2.add(listRadioBtn2);
         ListaRadioGrp.add(listRadioGrp);
 
         fotosAnexas = 0;
@@ -414,6 +423,7 @@ public class SlideshowFragment extends Fragment {
                     int secuEstratiEspesorWidth = 300;
 
                     for (int j = 0; j < opciones.length ; j++) {
+                        int aux = j + 1;
                         LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
                         liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
@@ -428,7 +438,7 @@ public class SlideshowFragment extends Fragment {
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt.setHint("Orden");
                         etSecuenciaEstratiOpt.setEms(10);
-                        etSecuenciaEstratiOpt.setTag(tagElemento+j+"orden");
+                        etSecuenciaEstratiOpt.setTag(tagElemento+aux+"orden");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
 
@@ -436,7 +446,7 @@ public class SlideshowFragment extends Fragment {
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setHint("Espesor (m)");
                         etSecuenciaEstratiOpt1Espesor.setEms(10);
-                        etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+j+"espesor");
+                        etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+aux+"espesor");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
 
@@ -482,6 +492,7 @@ public class SlideshowFragment extends Fragment {
                                         Resources res = getResources();
                                         String[] opciones = res.getStringArray(idStringArrayElemento);
                                         for (int i = 0; i < opciones.length; i++) {
+                                            int aux = i + 1;
                                             LinearLayout liFormSecuenciaEstratiSueloR1 = new LinearLayout(mcont);
                                             liFormSecuenciaEstratiSueloR1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             liFormSecuenciaEstratiSueloR1.setOrientation(LinearLayout.HORIZONTAL);
@@ -496,7 +507,7 @@ public class SlideshowFragment extends Fragment {
                                             etSecuenciaEstratiSueloROrden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etSecuenciaEstratiSueloROrden.setHint("Orden");
                                             etSecuenciaEstratiSueloROrden.setEms(10);
-                                            etSecuenciaEstratiSueloROrden.setTag(tagElemento+ i +"orden");
+                                            etSecuenciaEstratiSueloROrden.setTag(tagElemento+ aux +"orden");
                                             ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloROrden);
                                             liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloROrden);
 
@@ -504,7 +515,7 @@ public class SlideshowFragment extends Fragment {
                                             etSecuenciaEstratiSueloREspesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etSecuenciaEstratiSueloREspesor.setHint("Espesor (m)");
                                             etSecuenciaEstratiSueloREspesor.setEms(10);
-                                            etSecuenciaEstratiSueloREspesor.setTag(tagElemento+ i +"espesor");
+                                            etSecuenciaEstratiSueloREspesor.setTag(tagElemento+ aux +"espesor");
                                             ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloREspesor);
                                             liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloREspesor);
 
@@ -548,7 +559,7 @@ public class SlideshowFragment extends Fragment {
                         checkbox.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         String aux = j+"";
                         checkbox.setText(aux);
-                        checkbox.setTag(tagElemento+j+"exist");
+                        checkbox.setTag(tagElemento+j+"exist_"+idLinear);
                         ListaCheckBox.get(idLinear).add(checkbox);
                         liFormLitologias.addView(checkbox);
 
@@ -567,16 +578,17 @@ public class SlideshowFragment extends Fragment {
                             checkbox.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    int aux = Integer.parseInt(view.getTag().toString().split("_")[1]);
                                     if(((CheckBox) view).isChecked()){
-                                        for (int j = 0; j < ListaRadioBtn.get(idLinear).size() ; j++){
-                                            ListaRadioBtn.get(idLinear).get(j).setEnabled(true);
-                                            ListaRadioBtn.get(idLinear).get(j).setClickable(true);
+                                        for (int j = 0; j < ListaRadioBtn.get(aux).size() ; j++){
+                                            ListaRadioBtn.get(aux).get(j).setEnabled(true);
+                                            ListaRadioBtn.get(aux).get(j).setClickable(true);
                                         }
 
                                     } else {
-                                        for (int j = 0; j < ListaRadioBtn.get(idLinear).size() ; j++){
-                                            ListaRadioBtn.get(idLinear).get(j).setEnabled(false);
-                                            ListaRadioBtn.get(idLinear).get(j).setClickable(false);
+                                        for (int j = 0; j < ListaRadioBtn.get(aux).size() ; j++){
+                                            ListaRadioBtn.get(aux).get(j).setEnabled(false);
+                                            ListaRadioBtn.get(aux).get(j).setClickable(false);
                                         }
                                     }
                                 }
@@ -622,7 +634,7 @@ public class SlideshowFragment extends Fragment {
 
                     RadioGroup radioGroup2 = new RadioGroup(mcont);
                     radioGroup2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    radioGroup2.setTag(tagElemento);
+                    radioGroup2.setTag(tagElemento+2);
                     for(String opt : opciones2) {
                         RadioButton nuevoRadio = new RadioButton(mcont);
                         LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
@@ -646,7 +658,7 @@ public class SlideshowFragment extends Fragment {
 
                     RadioGroup radioGroup1 = new RadioGroup(mcont);
                     radioGroup1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    radioGroup1.setTag(tagElemento);
+                    radioGroup1.setTag(tagElemento+1);
                     for(String opt : opciones1) {
                         RadioButton nuevoRadio = new RadioButton(mcont);
                         LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
@@ -666,948 +678,6 @@ public class SlideshowFragment extends Fragment {
                 }
 
             }
-
-            listLiForm.add(liForm);
-            liFormularios.addView(liForm);
-        }
-
-        if (formType.equals("UGS Rocas1")) {
-
-            Button bAcordion = new Button(mcont);
-            bAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
-            bAcordion.setText("Formato UGS Rocas");
-            bAcordion.setTag(idLinear);
-            listBtnAcordion.add(bAcordion);
-            liFormularios.addView(bAcordion);
-
-            LinearLayout liForm = new LinearLayout(mcont);
-            liForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liForm.setOrientation(LinearLayout.VERTICAL);
-            liForm.setBackgroundColor(0x33333300);
-            //liForm.setVisibility(View.GONE);
-
-            bAcordion.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("jaaj", "onClick: "+R.array.Municipios);
-                    if (listLiForm.get(Integer.parseInt(v.getTag().toString())).getVisibility() == View.VISIBLE) {
-                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
-                        animation.setDuration(220);
-                        animation.setFillAfter(false);
-                        animation.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                            }
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.GONE);
-                                listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
-                            }
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-                            }
-                        });
-                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
-
-                    }
-                    else {
-                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
-                        animation.setDuration(220);
-                        animation.setFillAfter(false);
-                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
-                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
-                        listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
-                    }
-
-//                    if (listLiForm.get(Integer.parseInt(v.getTag().toString())).getVisibility() == View.VISIBLE) {
-//                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.GONE);
-//                    }
-//                    else {
-//                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
-//                    }
-
-                }
-            });
-
-
-
-            //------------> Titulo del Formato
-
-            TextView tvTitulo = new TextView(mcont);
-            tvTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvTitulo.setText("Formato UGSR");
-            tvTitulo.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            tvTitulo.setTextAppearance(R.style.TituloFormato);
-            tvTitulo.setPadding(0, 70, 0, 70);
-            liForm.addView(tvTitulo);
-
-
-            Button bBorrarForm = new Button(mcont);
-            bBorrarForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            bBorrarForm.setText("Borrar Este Formulario");
-            bBorrarForm.setTag(idLinear);
-            bBorrarForm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("jaaj", "BOrrarRocas: "+listFormularios);
-                    listLiForm.get(Integer.parseInt(v.getTag().toString())).removeAllViews();
-                    liFormularios.removeView(listBtnAcordion.get(Integer.parseInt(v.getTag().toString())));
-                    listFormularios.set(Integer.parseInt(v.getTag().toString()), "Ninguno");
-
-                }
-            });
-            liForm.addView(bBorrarForm);
-
-
-            //------------> Numero de Formato
-
-            TextView tvNoFormato = new TextView(mcont);
-            tvNoFormato.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvNoFormato.setText("Número Formato");
-            tvNoFormato.setTextAppearance(R.style.TituloItem);
-            tvNoFormato.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvNoFormato);
-
-            EditText etNoFormato = new EditText(mcont);
-            etNoFormato.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etNoFormato.setHint("Número Formato");
-            etNoFormato.setEms(10);
-            etNoFormato.setTag("noformato");
-            ListaEditText.get(idLinear).add(etNoFormato);
-            liForm.addView(etNoFormato);
-
-            //------------> Municipios
-
-            TextView tvMunicipios = new TextView(mcont);
-            tvMunicipios.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvMunicipios.setText("Municipio");
-            tvMunicipios.setTextAppearance(R.style.TituloItem);
-            tvMunicipios.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvMunicipios);
-
-            Spinner sMunicipios = new Spinner(mcont);
-            sMunicipios.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, R.array.Municipios, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sMunicipios.setAdapter(adapter);
-            sMunicipios.setTag("municipios");
-            ListaSpinner.get(idLinear).add(sMunicipios);
-            liForm.addView(sMunicipios);
-
-            //------------> Vereda
-
-            TextView tvVereda = new TextView(mcont);
-            tvVereda.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvVereda.setText("Vereda");
-            tvVereda.setTextAppearance(R.style.TituloItem);
-            tvVereda.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvVereda);
-
-            EditText etVereda = new EditText(mcont);
-            etVereda.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etVereda.setHint("Vereda");
-            etVereda.setEms(10);
-            etVereda.setTag("vereda");
-            ListaEditText.get(idLinear).add(etVereda);
-            liForm.addView(etVereda);
-
-//            //------------> Nombre Formato
-//
-//            TextView tvNombreFormato = new TextView(mcont);
-//            tvNombreFormato.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//            tvNombreFormato.setText("Nombre del Formato");
-//            tvNombreFormato.setTextAppearance(R.style.TituloItem);
-//            tvNombreFormato.setPadding(0, mtop, 0, 0);
-//            liForm.addView(tvNombreFormato);
-//
-//            EditText etNombreFormato = new EditText(mcont);
-//            etNombreFormato.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//            etNombreFormato.setHint("Nombre del Formato");
-//            etNombreFormato.setEms(10);
-//            etNombreFormato.setTag("nombreformato");
-//            ListaEditText.get(idLinear).add(etNombreFormato);
-//            liForm.addView(etNombreFormato);
-
-            //------------> Numero de la Estación
-
-            TextView tvNoEstacion = new TextView(mcont);
-            tvNoEstacion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvNoEstacion.setText("Número de la Estación");
-            tvNoEstacion.setTextAppearance(R.style.TituloItem);
-            tvNoEstacion.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvNoEstacion);
-
-            EditText etNoEstacion = new EditText(mcont);
-            etNoEstacion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etNoEstacion.setHint("Número de la Estación");
-            etNoEstacion.setEms(10);
-            etNoEstacion.setTag("noestacion");
-            ListaEditText.get(idLinear).add(etNoEstacion);
-            liForm.addView(etNoEstacion);
-
-            //------------> Clase de Afloramiento
-
-            TextView tvClaseAflor = new TextView(mcont);
-            tvClaseAflor.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvClaseAflor.setText("Clase Afloramiento");
-            tvClaseAflor.setTextAppearance(R.style.TituloItem);
-            tvClaseAflor.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvClaseAflor);
-
-            Spinner sClaseAflor = new Spinner(mcont);
-            sClaseAflor.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(mcont, R.array.ClaseAfloramiento, android.R.layout.simple_spinner_item);
-            adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sClaseAflor.setAdapter(adapter1);
-            sClaseAflor.setTag("claseaflor");
-            ListaSpinner.get(idLinear).add(sClaseAflor);
-            liForm.addView(sClaseAflor);
-
-
-            LinearLayout lipruebita1 = new LinearLayout(mcont);
-            lipruebita1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            lipruebita1.setOrientation(LinearLayout.HORIZONTAL);
-
-            TextView pruebatext = new TextView(mcont);
-            pruebatext.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
-            pruebatext.setText("2");
-            pruebatext.setTextAppearance(R.style.TituloItem);
-            pruebatext.setPadding(30, mtop, 0, 0);
-            lipruebita1.addView(pruebatext);
-
-            TextView pruebatext1 = new TextView(mcont);
-            pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            pruebatext1.setText("1");
-            pruebatext1.setTextAppearance(R.style.TituloItem);
-            pruebatext1.setPadding(30, mtop, 0, 0);
-            lipruebita1.addView(pruebatext1);
-
-
-            liForm.addView(lipruebita1);
-
-            LinearLayout lipruebita = new LinearLayout(mcont);
-            lipruebita.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            lipruebita.setOrientation(LinearLayout.HORIZONTAL);
-
-            Resources res = getResources();
-            String[] planets = res.getStringArray(R.array.ClaseAfloramiento);
-            RadioGroup radioPrueba = new RadioGroup(mcont);
-            radioPrueba.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            radioPrueba.setTag("tipoaflor");
-            for(String marca : planets) {
-                RadioButton nuevoRadio = new RadioButton(mcont);
-                LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
-                        100,
-                        RadioGroup.LayoutParams.WRAP_CONTENT);
-                nuevoRadio.setLayoutParams(params);
-                //nuevoRadio.setText(marca);
-                nuevoRadio.setTag(marca);
-                //nuevoRadio.setClickable(false);
-                nuevoRadio.setEnabled(false);
-
-                radioPrueba.addView(nuevoRadio);
-//                radioPrueba.setOrientation(LinearLayout.HORIZONTAL);
-            }
-            RadioButton primerRadio = (RadioButton) radioPrueba.getChildAt(0);
-            primerRadio.setChecked(true);
-            lipruebita.addView(radioPrueba);
-
-
-
-            Resources res1 = getResources();
-            String[] planets1 = res.getStringArray(R.array.ClaseAfloramiento);
-            RadioGroup radioPrueba1 = new RadioGroup(mcont);
-            radioPrueba1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            radioPrueba1.setTag("tipoaflor");
-            for(String marca : planets1) {
-                RadioButton nuevoRadio = new RadioButton(mcont);
-                LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
-                        RadioGroup.LayoutParams.WRAP_CONTENT,
-                        RadioGroup.LayoutParams.WRAP_CONTENT);
-                nuevoRadio.setLayoutParams(params);
-                nuevoRadio.setText(marca);
-                nuevoRadio.setTag(marca);
-                //nuevoRadio.setClickable(false);
-                nuevoRadio.setEnabled(false);
-
-                radioPrueba1.addView(nuevoRadio);
-//                radioPrueba1.setOrientation(LinearLayout.HORIZONTAL);
-            }
-            RadioButton primerRadio1 = (RadioButton) radioPrueba1.getChildAt(0);
-            primerRadio1.setChecked(true);
-            lipruebita.addView(radioPrueba1);
-
-            liForm.addView(lipruebita);
-
-            //------------> Secuencia Estratigráfica
-
-            TextView tvSecuenciaEstrati = new TextView(mcont);
-            tvSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvSecuenciaEstrati.setText("Secuencia Estratigráfica");
-            tvSecuenciaEstrati.setTextAppearance(R.style.TituloFormato);
-            tvSecuenciaEstrati.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvSecuenciaEstrati);
-
-            int secuEstratiWidth = 420;
-            int secuEstratiOrdenWidth = 200;
-            int secuEstratiEspesorWidth = 300;
-
-            //-------------------> Depósito de Gravedad
-
-            LinearLayout liFormSecuenciaEstrati1 = new LinearLayout(mcont);
-            liFormSecuenciaEstrati1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liFormSecuenciaEstrati1.setOrientation(LinearLayout.HORIZONTAL);
-
-            TextView tvSecuenciaEstratiOpt1 = new TextView(mcont);
-            tvSecuenciaEstratiOpt1.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvSecuenciaEstratiOpt1.setText("Depósito de Gravedad: ");
-            tvSecuenciaEstratiOpt1.setTextAppearance(R.style.TituloItem);
-            liFormSecuenciaEstrati1.addView(tvSecuenciaEstratiOpt1);
-
-            EditText etSecuenciaEstratiOpt1Orden = new EditText(mcont);
-            etSecuenciaEstratiOpt1Orden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etSecuenciaEstratiOpt1Orden.setHint("Orden");
-            etSecuenciaEstratiOpt1Orden.setEms(10);
-            etSecuenciaEstratiOpt1Orden.setTag("secuenciaestratiopt1orden");
-            ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Orden);
-            liFormSecuenciaEstrati1.addView(etSecuenciaEstratiOpt1Orden);
-
-            EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
-            etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etSecuenciaEstratiOpt1Espesor.setHint("Espesor (m)");
-            etSecuenciaEstratiOpt1Espesor.setEms(10);
-            etSecuenciaEstratiOpt1Espesor.setTag("secuenciaestratiopt1espesor");
-            ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
-            liFormSecuenciaEstrati1.addView(etSecuenciaEstratiOpt1Espesor);
-
-            liForm.addView(liFormSecuenciaEstrati1);
-
-            //-------------------> Suelo Transportado
-
-            LinearLayout liFormSecuenciaEstrati2 = new LinearLayout(mcont);
-            liFormSecuenciaEstrati2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liFormSecuenciaEstrati2.setOrientation(LinearLayout.HORIZONTAL);
-
-            TextView tvSecuenciaEstratiOpt2 = new TextView(mcont);
-            tvSecuenciaEstratiOpt2.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvSecuenciaEstratiOpt2.setText("Suelo Transportado: ");
-            tvSecuenciaEstratiOpt2.setTextAppearance(R.style.TituloItem);
-            liFormSecuenciaEstrati2.addView(tvSecuenciaEstratiOpt2);
-
-            EditText etSecuenciaEstratiOpt2Orden = new EditText(mcont);
-            etSecuenciaEstratiOpt2Orden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etSecuenciaEstratiOpt2Orden.setHint("Orden");
-            etSecuenciaEstratiOpt2Orden.setEms(10);
-            etSecuenciaEstratiOpt2Orden.setTag("secuenciaestratiopt2orden");
-            ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt2Orden);
-            liFormSecuenciaEstrati2.addView(etSecuenciaEstratiOpt2Orden);
-
-            EditText etSecuenciaEstratiOpt2Espesor = new EditText(mcont);
-            etSecuenciaEstratiOpt2Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etSecuenciaEstratiOpt2Espesor.setHint("Espesor (m)");
-            etSecuenciaEstratiOpt2Espesor.setEms(10);
-            etSecuenciaEstratiOpt2Espesor.setTag("secuenciaestratiopt2espesor");
-            ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt2Espesor);
-            liFormSecuenciaEstrati2.addView(etSecuenciaEstratiOpt2Espesor);
-
-            liForm.addView(liFormSecuenciaEstrati2);
-
-
-            //-------------------> Suelo Residual
-
-            LinearLayout liFormSecuenciaEstrati3 = new LinearLayout(mcont);
-            liFormSecuenciaEstrati3.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liFormSecuenciaEstrati3.setOrientation(LinearLayout.HORIZONTAL);
-
-            TextView tvSecuenciaEstratiOpt3 = new TextView(mcont);
-            tvSecuenciaEstratiOpt3.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvSecuenciaEstratiOpt3.setText("Suelo Residual: ");
-            tvSecuenciaEstratiOpt3.setTextAppearance(R.style.TituloItem);
-            liFormSecuenciaEstrati3.addView(tvSecuenciaEstratiOpt3);
-
-            EditText etSecuenciaEstratiOpt3Orden = new EditText(mcont);
-            etSecuenciaEstratiOpt3Orden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etSecuenciaEstratiOpt3Orden.setHint("Orden");
-            etSecuenciaEstratiOpt3Orden.setEms(10);
-            etSecuenciaEstratiOpt3Orden.setTag("secuenciaestratiopt3orden");
-            ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt3Orden);
-            liFormSecuenciaEstrati3.addView(etSecuenciaEstratiOpt3Orden);
-
-            EditText etSecuenciaEstratiOpt3Espesor = new EditText(mcont);
-            etSecuenciaEstratiOpt3Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etSecuenciaEstratiOpt3Espesor.setHint("Espesor (m)");
-            etSecuenciaEstratiOpt3Espesor.setEms(10);
-            etSecuenciaEstratiOpt3Espesor.setTag("secuenciaestratiopt3espesor");
-            ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt3Espesor);
-            liFormSecuenciaEstrati3.addView(etSecuenciaEstratiOpt3Espesor);
-
-            liForm.addView(liFormSecuenciaEstrati3);
-
-
-            //-------------------> Roca
-
-            LinearLayout liFormSecuenciaEstrati4 = new LinearLayout(mcont);
-            liFormSecuenciaEstrati4.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liFormSecuenciaEstrati4.setOrientation(LinearLayout.HORIZONTAL);
-
-            TextView tvSecuenciaEstratiOpt4 = new TextView(mcont);
-            tvSecuenciaEstratiOpt4.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvSecuenciaEstratiOpt4.setText("Roca: ");
-            tvSecuenciaEstratiOpt4.setTextAppearance(R.style.TituloItem);
-            liFormSecuenciaEstrati4.addView(tvSecuenciaEstratiOpt4);
-
-            EditText etSecuenciaEstratiOpt4Orden = new EditText(mcont);
-            etSecuenciaEstratiOpt4Orden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etSecuenciaEstratiOpt4Orden.setHint("Orden");
-            etSecuenciaEstratiOpt4Orden.setEms(10);
-            etSecuenciaEstratiOpt4Orden.setTag("secuenciaestratiopt4orden");
-            ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt4Orden);
-            liFormSecuenciaEstrati4.addView(etSecuenciaEstratiOpt4Orden);
-
-            EditText etSecuenciaEstratiOpt4Espesor = new EditText(mcont);
-            etSecuenciaEstratiOpt4Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etSecuenciaEstratiOpt4Espesor.setHint("Espesor (m)");
-            etSecuenciaEstratiOpt4Espesor.setEms(10);
-            etSecuenciaEstratiOpt4Espesor.setTag("secuenciaestratiopt4espesor");
-            ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt4Espesor);
-            liFormSecuenciaEstrati4.addView(etSecuenciaEstratiOpt4Espesor);
-
-            liForm.addView(liFormSecuenciaEstrati4);
-
-            //-------------------> Listener para saber si se trata de un suelo residual
-
-            LinearLayout liFormSecuenciaEstratiSueloR = new LinearLayout(mcont);
-            liFormSecuenciaEstratiSueloR.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liFormSecuenciaEstratiSueloR.setOrientation(LinearLayout.VERTICAL);
-
-            liForm.addView(liFormSecuenciaEstratiSueloR);
-
-            etSecuenciaEstratiOpt3Orden.addTextChangedListener(new TextWatcher() {
-                // Antes de que el texto cambie (no debemos modificar nada aquí)
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                //Cuando esté cambiando (no debemos modificar el texto aquí)
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-                // Aquí el texto ya ha cambiado completamente, tenemos el texto actualizado en pocas palabras
-                @Override
-                public void afterTextChanged(Editable s) {
-                    String elNuevoTexto = s.toString();
-                    elNuevoTexto = elNuevoTexto.replace(" ","");
-
-                    //-------------------> Si es Suelo Residual
-
-                    if (!elNuevoTexto.equals("")){
-
-                        int secuEstratiWidth = 150;
-                        int secuEstratiOrdenWidth = 200;
-                        int secuEstratiEspesorWidth = 300;
-
-                        TextView tvSecuenciaEstratiHorizonte1 = new TextView(mcont);
-                        tvSecuenciaEstratiHorizonte1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        tvSecuenciaEstratiHorizonte1.setText("Si es Suelo Residual: ");
-                        tvSecuenciaEstratiHorizonte1.setTextAppearance(R.style.TituloItem);
-                        tvSecuenciaEstratiHorizonte1.setPadding(0, mtop, 0, 0);
-                        liFormSecuenciaEstratiSueloR.addView(tvSecuenciaEstratiHorizonte1);
-
-                        TextView tvSecuenciaEstratiHorizonte2 = new TextView(mcont);
-                        tvSecuenciaEstratiHorizonte2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        tvSecuenciaEstratiHorizonte2.setText("Horizonte");
-                        tvSecuenciaEstratiHorizonte2.setTextAppearance(R.style.TituloItem);
-                        liFormSecuenciaEstratiSueloR.addView(tvSecuenciaEstratiHorizonte2);
-
-                        //-------------------> III
-
-                        LinearLayout liFormSecuenciaEstratiSueloR1 = new LinearLayout(mcont);
-                        liFormSecuenciaEstratiSueloR1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        liFormSecuenciaEstratiSueloR1.setOrientation(LinearLayout.HORIZONTAL);
-
-                        TextView tvSecuenciaEstratiSueloR1 = new TextView(mcont);
-                        tvSecuenciaEstratiSueloR1.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        tvSecuenciaEstratiSueloR1.setText("III: ");
-                        tvSecuenciaEstratiSueloR1.setTextAppearance(R.style.TituloItem);
-                        liFormSecuenciaEstratiSueloR1.addView(tvSecuenciaEstratiSueloR1);
-
-                        EditText etSecuenciaEstratiSueloR1Orden = new EditText(mcont);
-                        etSecuenciaEstratiSueloR1Orden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        etSecuenciaEstratiSueloR1Orden.setHint("Orden");
-                        etSecuenciaEstratiSueloR1Orden.setEms(10);
-                        etSecuenciaEstratiSueloR1Orden.setTag("secuenciaestratisuelor1orden");
-                        ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloR1Orden);
-                        liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloR1Orden);
-
-                        EditText etSecuenciaEstratiSueloR1Espesor = new EditText(mcont);
-                        etSecuenciaEstratiSueloR1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        etSecuenciaEstratiSueloR1Espesor.setHint("Espesor (m)");
-                        etSecuenciaEstratiSueloR1Espesor.setEms(10);
-                        etSecuenciaEstratiSueloR1Espesor.setTag("secuenciaestratisuelor1espesor");
-                        ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloR1Espesor);
-                        liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloR1Espesor);
-
-                        liFormSecuenciaEstratiSueloR.addView(liFormSecuenciaEstratiSueloR1);
-
-                        //-------------------> II
-
-                        LinearLayout liFormSecuenciaEstratiSueloR2 = new LinearLayout(mcont);
-                        liFormSecuenciaEstratiSueloR2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        liFormSecuenciaEstratiSueloR2.setOrientation(LinearLayout.HORIZONTAL);
-
-                        TextView tvSecuenciaEstratiSueloR2 = new TextView(mcont);
-                        tvSecuenciaEstratiSueloR2.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        tvSecuenciaEstratiSueloR2.setText("II: ");
-                        tvSecuenciaEstratiSueloR2.setTextAppearance(R.style.TituloItem);
-                        liFormSecuenciaEstratiSueloR2.addView(tvSecuenciaEstratiSueloR2);
-
-                        EditText etSecuenciaEstratiSueloR2Orden = new EditText(mcont);
-                        etSecuenciaEstratiSueloR2Orden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        etSecuenciaEstratiSueloR2Orden.setHint("Orden");
-                        etSecuenciaEstratiSueloR2Orden.setEms(10);
-                        etSecuenciaEstratiSueloR2Orden.setTag("secuenciaestratisuelor2orden");
-                        ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloR2Orden);
-                        liFormSecuenciaEstratiSueloR2.addView(etSecuenciaEstratiSueloR2Orden);
-
-                        EditText etSecuenciaEstratiSueloR2Espesor = new EditText(mcont);
-                        etSecuenciaEstratiSueloR2Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        etSecuenciaEstratiSueloR2Espesor.setHint("Espesor (m)");
-                        etSecuenciaEstratiSueloR2Espesor.setEms(10);
-                        etSecuenciaEstratiSueloR2Espesor.setTag("secuenciaestratisuelor2espesor");
-                        ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloR2Espesor);
-                        liFormSecuenciaEstratiSueloR2.addView(etSecuenciaEstratiSueloR2Espesor);
-
-                        liFormSecuenciaEstratiSueloR.addView(liFormSecuenciaEstratiSueloR2);
-                        //-------------------> I
-
-                        LinearLayout liFormSecuenciaEstratiSueloR3 = new LinearLayout(mcont);
-                        liFormSecuenciaEstratiSueloR3.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        liFormSecuenciaEstratiSueloR3.setOrientation(LinearLayout.HORIZONTAL);
-
-                        TextView tvSecuenciaEstratiSueloR3 = new TextView(mcont);
-                        tvSecuenciaEstratiSueloR3.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        tvSecuenciaEstratiSueloR3.setText("I: ");
-                        tvSecuenciaEstratiSueloR3.setTextAppearance(R.style.TituloItem);
-                        liFormSecuenciaEstratiSueloR3.addView(tvSecuenciaEstratiSueloR3);
-
-                        EditText etSecuenciaEstratiSueloR3Orden = new EditText(mcont);
-                        etSecuenciaEstratiSueloR3Orden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        etSecuenciaEstratiSueloR3Orden.setHint("Orden");
-                        etSecuenciaEstratiSueloR3Orden.setEms(10);
-                        etSecuenciaEstratiSueloR3Orden.setTag("secuenciaestratisuelor3orden");
-                        ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloR3Orden);
-                        liFormSecuenciaEstratiSueloR3.addView(etSecuenciaEstratiSueloR3Orden);
-
-                        EditText etSecuenciaEstratiSueloR3Espesor = new EditText(mcont);
-                        etSecuenciaEstratiSueloR3Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        etSecuenciaEstratiSueloR3Espesor.setHint("Espesor (m)");
-                        etSecuenciaEstratiSueloR3Espesor.setEms(10);
-                        etSecuenciaEstratiSueloR3Espesor.setTag("secuenciaestratisuelor3espesor");
-                        ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloR3Espesor);
-                        liFormSecuenciaEstratiSueloR3.addView(etSecuenciaEstratiSueloR3Espesor);
-
-                        liFormSecuenciaEstratiSueloR.addView(liFormSecuenciaEstratiSueloR3);
-                    }
-                    else{
-                        liFormSecuenciaEstratiSueloR.removeAllViews();
-                    }
-
-                }
-            });
-
-
-            //------------> CARACTERIZACIÓN DE LA UGS / UGI
-
-            TextView tvCaracterizacionUGS = new TextView(mcont);
-            tvCaracterizacionUGS.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvCaracterizacionUGS.setText("CARACTERIZACIÓN DE LA UGS / UGI");
-            tvCaracterizacionUGS.setTextAppearance(R.style.TituloFormato);
-            tvCaracterizacionUGS.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvCaracterizacionUGS);
-
-
-            //------------> Perfil de meteorización (Dearman 1974)
-
-            TextView tvPerfilMeteorizacion = new TextView(mcont);
-            tvPerfilMeteorizacion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvPerfilMeteorizacion.setText("Perfil de meteorización (Dearman 1974)");
-            tvPerfilMeteorizacion.setTextAppearance(R.style.TituloItem);
-            tvPerfilMeteorizacion.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvPerfilMeteorizacion);
-
-            EditText etPerfilMeteorizacion = new EditText(mcont);
-            etPerfilMeteorizacion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etPerfilMeteorizacion.setHint("I-II-III-IV-V-VI");
-            etPerfilMeteorizacion.setEms(10);
-            etPerfilMeteorizacion.setTag("perfilmeteorizacion");
-            ListaEditText.get(idLinear).add(etPerfilMeteorizacion);
-            liForm.addView(etPerfilMeteorizacion);
-
-
-            //------------> N° litologías asociadas a la UGS /UGI
-
-            TextView tvlitologiasasociadas = new TextView(mcont);
-            tvlitologiasasociadas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvlitologiasasociadas.setText("N° litologías asociadas a la UGS /UGI");
-            tvlitologiasasociadas.setTextAppearance(R.style.TituloItem);
-            tvlitologiasasociadas.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvlitologiasasociadas);
-
-            secuEstratiWidth = 200;
-            secuEstratiOrdenWidth = 400;
-
-            //------------> Litología 1
-
-            LinearLayout liFormlitologiasasociadas1 = new LinearLayout(mcont);
-            liFormlitologiasasociadas1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liFormlitologiasasociadas1.setOrientation(LinearLayout.HORIZONTAL);
-
-            TextView tvlitologiasasociadasOpt1 = new TextView(mcont);
-            tvlitologiasasociadasOpt1.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvlitologiasasociadasOpt1.setText("Litología 1");
-            tvlitologiasasociadasOpt1.setTextAppearance(R.style.TituloItem);
-            liFormlitologiasasociadas1.addView(tvlitologiasasociadasOpt1);
-
-            EditText etlitologiasasociadasOpt1Exist = new EditText(mcont);
-            etlitologiasasociadasOpt1Exist.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etlitologiasasociadasOpt1Exist.setHint("Marque X si Existe");
-            etlitologiasasociadasOpt1Exist.setEms(10);
-            etlitologiasasociadasOpt1Exist.setTag("litologiasasociadasopt1exist");
-            ListaEditText.get(idLinear).add(etlitologiasasociadasOpt1Exist);
-            liFormlitologiasasociadas1.addView(etlitologiasasociadasOpt1Exist);
-
-            EditText etlitologiasasociadasOpt1Espesor = new EditText(mcont);
-            etlitologiasasociadasOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etlitologiasasociadasOpt1Espesor.setHint("Espesor (m)");
-            etlitologiasasociadasOpt1Espesor.setEms(10);
-            etlitologiasasociadasOpt1Espesor.setTag("litologiasasociadasopt1espesor");
-            ListaEditText.get(idLinear).add(etlitologiasasociadasOpt1Espesor);
-            liFormlitologiasasociadas1.addView(etlitologiasasociadasOpt1Espesor);
-
-            liForm.addView(liFormlitologiasasociadas1);
-
-            //------------> Litología 2
-
-            LinearLayout liFormlitologiasasociadas2 = new LinearLayout(mcont);
-            liFormlitologiasasociadas2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liFormlitologiasasociadas2.setOrientation(LinearLayout.HORIZONTAL);
-
-            TextView tvlitologiasasociadasOpt2 = new TextView(mcont);
-            tvlitologiasasociadasOpt2.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvlitologiasasociadasOpt2.setText("Litología 2");
-            tvlitologiasasociadasOpt2.setTextAppearance(R.style.TituloItem);
-            liFormlitologiasasociadas2.addView(tvlitologiasasociadasOpt2);
-
-            EditText etlitologiasasociadasOpt2Exist = new EditText(mcont);
-            etlitologiasasociadasOpt2Exist.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etlitologiasasociadasOpt2Exist.setHint("Marque X si Existe");
-            etlitologiasasociadasOpt2Exist.setEms(10);
-            etlitologiasasociadasOpt2Exist.setTag("litologiasasociadasopt2exist");
-            ListaEditText.get(idLinear).add(etlitologiasasociadasOpt2Exist);
-            liFormlitologiasasociadas2.addView(etlitologiasasociadasOpt2Exist);
-
-            EditText etlitologiasasociadasOpt2Espesor = new EditText(mcont);
-            etlitologiasasociadasOpt2Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etlitologiasasociadasOpt2Espesor.setHint("Espesor (m)");
-            etlitologiasasociadasOpt2Espesor.setEms(10);
-            etlitologiasasociadasOpt2Espesor.setTag("litologiasasociadasopt2espesor");
-            ListaEditText.get(idLinear).add(etlitologiasasociadasOpt2Espesor);
-            liFormlitologiasasociadas2.addView(etlitologiasasociadasOpt2Espesor);
-
-            liForm.addView(liFormlitologiasasociadas2);
-
-
-            //------------> Nombre de la UGS / UGI
-
-            TextView tvNombreUGS = new TextView(mcont);
-            tvNombreUGS.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvNombreUGS.setText("Nombre de la UGS / UGI");
-            tvNombreUGS.setTextAppearance(R.style.TituloItem);
-            tvNombreUGS.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvNombreUGS);
-
-            EditText etNombreUGS = new EditText(mcont);
-            etNombreUGS.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etNombreUGS.setHint("Nombre UGS / UGI");
-            etNombreUGS.setEms(10);
-            etNombreUGS.setTag("nombreugs");
-            ListaEditText.get(idLinear).add(etNombreUGS);
-            liForm.addView(etNombreUGS);
-
-
-            //------------> GSI
-
-            TextView tvGSI = new TextView(mcont);
-            tvGSI.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvGSI.setText("GSI");
-            tvGSI.setTextAppearance(R.style.TituloItem);
-            tvGSI.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvGSI);
-
-            Spinner sGSI = new Spinner(mcont);
-            sGSI.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(mcont, R.array.GSI, android.R.layout.simple_spinner_item);
-            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sGSI.setAdapter(adapter2);
-            sGSI.setTag("gsi");
-            ListaSpinner.get(idLinear).add(sGSI);
-            liForm.addView(sGSI);
-
-            //------------> CARACTERÍSTICAS DE LA UGS / UGI
-
-            TextView tvCaracteristicasUGS = new TextView(mcont);
-            tvCaracteristicasUGS.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvCaracteristicasUGS.setText("CARACTERÍSTICAS DE LA UGS / UGI");
-            tvCaracteristicasUGS.setTextAppearance(R.style.TituloFormato);
-            tvCaracteristicasUGS.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvCaracteristicasUGS);
-
-            //------------> Fábrica Litologia 1
-
-            TextView tvFabrica1 = new TextView(mcont);
-            tvFabrica1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvFabrica1.setText("Fábrica Litología 1");
-            tvFabrica1.setTextAppearance(R.style.TituloItem);
-            tvFabrica1.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvFabrica1);
-
-            Spinner sFabrica1 = new Spinner(mcont);
-            sFabrica1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(mcont, R.array.Fabrica1, android.R.layout.simple_spinner_item);
-            adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sFabrica1.setAdapter(adapter3);
-            sFabrica1.setTag("fabrica1");
-            ListaSpinner.get(idLinear).add(sFabrica1);
-            liForm.addView(sFabrica1);
-
-            //------------> Fábrica Litologia 2
-
-            TextView tvFabrica2 = new TextView(mcont);
-            tvFabrica2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvFabrica2.setText("Fábrica Litología 2");
-            tvFabrica2.setTextAppearance(R.style.TituloItem);
-            tvFabrica2.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvFabrica2);
-
-            Spinner sFabrica2 = new Spinner(mcont);
-            sFabrica2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(mcont, R.array.Fabrica2, android.R.layout.simple_spinner_item);
-            adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sFabrica2.setAdapter(adapter4);
-            sFabrica2.setTag("fabrica2");
-            ListaSpinner.get(idLinear).add(sFabrica2);
-            liForm.addView(sFabrica2);
-
-            //------------> Humedad Natural 1
-
-            TextView tvHumedad1 = new TextView(mcont);
-            tvHumedad1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvHumedad1.setText("Humedad Natural Litología 1");
-            tvHumedad1.setTextAppearance(R.style.TituloItem);
-            tvHumedad1.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvHumedad1);
-
-            Spinner sHumedad1 = new Spinner(mcont);
-            sHumedad1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter5 = ArrayAdapter.createFromResource(mcont, R.array.HumedadNatural1, android.R.layout.simple_spinner_item);
-            adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sHumedad1.setAdapter(adapter5);
-            sHumedad1.setTag("humedad1");
-            ListaSpinner.get(idLinear).add(sHumedad1);
-            liForm.addView(sHumedad1);
-
-            //------------> Humedad Natural 2
-
-            TextView tvHumedad2 = new TextView(mcont);
-            tvHumedad2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvHumedad2.setText("Humedad Natural Litología 2");
-            tvHumedad2.setTextAppearance(R.style.TituloItem);
-            tvHumedad2.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvHumedad2);
-
-            Spinner sHumedad2 = new Spinner(mcont);
-            sHumedad2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter6 = ArrayAdapter.createFromResource(mcont, R.array.HumedadNatural2, android.R.layout.simple_spinner_item);
-            adapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sHumedad2.setAdapter(adapter6);
-            sHumedad2.setTag("humedad2");
-            ListaSpinner.get(idLinear).add(sHumedad2);
-            liForm.addView(sHumedad2);
-
-            //------------> Tamaño de grano  1
-
-            TextView tvTamanoGrano1 = new TextView(mcont);
-            tvTamanoGrano1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvTamanoGrano1.setText("Tamaño del Grano Litología 1");
-            tvTamanoGrano1.setTextAppearance(R.style.TituloItem);
-            tvTamanoGrano1.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvTamanoGrano1);
-
-            Spinner sTamanoGrano1 = new Spinner(mcont);
-            sTamanoGrano1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter7 = ArrayAdapter.createFromResource(mcont, R.array.TamañoGrano1, android.R.layout.simple_spinner_item);
-            adapter7.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sTamanoGrano1.setAdapter(adapter7);
-            sTamanoGrano1.setTag("tamañograno1");
-            ListaSpinner.get(idLinear).add(sTamanoGrano1);
-            liForm.addView(sTamanoGrano1);
-
-            //------------> Tamaño de grano  2
-
-            TextView tvTamanoGrano2 = new TextView(mcont);
-            tvTamanoGrano2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvTamanoGrano2.setText("Tamaño del Grano Litología 2");
-            tvTamanoGrano2.setTextAppearance(R.style.TituloItem);
-            tvTamanoGrano2.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvTamanoGrano2);
-
-            Spinner sTamanoGrano2 = new Spinner(mcont);
-            sTamanoGrano2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter8 = ArrayAdapter.createFromResource(mcont, R.array.TamañoGrano2, android.R.layout.simple_spinner_item);
-            adapter8.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sTamanoGrano2.setAdapter(adapter8);
-            sTamanoGrano2.setTag("tamañograno2");
-            ListaSpinner.get(idLinear).add(sTamanoGrano2);
-            liForm.addView(sTamanoGrano2);
-
-            //------------> Grado meteorización  1
-
-            TextView tvGradoMeteo1 = new TextView(mcont);
-            tvGradoMeteo1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvGradoMeteo1.setText("Grado de Meteorización Litología 1");
-            tvGradoMeteo1.setTextAppearance(R.style.TituloItem);
-            tvGradoMeteo1.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvGradoMeteo1);
-
-            Spinner sGradoMeteo1 = new Spinner(mcont);
-            sGradoMeteo1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter9 = ArrayAdapter.createFromResource(mcont, R.array.GradoMeteo1, android.R.layout.simple_spinner_item);
-            adapter9.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sGradoMeteo1.setAdapter(adapter9);
-            sGradoMeteo1.setTag("gradometeo1");
-            ListaSpinner.get(idLinear).add(sGradoMeteo1);
-            liForm.addView(sGradoMeteo1);
-
-            //------------> Grado meteorización  2
-
-            TextView tvGradoMeteo2 = new TextView(mcont);
-            tvGradoMeteo2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvGradoMeteo2.setText("Grado de Meteorización Litología 2");
-            tvGradoMeteo2.setTextAppearance(R.style.TituloItem);
-            tvGradoMeteo2.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvGradoMeteo2);
-
-            Spinner sGradoMeteo2 = new Spinner(mcont);
-            sGradoMeteo2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter10 = ArrayAdapter.createFromResource(mcont, R.array.GradoMeteo2, android.R.layout.simple_spinner_item);
-            adapter10.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sGradoMeteo2.setAdapter(adapter10);
-            sGradoMeteo2.setTag("gradometeo2");
-            ListaSpinner.get(idLinear).add(sGradoMeteo2);
-            liForm.addView(sGradoMeteo2);
-
-            //------------> Resistenca a la compresion  1
-
-            TextView tvResistenciaComp1 = new TextView(mcont);
-            tvResistenciaComp1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvResistenciaComp1.setText("Resistencia a la Compresión Simple (Mpa) Litología 1");
-            tvResistenciaComp1.setTextAppearance(R.style.TituloItem);
-            tvResistenciaComp1.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvResistenciaComp1);
-
-            Spinner sResistenciaComp1 = new Spinner(mcont);
-            sResistenciaComp1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter11 = ArrayAdapter.createFromResource(mcont, R.array.ResistenciaCompresionSimple1, android.R.layout.simple_spinner_item);
-            adapter11.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sResistenciaComp1.setAdapter(adapter11);
-            sResistenciaComp1.setTag("resistenciacomp1");
-            ListaSpinner.get(idLinear).add(sResistenciaComp1);
-            liForm.addView(sResistenciaComp1);
-
-            //------------> Resistenca a la compresion  2
-
-            TextView tvResistenciaComp2 = new TextView(mcont);
-            tvResistenciaComp2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvResistenciaComp2.setText("Resistencia a la Compresión Simple (Mpa) Litología 2");
-            tvResistenciaComp2.setTextAppearance(R.style.TituloItem);
-            tvResistenciaComp2.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvResistenciaComp2);
-
-            Spinner sResistenciaComp2 = new Spinner(mcont);
-            sResistenciaComp2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            ArrayAdapter<CharSequence> adapter12 = ArrayAdapter.createFromResource(mcont, R.array.ResistenciaCompresionSimple2, android.R.layout.simple_spinner_item);
-            adapter12.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sResistenciaComp2.setAdapter(adapter12);
-            sResistenciaComp2.setTag("resistenciacomp2");
-            ListaSpinner.get(idLinear).add(sResistenciaComp2);
-            liForm.addView(sResistenciaComp2);
-
-            //------------> Color 1
-
-            TextView tvColor1 = new TextView(mcont);
-            tvColor1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvColor1.setText("Color Litología 1");
-            tvColor1.setTextAppearance(R.style.TituloItem);
-            tvColor1.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvColor1);
-
-            EditText etColor1 = new EditText(mcont);
-            etColor1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etColor1.setHint("Color Litología 1");
-            etColor1.setEms(10);
-            etColor1.setTag("color1");
-            ListaEditText.get(idLinear).add(etColor1);
-            liForm.addView(etColor1);
-
-            //------------> Color 2
-
-            TextView tvColor2 = new TextView(mcont);
-            tvColor2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvColor2.setText("Color Litología 2");
-            tvColor2.setTextAppearance(R.style.TituloItem);
-            tvColor2.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvColor2);
-
-            EditText etColor2 = new EditText(mcont);
-            etColor2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etColor2.setHint("Color Litología 2");
-            etColor2.setEms(10);
-            etColor2.setTag("color2");
-            ListaEditText.get(idLinear).add(etColor2);
-            liForm.addView(etColor2);
-
-            //------------> Composición Mineralogica 1
-
-            TextView tvComposicionMineral1 = new TextView(mcont);
-            tvComposicionMineral1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvComposicionMineral1.setText("Composición Mineralógica (Macro) Litología 1");
-            tvComposicionMineral1.setTextAppearance(R.style.TituloItem);
-            tvComposicionMineral1.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvComposicionMineral1);
-
-            EditText etComposicionMineral1 = new EditText(mcont);
-            etComposicionMineral1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etComposicionMineral1.setHint("Composición Mineralógica (Macro) Litología 1");
-            etComposicionMineral1.setEms(10);
-            etComposicionMineral1.setTag("composicionmineral1");
-            ListaEditText.get(idLinear).add(etComposicionMineral1);
-            liForm.addView(etComposicionMineral1);
-
-            //------------> Composición Mineralogica 2
-
-            TextView tvComposicionMineral2 = new TextView(mcont);
-            tvComposicionMineral2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvComposicionMineral2.setText("Composición Mineralógica (Macro) Litología 2");
-            tvComposicionMineral2.setTextAppearance(R.style.TituloItem);
-            tvComposicionMineral2.setPadding(0, mtop, 0, 0);
-            liForm.addView(tvComposicionMineral2);
-
-            EditText etComposicionMineral2 = new EditText(mcont);
-            etComposicionMineral2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            etComposicionMineral2.setHint("Composición Mineralógica (Macro) Litología 2");
-            etComposicionMineral2.setEms(10);
-            etComposicionMineral2.setTag("composicionmineral2");
-            ListaEditText.get(idLinear).add(etComposicionMineral2);
-            liForm.addView(etComposicionMineral2);
-
 
             //------------> LEVANTAMIENTO DE DISCONTINUIDADES
 
@@ -1695,315 +765,48 @@ public class SlideshowFragment extends Fragment {
                     tvNameDiscont.setPadding(0, 100, 0, 50);
                     liDiscontinuidades.addView(tvNameDiscont);
 
+                    for (int i = 0; i < listaElementosUGSRDiscont.size(); i++){
+                        ElementoFormato elementoActual = listaElementosUGSRDiscont.get(i);
+                        String nombreElemento = elementoActual.getNombreelemento();
+                        String hintElemento = elementoActual.getNombreelemento();
+                        String claseElemento = elementoActual.getClaseelemento();
+                        String tagElemento = elementoActual.getTagelemento();
+                        int idStringArrayElemento = elementoActual.getIdStringArray();
+                        int aux = listDiscontinuidades.size();
+                        if (claseElemento.equals("edittext")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, mtop, 0, 0);
+                            liDiscontinuidades.addView(tvGenerico);
 
-                    //------------> Tipo
+                            EditText etGenerico = new EditText(mcont);
+                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            etGenerico.setHint(hintElemento);
+                            etGenerico.setEms(10);
+                            etGenerico.setTag(tagElemento+aux);
+                            ListaEditText.get(idLinear).add(etGenerico);
+                            liDiscontinuidades.addView(etGenerico);
+                        }
+                        if (claseElemento.equals("spinner")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, mtop, 0, 0);
+                            liDiscontinuidades.addView(tvGenerico);
 
-                    TextView tvTipoDiscont = new TextView(mcont);
-                    tvTipoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvTipoDiscont.setText("Tipo");
-                    tvTipoDiscont.setTextAppearance(R.style.TituloItem);
-                    tvTipoDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvTipoDiscont);
-
-                    Spinner sTipoDiscont = new Spinner(mcont);
-                    sTipoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, R.array.TipoDiscont, android.R.layout.simple_spinner_item);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sTipoDiscont.setAdapter(adapter);
-                    sTipoDiscont.setTag("TipoDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sTipoDiscont);
-                    liDiscontinuidades.addView(sTipoDiscont);
-
-
-                    //------------> Dir Buzamiento
-
-                    TextView tvDirBuzamiento = new TextView(mcont);
-                    tvDirBuzamiento.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvDirBuzamiento.setText("Dir. Buzamiento (Az. Bz.) ");
-                    tvDirBuzamiento.setTextAppearance(R.style.TituloItem);
-                    tvDirBuzamiento.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvDirBuzamiento);
-
-                    EditText etDirBuzamiento = new EditText(mcont);
-                    etDirBuzamiento.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etDirBuzamiento.setHint("Dir. Buzamiento (Az. Bz.) ");
-                    etDirBuzamiento.setEms(10);
-                    etDirBuzamiento.setTag("DirBuzamiento"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etDirBuzamiento);
-                    liDiscontinuidades.addView(etDirBuzamiento);
-
-                    //------------> Buzamiento
-
-                    TextView tvBuzamiento = new TextView(mcont);
-                    tvBuzamiento.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvBuzamiento.setText("Buzamiento (Bz.)");
-                    tvBuzamiento.setTextAppearance(R.style.TituloItem);
-                    tvBuzamiento.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvBuzamiento);
-
-                    EditText etBuzamiento = new EditText(mcont);
-                    etBuzamiento.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etBuzamiento.setHint("Buzamiento (Bz.)");
-                    etBuzamiento.setEms(10);
-                    etBuzamiento.setTag("Buzamiento"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etBuzamiento);
-                    liDiscontinuidades.addView(etBuzamiento);
-
-
-                    //------------> Persistencia
-
-                    TextView tvPersistenciaDiscont = new TextView(mcont);
-                    tvPersistenciaDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvPersistenciaDiscont.setText("Persistencia");
-                    tvPersistenciaDiscont.setTextAppearance(R.style.TituloItem);
-                    tvPersistenciaDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvPersistenciaDiscont);
-
-                    Spinner sPersistenciaDiscont = new Spinner(mcont);
-                    sPersistenciaDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(mcont, R.array.PersistenciaDiscont, android.R.layout.simple_spinner_item);
-                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sPersistenciaDiscont.setAdapter(adapter1);
-                    sPersistenciaDiscont.setTag("PersistenciaDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sPersistenciaDiscont);
-                    liDiscontinuidades.addView(sPersistenciaDiscont);
-
-                    //------------> Ancho de Abertura
-
-                    TextView tvAnchoAberDiscont = new TextView(mcont);
-                    tvAnchoAberDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvAnchoAberDiscont.setText("Ancho de Abertura");
-                    tvAnchoAberDiscont.setTextAppearance(R.style.TituloItem);
-                    tvAnchoAberDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvAnchoAberDiscont);
-
-                    Spinner sAnchoAberDiscont = new Spinner(mcont);
-                    sAnchoAberDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(mcont, R.array.AnchoAberturaDiscont, android.R.layout.simple_spinner_item);
-                    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sAnchoAberDiscont.setAdapter(adapter2);
-                    sAnchoAberDiscont.setTag("AnchoAberDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sAnchoAberDiscont);
-                    liDiscontinuidades.addView(sAnchoAberDiscont);
-
-                    //------------> Tipo de Relleno
-
-                    TextView tvTipoRellenoDiscont = new TextView(mcont);
-                    tvTipoRellenoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvTipoRellenoDiscont.setText("Tipo de Relleno");
-                    tvTipoRellenoDiscont.setTextAppearance(R.style.TituloItem);
-                    tvTipoRellenoDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvTipoRellenoDiscont);
-
-                    Spinner sTipoRellenoDiscont = new Spinner(mcont);
-                    sTipoRellenoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(mcont, R.array.TipoRellenoDiscont, android.R.layout.simple_spinner_item);
-                    adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sTipoRellenoDiscont.setAdapter(adapter3);
-                    sTipoRellenoDiscont.setTag("TipoRellenoDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sTipoRellenoDiscont);
-                    liDiscontinuidades.addView(sTipoRellenoDiscont);
-
-                    //------------> Rugosidad de la Superficie
-
-                    TextView tvRugosidadSuperDiscont = new TextView(mcont);
-                    tvRugosidadSuperDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvRugosidadSuperDiscont.setText("Rugosidad de la Superficie");
-                    tvRugosidadSuperDiscont.setTextAppearance(R.style.TituloItem);
-                    tvRugosidadSuperDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvRugosidadSuperDiscont);
-
-                    Spinner sRugosidadSuperDiscont = new Spinner(mcont);
-                    sRugosidadSuperDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(mcont, R.array.RugosidadDiscont, android.R.layout.simple_spinner_item);
-                    adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sRugosidadSuperDiscont.setAdapter(adapter4);
-                    sRugosidadSuperDiscont.setTag("RugosidadSuperDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sRugosidadSuperDiscont);
-                    liDiscontinuidades.addView(sRugosidadSuperDiscont);
-
-                    //------------> Forma de la Superficie
-
-                    TextView tvFormaSuperDiscont = new TextView(mcont);
-                    tvFormaSuperDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvFormaSuperDiscont.setText("Forma de la Superficie");
-                    tvFormaSuperDiscont.setTextAppearance(R.style.TituloItem);
-                    tvFormaSuperDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvFormaSuperDiscont);
-
-                    Spinner sFormaSuperDiscont = new Spinner(mcont);
-                    sFormaSuperDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter5 = ArrayAdapter.createFromResource(mcont, R.array.FormaSuperficieDiscont, android.R.layout.simple_spinner_item);
-                    adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sFormaSuperDiscont.setAdapter(adapter5);
-                    sFormaSuperDiscont.setTag("FormaSuperDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sFormaSuperDiscont);
-                    liDiscontinuidades.addView(sFormaSuperDiscont);
-
-                    //------------> Humedad en Diaclasas
-
-                    TextView tvHumedadDiscont = new TextView(mcont);
-                    tvHumedadDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvHumedadDiscont.setText("Humedad en Diaclasas");
-                    tvHumedadDiscont.setTextAppearance(R.style.TituloItem);
-                    tvHumedadDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvHumedadDiscont);
-
-                    Spinner sHumedadDiscont = new Spinner(mcont);
-                    sHumedadDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter6 = ArrayAdapter.createFromResource(mcont, R.array.HumedadDiaclasasDiscont, android.R.layout.simple_spinner_item);
-                    adapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sHumedadDiscont.setAdapter(adapter6);
-                    sHumedadDiscont.setTag("HumedadDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sHumedadDiscont);
-                    liDiscontinuidades.addView(sHumedadDiscont);
-
-                    //------------> Espaciamiento
-
-                    TextView tvEspaciamientoDiscont = new TextView(mcont);
-                    tvEspaciamientoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvEspaciamientoDiscont.setText("Espaciamiento");
-                    tvEspaciamientoDiscont.setTextAppearance(R.style.TituloItem);
-                    tvEspaciamientoDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvEspaciamientoDiscont);
-
-                    Spinner sEspaciamientoDiscont = new Spinner(mcont);
-                    sEspaciamientoDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter7 = ArrayAdapter.createFromResource(mcont, R.array.EspaciamientoDiscont, android.R.layout.simple_spinner_item);
-                    adapter7.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sEspaciamientoDiscont.setAdapter(adapter7);
-                    sEspaciamientoDiscont.setTag("EspaciamientoDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sEspaciamientoDiscont);
-                    liDiscontinuidades.addView(sEspaciamientoDiscont);
-
-                    //------------> Meteorización
-
-                    TextView tvMeteorizacionDiscont = new TextView(mcont);
-                    tvMeteorizacionDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvMeteorizacionDiscont.setText("Meteorizacion");
-                    tvMeteorizacionDiscont.setTextAppearance(R.style.TituloItem);
-                    tvMeteorizacionDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvMeteorizacionDiscont);
-
-                    Spinner sMeteorizacionDiscont = new Spinner(mcont);
-                    sMeteorizacionDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    ArrayAdapter<CharSequence> adapter8 = ArrayAdapter.createFromResource(mcont, R.array.MeteorizacionDiscont, android.R.layout.simple_spinner_item);
-                    adapter8.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    sMeteorizacionDiscont.setAdapter(adapter8);
-                    sMeteorizacionDiscont.setTag("MeteorizacionDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sMeteorizacionDiscont);
-                    liDiscontinuidades.addView(sMeteorizacionDiscont);
-
-                    //------------> Rake/Pitch
-
-                    TextView tvRakePitch = new TextView(mcont);
-                    tvRakePitch.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvRakePitch.setText("Rake/Pitch");
-                    tvRakePitch.setTextAppearance(R.style.TituloItem);
-                    tvRakePitch.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvRakePitch);
-
-                    EditText etRakePitch = new EditText(mcont);
-                    etRakePitch.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etRakePitch.setHint("Rake/Pitch");
-                    etRakePitch.setEms(10);
-                    etRakePitch.setTag("RakePitch"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etRakePitch);
-                    liDiscontinuidades.addView(etRakePitch);
-
-                    //------------> Dir. del Rake/Pitch
-
-                    TextView tvDirRakePitch = new TextView(mcont);
-                    tvDirRakePitch.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvDirRakePitch.setText("Dir. del Rake/Pitch");
-                    tvDirRakePitch.setTextAppearance(R.style.TituloItem);
-                    tvDirRakePitch.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvDirRakePitch);
-
-                    EditText etDirRakePitch = new EditText(mcont);
-                    etDirRakePitch.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etDirRakePitch.setHint("Dir. del Rake/Pitch");
-                    etDirRakePitch.setEms(10);
-                    etDirRakePitch.setTag("DirRakePitch"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etDirRakePitch);
-                    liDiscontinuidades.addView(etDirRakePitch);
-
-                    //------------> Orientación talud/ladera
-
-                    TextView tvOrientacion = new TextView(mcont);
-                    tvOrientacion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvOrientacion.setText("Orientación talud/ladera");
-                    tvOrientacion.setTextAppearance(R.style.TituloItem);
-                    tvOrientacion.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvOrientacion);
-
-                    //------------> Az Bz/Bz 1
-
-                    TextView tvAzBzBz1 = new TextView(mcont);
-                    tvAzBzBz1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvAzBzBz1.setText("Az Bz/Bz");
-                    tvAzBzBz1.setTextAppearance(R.style.TituloItem);
-                    tvAzBzBz1.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvAzBzBz1);
-
-                    EditText etAzBzBz1 = new EditText(mcont);
-                    etAzBzBz1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etAzBzBz1.setHint("Az Bz/Bz");
-                    etAzBzBz1.setEms(10);
-                    etAzBzBz1.setTag("AzBzBz1"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etAzBzBz1);
-                    liDiscontinuidades.addView(etAzBzBz1);
-
-                    //------------> Az Bz/Bz 2
-
-                    TextView tvAzBzBz2 = new TextView(mcont);
-                    tvAzBzBz2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvAzBzBz2.setText("Az Bz/Bz");
-                    tvAzBzBz2.setTextAppearance(R.style.TituloItem);
-                    tvAzBzBz2.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvAzBzBz2);
-
-                    EditText etAzBzBz2 = new EditText(mcont);
-                    etAzBzBz2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etAzBzBz2.setHint("Az Bz/Bz");
-                    etAzBzBz2.setEms(10);
-                    etAzBzBz2.setTag("AzBzBz2"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etAzBzBz2);
-                    liDiscontinuidades.addView(etAzBzBz2);
-
-                    //------------> Altura
-
-                    TextView tvAltura = new TextView(mcont);
-                    tvAltura.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvAltura.setText("Altura");
-                    tvAltura.setTextAppearance(R.style.TituloItem);
-                    tvAltura.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvAltura);
-
-                    EditText etAltura = new EditText(mcont);
-                    etAltura.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etAltura.setHint("Altura");
-                    etAltura.setEms(10);
-                    etAltura.setTag("AlturaDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etAltura);
-                    liDiscontinuidades.addView(etAltura);
-
-                    //------------> Observaciones
-
-                    TextView tvObservacionesDiscont = new TextView(mcont);
-                    tvObservacionesDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvObservacionesDiscont.setText("Observaciones");
-                    tvObservacionesDiscont.setTextAppearance(R.style.TituloItem);
-                    tvObservacionesDiscont.setPadding(0, 70, 0, 0);
-                    liDiscontinuidades.addView(tvObservacionesDiscont);
-
-                    EditText etObservacionesDiscont = new EditText(mcont);
-                    etObservacionesDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etObservacionesDiscont.setHint("Observaciones");
-                    etObservacionesDiscont.setEms(10);
-                    etObservacionesDiscont.setTag("ObservacionesDiscont"+ listContDiscontinuidades.get(Integer.parseInt(v.getTag().toString())));
-                    ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etObservacionesDiscont);
-                    liDiscontinuidades.addView(etObservacionesDiscont);
+                            Spinner sGenerico = new Spinner(mcont);
+                            sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, idStringArrayElemento, android.R.layout.simple_spinner_item);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            sGenerico.setAdapter(adapter);
+                            sGenerico.setTag(tagElemento+aux);
+                            ListaSpinner.get(idLinear).add(sGenerico);
+                            liDiscontinuidades.addView(sGenerico);
+                        }
+                    }
 
                 }
             });
@@ -2032,10 +835,6 @@ public class SlideshowFragment extends Fragment {
             bFotosAnexas.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int aux=radioPrueba.getCheckedRadioButtonId()-1;
-                    Log.d("jaaja", "radiobtn: "+radioPrueba.getChildAt(aux).getTag());
-                    Log.d("jaaja", "radiobtn: "+radioPrueba.getTag());
-
 
                     listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
 
@@ -2101,6 +900,701 @@ public class SlideshowFragment extends Fragment {
                     liFotosAnexas.addView(tvNameFotos);
 
 
+                    for (int i = 0; i < listaElementosUGSFotosAnexas.size(); i++){
+                        ElementoFormato elementoActual = listaElementosUGSFotosAnexas.get(i);
+                        String nombreElemento = elementoActual.getNombreelemento();
+                        String hintElemento = elementoActual.getNombreelemento();
+                        String claseElemento = elementoActual.getClaseelemento();
+                        String tagElemento = elementoActual.getTagelemento();
+                        int idStringArrayElemento = elementoActual.getIdStringArray();
+                        int aux = listFotosAnexas.size();
+                        if (claseElemento.equals("edittext")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, 40, 0, 0);
+                            liFotosAnexas.addView(tvGenerico);
+
+                            EditText etGenerico = new EditText(mcont);
+                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            etGenerico.setHint(hintElemento);
+                            etGenerico.setEms(10);
+                            etGenerico.setTag(tagElemento+aux);
+                            ListaEditText.get(idLinear).add(etGenerico);
+                            liFotosAnexas.addView(etGenerico);
+                        }
+                    }
+
+                }
+            });
+            liForm.addView(bFotosAnexas);
+
+            listLiForm.add(liForm);
+            liFormularios.addView(liForm);
+        }
+
+        if (formType.equals("UGS Suelos")) {
+
+            Button bAcordion = new Button(mcont);
+            bAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+            bAcordion.setText("Formato UGS Suelos");
+            bAcordion.setTag(idLinear);
+            listBtnAcordion.add(bAcordion);
+            liFormularios.addView(bAcordion);
+
+            LinearLayout liForm = new LinearLayout(mcont);
+            liForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liForm.setOrientation(LinearLayout.VERTICAL);
+            liForm.setBackgroundColor(0x33333300);
+            //liForm.setVisibility(View.GONE);
+            liForm.setTag(idLinear);
+
+            bAcordion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("jaaj", "onClick: "+listFormularios);
+                    if (listLiForm.get(Integer.parseInt(v.getTag().toString())).getVisibility() == View.VISIBLE) {
+                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                        animation.setDuration(220);
+                        animation.setFillAfter(false);
+                        animation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                            }
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.GONE);
+                                listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                            }
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                            }
+                        });
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
+
+                    }
+                    else {
+                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                        animation.setDuration(220);
+                        animation.setFillAfter(false);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
+                        listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                    }
+
+                }
+            });
+
+            //------------> Titulo del Formato
+
+            TextView tvTitulo = new TextView(mcont);
+            tvTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvTitulo.setText("Formato UGSS");
+            tvTitulo.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            tvTitulo.setTextAppearance(R.style.TituloFormato);
+            tvTitulo.setPadding(0, 70, 0, 70);
+            liForm.addView(tvTitulo);
+
+
+            Button bBorrarForm = new Button(mcont);
+            bBorrarForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bBorrarForm.setText("Borrar Este Formulario");
+            bBorrarForm.setTag(idLinear);
+            bBorrarForm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("jaaj", "BOrrar: "+listFormularios);
+                    listLiForm.get(Integer.parseInt(v.getTag().toString())).removeAllViews();
+                    liFormularios.removeView(listBtnAcordion.get(Integer.parseInt(v.getTag().toString())));
+                    listFormularios.set(Integer.parseInt(v.getTag().toString()), "Ninguno");
+                }
+            });
+            liForm.addView(bBorrarForm);
+
+            Boolean auxFinosGruesos = false;
+
+            for (int i = 0; i < listaElementosUGSS.size(); i++) {
+                ElementoFormato elementoActual = listaElementosUGSS.get(i);
+                String nombreElemento = elementoActual.getNombreelemento();
+                String hintElemento = elementoActual.getNombreelemento();
+                String claseElemento = elementoActual.getClaseelemento();
+                String tagElemento = elementoActual.getTagelemento();
+                int idStringArrayElemento = elementoActual.getIdStringArray();
+
+
+                if (claseElemento.equals("edittext")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    EditText etGenerico = new EditText(mcont);
+                    etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    etGenerico.setHint(hintElemento);
+                    etGenerico.setEms(10);
+                    etGenerico.setTag(tagElemento);
+                    ListaEditText.get(idLinear).add(etGenerico);
+                    liForm.addView(etGenerico);
+                }
+                if (claseElemento.equals("spinner")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    Spinner sGenerico = new Spinner(mcont);
+                    sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, idStringArrayElemento, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    sGenerico.setAdapter(adapter);
+                    sGenerico.setTag(tagElemento);
+                    ListaSpinner.get(idLinear).add(sGenerico);
+                    liForm.addView(sGenerico);
+                }
+                if (claseElemento.equals("secuenciaestrati")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloFormato);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+                    int secuEstratiWidth = 420;
+                    int secuEstratiOrdenWidth = 200;
+                    int secuEstratiEspesorWidth = 300;
+
+                    for (int j = 0; j < opciones.length ; j++) {
+                        int aux = j + 1;
+                        LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                        liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                        TextView tvSecuenciaEstratiOpt = new TextView(mcont);
+                        tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvSecuenciaEstratiOpt.setText(opciones[j]);
+                        tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
+                        liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+                        EditText etSecuenciaEstratiOpt = new EditText(mcont);
+                        etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etSecuenciaEstratiOpt.setHint("Orden");
+                        etSecuenciaEstratiOpt.setEms(10);
+                        etSecuenciaEstratiOpt.setTag(tagElemento+aux+"orden");
+                        ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
+                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
+
+                        EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
+                        etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etSecuenciaEstratiOpt1Espesor.setHint("Espesor (m)");
+                        etSecuenciaEstratiOpt1Espesor.setEms(10);
+                        etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+aux+"espesor");
+                        ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
+                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
+
+                        liForm.addView(liFormSecuenciaEstrati);
+
+                        if (opciones[j].equals("Suelo Residual")){
+                            LinearLayout liFormSecuenciaEstratiSueloR = new LinearLayout(mcont);
+                            liFormSecuenciaEstratiSueloR.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            liFormSecuenciaEstratiSueloR.setOrientation(LinearLayout.VERTICAL);
+
+                            liForm.addView(liFormSecuenciaEstratiSueloR);
+
+                            etSecuenciaEstratiOpt.addTextChangedListener(new TextWatcher() {
+                                // Antes de que el texto cambie (no debemos modificar nada aquí)
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                                //Cuando esté cambiando (no debemos modificar el texto aquí)
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                                // Aquí el texto ya ha cambiado completamente, tenemos el texto actualizado en pocas palabras
+                                @Override
+                                public void afterTextChanged(Editable s) {
+                                    String elNuevoTexto = s.toString();
+                                    elNuevoTexto = elNuevoTexto.replace(" ","");
+
+                                    //-------------------> Si es Suelo Residual
+
+                                    if (!elNuevoTexto.equals("")){
+
+                                        int secuEstratiWidth = 450;
+                                        int secuEstratiOrdenWidth = 200;
+                                        int secuEstratiEspesorWidth = 300;
+
+                                        TextView tvSecuenciaEstratiHorizonte2 = new TextView(mcont);
+                                        tvSecuenciaEstratiHorizonte2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        tvSecuenciaEstratiHorizonte2.setText("Horizonte");
+                                        tvSecuenciaEstratiHorizonte2.setTextAppearance(R.style.TituloItem);
+                                        liFormSecuenciaEstratiSueloR.addView(tvSecuenciaEstratiHorizonte2);
+
+                                        String tagElemento = ElementoSueloResidualUGSS.getTagelemento();
+                                        int idStringArrayElemento = ElementoSueloResidualUGSS.getIdStringArray();
+
+                                        Resources res = getResources();
+                                        String[] opciones = res.getStringArray(idStringArrayElemento);
+                                        for (int i = 0; i < opciones.length; i++) {
+                                            int aux = i + 1;
+                                            LinearLayout liFormSecuenciaEstratiSueloR1 = new LinearLayout(mcont);
+                                            liFormSecuenciaEstratiSueloR1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            liFormSecuenciaEstratiSueloR1.setOrientation(LinearLayout.HORIZONTAL);
+
+                                            TextView tvSecuenciaEstratiSueloR = new TextView(mcont);
+                                            tvSecuenciaEstratiSueloR.setLayoutParams(new ActionBar.LayoutParams(secuEstratiWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            tvSecuenciaEstratiSueloR.setText(opciones[i]);
+                                            tvSecuenciaEstratiSueloR.setTextAppearance(R.style.TituloItem);
+                                            liFormSecuenciaEstratiSueloR1.addView(tvSecuenciaEstratiSueloR);
+
+                                            EditText etSecuenciaEstratiSueloROrden = new EditText(mcont);
+                                            etSecuenciaEstratiSueloROrden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            etSecuenciaEstratiSueloROrden.setHint("Orden");
+                                            etSecuenciaEstratiSueloROrden.setEms(10);
+                                            etSecuenciaEstratiSueloROrden.setTag(tagElemento+ aux +"orden");
+                                            ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloROrden);
+                                            liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloROrden);
+
+                                            EditText etSecuenciaEstratiSueloREspesor = new EditText(mcont);
+                                            etSecuenciaEstratiSueloREspesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            etSecuenciaEstratiSueloREspesor.setHint("Espesor (m)");
+                                            etSecuenciaEstratiSueloREspesor.setEms(10);
+                                            etSecuenciaEstratiSueloREspesor.setTag(tagElemento+ aux +"espesor");
+                                            ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloREspesor);
+                                            liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloREspesor);
+
+                                            liFormSecuenciaEstratiSueloR.addView(liFormSecuenciaEstratiSueloR1);
+
+                                        }
+
+                                    }
+                                    else{
+                                        liFormSecuenciaEstratiSueloR.removeAllViews();
+                                    }
+
+                                }
+                            });
+                        }
+                    }
+
+                }
+                if (claseElemento.equals("titulo")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloFormato);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+                }
+                if (claseElemento.equals("litologias")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    LinearLayout liFormLitologias = new LinearLayout(mcont);
+                    liFormLitologias.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liFormLitologias.setOrientation(LinearLayout.HORIZONTAL);
+                    liForm.addView(liFormLitologias);
+                    for (int j = 1; j < 3 ; j++){
+                        CheckBox checkbox = new CheckBox(mcont);
+                        checkbox.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        String aux = j+"";
+                        checkbox.setText(aux);
+                        checkbox.setTag(tagElemento+j+"exist_"+idLinear);
+                        ListaCheckBox.get(idLinear).add(checkbox);
+                        liFormLitologias.addView(checkbox);
+
+                        EditText etLitologia = new EditText(mcont);
+                        etLitologia.setLayoutParams(new ActionBar.LayoutParams(300, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etLitologia.setHint("Espesor (m)");
+                        etLitologia.setEms(10);
+                        etLitologia.setTag(tagElemento+j+"espesor");
+                        ListaEditText.get(idLinear).add(etLitologia);
+                        liFormLitologias.addView(etLitologia);
+
+                        if (j == 1){
+                            checkbox.setChecked(true);
+                        }
+                        if (j == 2){
+                            checkbox.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    int aux = Integer.parseInt(view.getTag().toString().split("_")[1]);
+                                    if(((CheckBox) view).isChecked()){
+                                        for (int j = 0; j < ListaRadioBtn.get(aux).size() ; j++){
+                                            ListaRadioBtn.get(aux).get(j).setEnabled(true);
+                                            ListaRadioBtn.get(aux).get(j).setClickable(true);
+                                        }
+
+                                    } else {
+                                        for (int j = 0; j < ListaRadioBtn.get(aux).size() ; j++){
+                                            ListaRadioBtn.get(aux).get(j).setEnabled(false);
+                                            ListaRadioBtn.get(aux).get(j).setClickable(false);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                }
+                if (claseElemento.equals("porcentajes")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView pruebatext = new TextView(mcont);
+                    pruebatext.setLayoutParams(new ActionBar.LayoutParams(400, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext.setText("2");
+                    pruebatext.setTextAppearance(R.style.TituloItem);
+                    pruebatext.setPadding(345, 20, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext);
+
+                    TextView pruebatext1 = new TextView(mcont);
+                    pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext1.setText("1");
+                    pruebatext1.setTextAppearance(R.style.TituloItem);
+                    pruebatext1.setPadding(30, 20, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext1);
+
+                    liForm.addView(liradiobtnTitulo);
+
+
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+
+                    for (int j = 0; j < opciones.length; j++){
+                        int aux = 2 - j;
+                        String tag = tagElemento.toString().split("_")[j];
+                        LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                        liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                        TextView tvSecuenciaEstratiOpt = new TextView(mcont);
+                        tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(300, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvSecuenciaEstratiOpt.setText(opciones[j]);
+                        tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
+                        liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+                        EditText etSecuenciaEstratiOpt = new EditText(mcont);
+                        etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etSecuenciaEstratiOpt.setEms(10);
+                        etSecuenciaEstratiOpt.setTag(tag+aux);
+                        ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
+                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
+
+                        EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
+                        etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etSecuenciaEstratiOpt1Espesor.setEms(10);
+                        etSecuenciaEstratiOpt1Espesor.setTag(tag+aux);
+                        ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
+                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
+
+                        liForm.addView(liFormSecuenciaEstrati);
+                    }
+
+
+                }
+                if (claseElemento.equals("radiobtn")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    if (nombreElemento.equals("RESISTENCIA AL CORTE NO DRENADO kN/m2 (CONSISTENCIA)")){
+                        auxFinosGruesos = true;
+                    }
+
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView pruebatext = new TextView(mcont);
+                    pruebatext.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext.setText("2");
+                    pruebatext.setTextAppearance(R.style.TituloItem);
+                    pruebatext.setPadding(30, 20, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext);
+
+                    TextView pruebatext1 = new TextView(mcont);
+                    pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext1.setText("1");
+                    pruebatext1.setTextAppearance(R.style.TituloItem);
+                    pruebatext1.setPadding(30, 20, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext1);
+
+                    liForm.addView(liradiobtnTitulo);
+
+                    LinearLayout liradiobtn = new LinearLayout(mcont);
+                    liradiobtn.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtn.setOrientation(LinearLayout.HORIZONTAL);
+
+                    Resources res = getResources();
+                    String[] opciones2 = res.getStringArray(idStringArrayElemento);
+
+                    RadioGroup radioGroup2 = new RadioGroup(mcont);
+                    radioGroup2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    radioGroup2.setTag(tagElemento+2);
+                    for(String opt : opciones2) {
+                        RadioButton nuevoRadio = new RadioButton(mcont);
+                        LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
+                                100,
+                                RadioGroup.LayoutParams.WRAP_CONTENT);
+                        nuevoRadio.setLayoutParams(params);
+                        //nuevoRadio.setText(marca);
+                        nuevoRadio.setTag(opt);
+                        nuevoRadio.setClickable(false);
+                        nuevoRadio.setEnabled(false);
+                        ListaRadioBtn.get(idLinear).add(nuevoRadio);
+                        if (auxFinosGruesos){
+                            ListaRadioBtn2.get(idLinear).add(nuevoRadio);
+                        }
+                        radioGroup2.addView(nuevoRadio);
+                    }
+                    RadioButton primerRadio2 = (RadioButton) radioGroup2.getChildAt(0);
+                    primerRadio2.setChecked(true);
+                    liradiobtn.addView(radioGroup2);
+                    ListaRadioGrp.get(idLinear).add(radioGroup2);
+
+                    Resources res1 = getResources();
+                    String[] opciones1 = res.getStringArray(idStringArrayElemento);
+
+                    RadioGroup radioGroup1 = new RadioGroup(mcont);
+                    radioGroup1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    radioGroup1.setTag(tagElemento+1);
+                    for(String opt : opciones1) {
+                        RadioButton nuevoRadio = new RadioButton(mcont);
+                        LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
+                                RadioGroup.LayoutParams.WRAP_CONTENT,
+                                RadioGroup.LayoutParams.WRAP_CONTENT);
+                        nuevoRadio.setLayoutParams(params);
+                        nuevoRadio.setText(opt);
+                        nuevoRadio.setTag(opt);
+                        if (auxFinosGruesos){
+                            ListaRadioBtn1.get(idLinear).add(nuevoRadio);
+                        }
+                        radioGroup1.addView(nuevoRadio);
+                    }
+                    RadioButton primerRadio1 = (RadioButton) radioGroup1.getChildAt(0);
+                    primerRadio1.setChecked(true);
+                    liradiobtn.addView(radioGroup1);
+                    ListaRadioGrp.get(idLinear).add(radioGroup1);
+
+                    liForm.addView(liradiobtn);
+
+
+                    if (nombreElemento.equals("Orientacion de los Clastos") || nombreElemento.equals("Orientación de la Matriz")){
+                        LinearLayout liFormdirimbri = new LinearLayout(mcont);
+                        liFormdirimbri.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormdirimbri.setOrientation(LinearLayout.VERTICAL);
+
+                        liForm.addView(liFormdirimbri);
+
+                        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                            public void onCheckedChanged(RadioGroup group, int checkedId)
+                            {
+                                Log.d("jaaja", "onCheckedChanged: "+group.getTag());
+                                Log.d("jaaja", "onCheckedChanged: "+checkedId);
+                                // This will get the radiobutton that has changed in its check state
+                                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+                                // This puts the value (true/false) into the variable
+                                boolean isChecked = checkedRadioButton.isChecked();
+                                Log.d("jaaja", "onCheckedChanged: "+checkedRadioButton.getText());
+                                // If the radiobutton that has changed in check state is now checked...
+                                if (isChecked && checkedRadioButton.getText().equals("Imbricado"))
+                                {
+                                    TextView DirImbricacion1 = new TextView(mcont);
+                                    DirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    int aux = 0;
+
+                                    DirImbricacion1.setText("Dirección de la Imbricación Litología 1");
+                                    DirImbricacion1.setTextAppearance(R.style.TituloItem);
+                                    DirImbricacion1.setPadding(0, mtop, 0, 0);
+                                    liFormdirimbri.addView(DirImbricacion1);
+
+                                    EditText etDirImbricacion1 = new EditText(mcont);
+                                    etDirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    etDirImbricacion1.setHint("Dirección de la Imbricación Litología 1");
+                                    etDirImbricacion1.setEms(10);
+                                    etDirImbricacion1.setTag("dirimbricacion1");
+                                    ListaEditText.get(idLinear).add(etDirImbricacion1);
+                                    liFormdirimbri.addView(etDirImbricacion1);
+                                }
+                            }
+                        });
+                        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                            public void onCheckedChanged(RadioGroup group, int checkedId)
+                            {
+                                Log.d("jaaja", "onCheckedChanged: "+group.getTag());
+                                Log.d("jaaja", "onCheckedChanged: "+checkedId);
+                                // This will get the radiobutton that has changed in its check state
+                                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+                                // This puts the value (true/false) into the variable
+                                boolean isChecked = checkedRadioButton.isChecked();
+                                // If the radiobutton that has changed in check state is now checked...
+                                Log.d("jaaja", "onCheckedChanged: "+checkedRadioButton.getText());
+                                if (isChecked && checkedId == 57)
+                                {
+                                    TextView DirImbricacion1 = new TextView(mcont);
+                                    DirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                                    DirImbricacion1.setText("Dirección de la Imbricación Litología 2");
+                                    DirImbricacion1.setTextAppearance(R.style.TituloItem);
+                                    DirImbricacion1.setPadding(0, mtop, 0, 0);
+                                    liFormdirimbri.addView(DirImbricacion1);
+
+                                    EditText etDirImbricacion1 = new EditText(mcont);
+                                    etDirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    etDirImbricacion1.setHint("Dirección de la Imbricación Litología 2");
+                                    etDirImbricacion1.setEms(10);
+                                    etDirImbricacion1.setTag("dirimbricacion2");
+                                    ListaEditText.get(idLinear).add(etDirImbricacion1);
+                                    liFormdirimbri.addView(etDirImbricacion1);
+                                }
+                            }
+                        });
+                    }
+
+//                    if (nombreElemento.equals("Granulometría de la Matriz")){
+//                        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//                            public void onCheckedChanged(RadioGroup group, int checkedId)
+//                            {
+//                                // This will get the radiobutton that has changed in its check state
+//                                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+//                                // This puts the value (true/false) into the variable
+//                                boolean isChecked = checkedRadioButton.isChecked();
+//                                // If the radiobutton that has changed in check state is now checked...
+//                                if (isChecked && checkedId == 2)
+//                                {
+//                                    if(((CheckBox) view).isChecked()){
+//                                        for (int j = 0; j < ListaRadioBtn.get(aux).size() ; j++){
+//                                            ListaRadioBtn.get(aux).get(j).setEnabled(true);
+//                                            ListaRadioBtn.get(aux).get(j).setClickable(true);
+//                                        }
+//
+//                                    } else {
+//                                        for (int j = 0; j < ListaRadioBtn.get(aux).size() ; j++){
+//                                            ListaRadioBtn.get(aux).get(j).setEnabled(false);
+//                                            ListaRadioBtn.get(aux).get(j).setClickable(false);
+//                                        }
+//                                    }
+//
+//                                }
+//                            }
+//                        });
+//
+//                    }
+
+                }
+
+            }
+
+
+
+
+            //------------> Fotografías Anexas
+
+            TextView tvFotosAnexas = new TextView(mcont);
+            tvFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvFotosAnexas.setText("Fotografías Anexas");
+            tvFotosAnexas.setTextAppearance(R.style.TituloFormato);
+            tvFotosAnexas.setPadding(0, mtop, 0, 20);
+            liForm.addView(tvFotosAnexas);
+
+            LinearLayout liFormFotosAnexasSuelos = new LinearLayout(mcont);
+            liFormFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormFotosAnexasSuelos.setOrientation(LinearLayout.VERTICAL);
+            liForm.addView(liFormFotosAnexasSuelos);
+
+
+            Button bFotosAnexasSuelos = new Button(mcont);
+            bFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bFotosAnexasSuelos.setText("Añadir Foto");
+            bFotosAnexasSuelos.setTag(idLinear);
+            bFotosAnexasSuelos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.plus_circle, 0);
+            bFotosAnexasSuelos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
+
+                    Button bFotosAnexasAcordion = new Button(mcont);
+                    bFotosAnexasAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                    String foto = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
+                    bFotosAnexasAcordion.setText(foto);
+                    bFotosAnexasAcordion.setTag(idLinear);
+                    liFormFotosAnexasSuelos.addView(bFotosAnexasAcordion);
+
+                    LinearLayout liFotosAnexas = new LinearLayout(mcont);
+                    liFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liFotosAnexas.setOrientation(LinearLayout.VERTICAL);
+                    liFotosAnexas.setBackgroundColor(0x22222200);
+                    liFotosAnexas.setVisibility(View.GONE);
+                    liFormFotosAnexasSuelos.addView(liFotosAnexas);
+                    listFotosAnexas.add(liFotosAnexas);
+
+                    bFotosAnexasAcordion.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (liFotosAnexas.getVisibility() == View.VISIBLE) {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                animation.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                    }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        liFotosAnexas.setVisibility(View.GONE);
+                                        bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                    }
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+                                    }
+                                });
+                                liFotosAnexas.startAnimation(animation);
+
+                            }
+                            else {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                liFotosAnexas.startAnimation(animation);
+                                liFotosAnexas.setVisibility(View.VISIBLE);
+                                bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                            }
+
+                        }
+                    });
+
+                    TextView tvNameFotos = new TextView(mcont);
+                    tvNameFotos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    String foto1 = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
+                    tvNameFotos.setText(foto1);
+                    tvNameFotos.setTextAppearance(R.style.TituloFormato);
+                    tvNameFotos.setPadding(0, 100, 0, 50);
+                    liFotosAnexas.addView(tvNameFotos);
+
+
                     //------------> Nombre Foto
 
                     TextView tvNombreFotosAnexas = new TextView(mcont);
@@ -2120,31 +1614,30 @@ public class SlideshowFragment extends Fragment {
 
                     //------------> Descripción
 
-                    TextView tvDescriFotosAnexas = new TextView(mcont);
-                    tvDescriFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvDescriFotosAnexas.setText("Descripción de la Foto");
-                    tvDescriFotosAnexas.setTextAppearance(R.style.TituloItem);
-                    tvDescriFotosAnexas.setPadding(0, 70, 0, 0);
-                    liFotosAnexas.addView(tvDescriFotosAnexas);
+                    TextView tvDescriFotosAnexas1 = new TextView(mcont);
+                    tvDescriFotosAnexas1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvDescriFotosAnexas1.setText("Descripción de la Foto");
+                    tvDescriFotosAnexas1.setTextAppearance(R.style.TituloItem);
+                    tvDescriFotosAnexas1.setPadding(0, 70, 0, 0);
+                    liFotosAnexas.addView(tvDescriFotosAnexas1);
 
-                    EditText etDescriFotosAnexas = new EditText(mcont);
-                    etDescriFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    etDescriFotosAnexas.setHint("Descripción de la Foto");
-                    etDescriFotosAnexas.setEms(10);
-                    etDescriFotosAnexas.setTag("DescriFotosAnexas"+listContFotosAnexas.get(idLinear));
-                    ListaEditText.get(idLinear).add(etDescriFotosAnexas);
-                    liFotosAnexas.addView(etDescriFotosAnexas);
+                    EditText etDescriFotosAnexas1 = new EditText(mcont);
+                    etDescriFotosAnexas1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    etDescriFotosAnexas1.setHint("Descripción de la Foto");
+                    etDescriFotosAnexas1.setEms(10);
+                    etDescriFotosAnexas1.setTag("DescriFotosAnexas"+listContFotosAnexas.get(idLinear));
+                    ListaEditText.get(idLinear).add(etDescriFotosAnexas1);
+                    liFotosAnexas.addView(etDescriFotosAnexas1);
                 }
             });
-            liForm.addView(bFotosAnexas);
-
+            liForm.addView(bFotosAnexasSuelos);
 
 
             listLiForm.add(liForm);
             liFormularios.addView(liForm);
         }
 
-        if (formType.equals("UGS Suelos")) {
+        if (formType.equals("UGS Suelos1")) {
 
             Button bAcordion = new Button(mcont);
             bAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -3858,19 +3351,21 @@ public class SlideshowFragment extends Fragment {
                                         JSONObject FromatoAux = Formularios.getJSONObject("Form_UGS_Rocas_"+j);
                                         JSONObject SpinnersAux = FromatoAux.getJSONObject("Spinners");
                                         JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
+                                        JSONObject CheckBoxAux = FromatoAux.getJSONObject("CheckBox");
+                                        JSONObject RadioGrpAux = FromatoAux.getJSONObject("RadioGrp");
                                         String municipios = SpinnersAux.getString("municipios");
                                         String claseaflor = SpinnersAux.getString("claseaflor");
                                         String gsi = SpinnersAux.getString("gsi");
-                                        String fabrica1 = SpinnersAux.getString("fabrica1");
-                                        String fabrica2 = SpinnersAux.getString("fabrica2");
-                                        String humedad1 = SpinnersAux.getString("humedad1");
-                                        String humedad2 = SpinnersAux.getString("humedad2");
-                                        String tamanograno1 = SpinnersAux.getString("tamañograno1");
-                                        String tamanograno2 = SpinnersAux.getString("tamañograno2");
-                                        String gradometeo1 = SpinnersAux.getString("gradometeo1");
-                                        String gradometeo2 = SpinnersAux.getString("gradometeo2");
-                                        String resistenciacomp1 = SpinnersAux.getString("resistenciacomp1");
-                                        String resistenciacomp2 = SpinnersAux.getString("resistenciacomp2");
+                                        String fabrica1 = RadioGrpAux.getString("fabrica1");
+                                        String fabrica2 = RadioGrpAux.getString("fabrica2");
+                                        String humedad1 = RadioGrpAux.getString("humedad1");
+                                        String humedad2 = RadioGrpAux.getString("humedad2");
+                                        String tamanograno1 = RadioGrpAux.getString("tamañograno1");
+                                        String tamanograno2 = RadioGrpAux.getString("tamañograno2");
+                                        String gradometeo1 = RadioGrpAux.getString("gradometeo1");
+                                        String gradometeo2 = RadioGrpAux.getString("gradometeo2");
+                                        String resistenciacomp1 = RadioGrpAux.getString("resistenciacomp1");
+                                        String resistenciacomp2 = RadioGrpAux.getString("resistenciacomp2");
                                         String noformato = EditTextsAux.getString("noformato");
                                         String vereda = EditTextsAux.getString("vereda");
 //                                        String nombreformato = EditTextsAux.getString("nombreformato");
@@ -3902,9 +3397,9 @@ public class SlideshowFragment extends Fragment {
                                             secuenciaestratisuelor3espesor = EditTextsAux.getString("secuenciaestratisuelor3espesor");
                                         }
                                         String perfilmeteorizacion = EditTextsAux.getString("perfilmeteorizacion");
-                                        String litologiasasociadasopt1exist = EditTextsAux.getString("litologiasasociadasopt1exist");
+                                        String litologiasasociadasopt1exist = CheckBoxAux.getString("litologiasasociadasopt1exist");
                                         String litologiasasociadasopt1espesor = EditTextsAux.getString("litologiasasociadasopt1espesor");
-                                        String litologiasasociadasopt2exist = EditTextsAux.getString("litologiasasociadasopt2exist");
+                                        String litologiasasociadasopt2exist = CheckBoxAux.getString("litologiasasociadasopt2exist");
                                         String litologiasasociadasopt2espesor = EditTextsAux.getString("litologiasasociadasopt2espesor");
                                         String nombreugs = EditTextsAux.getString("nombreugs");
                                         String color1 = EditTextsAux.getString("color1");
@@ -4185,6 +3680,21 @@ public class SlideshowFragment extends Fragment {
                 }
                 FormatoTemp.put("EditText", editTextList);
 
+                JSONObject checkBox = new JSONObject();
+                for (int k = 0; k < ListaCheckBox.get(i).size(); k++) {
+                    checkBox.put(ListaCheckBox.get(i).get(k).getTag().toString().split("_")[0], ListaCheckBox.get(i).get(k).isChecked());
+                }
+                FormatoTemp.put("CheckBox", checkBox);
+
+                JSONObject radioGrp = new JSONObject();
+                int contAux = 0;
+                for (int k = 0; k < ListaRadioGrp.get(i).size(); k++) {
+                    int aux= ListaRadioGrp.get(i).get(k).getCheckedRadioButtonId() - contAux - 1;
+                    contAux += ListaRadioGrp.get(i).get(k).getChildCount();
+                    radioGrp.put(ListaRadioGrp.get(i).get(k).getTag().toString(), ListaRadioGrp.get(i).get(k).getChildAt(aux).getTag());
+                }
+                FormatoTemp.put("RadioGrp", radioGrp);
+
                 FormatosList.put("Form_UGS_Rocas_"+countFormatosUGSRocas, FormatoTemp);
 
                 countFormatosUGSRocas++;
@@ -4308,11 +3818,50 @@ public class SlideshowFragment extends Fragment {
         listaElementosUGSRDiscont.add(new ElementoFormato( "Altura",  "edittext",  "AlturaDiscont", 0));
         listaElementosUGSRDiscont.add(new ElementoFormato( "Observaciones",  "edittext",  "ObservacionesDiscont", 0));
 
-
+        //----------> Fotos Anexas
 
         listaElementosUGSFotosAnexas.add(new ElementoFormato( "Nombre de la Foto",  "edittext",  "NombreFotosAnexas", 0));
         listaElementosUGSFotosAnexas.add(new ElementoFormato( "Descripción de la Foto",  "edittext",  "DescriFotosAnexas", 0));
 
+
+        //----------> Formato UGSS
+
+        listaElementosUGSS.add(new ElementoFormato( "Número Formato",  "edittext",  "noformato", 0));
+        listaElementosUGSS.add(new ElementoFormato( "Municipio",  "spinner",  "municipios", R.array.Municipios));
+        listaElementosUGSS.add(new ElementoFormato( "Vereda",  "edittext",  "vereda", 0));
+        listaElementosUGSS.add(new ElementoFormato( "Número de la Estación",  "edittext",  "noestacion", 0));
+        listaElementosUGSS.add(new ElementoFormato( "Clase Afloramiento",  "spinner",  "claseaflor", R.array.ClaseAfloramiento));
+        listaElementosUGSS.add(new ElementoFormato( "Secuencia Estratigráfica",  "secuenciaestrati",  "secuenciaestratiopt", R.array.SecuenciaEstratiSuelos));
+        listaElementosUGSS.add(new ElementoFormato( "CARACTERIZACIÓN DE LA UGS / UGI",  "titulo",  "", 0));
+        listaElementosUGSS.add(new ElementoFormato( "Nombre-Código de la UGS / UGI",  "edittext",  "nombreugs", 0));
+        listaElementosUGSS.add(new ElementoFormato( "N° litologías asociadas a la UGS /UGI",  "litologias",  "litologiasasociadasopt", 0));
+        listaElementosUGSS.add(new ElementoFormato( "CARACTERÍSTICAS DE LA UGS / UGI",  "titulo",  "", 0));
+        listaElementosUGSS.add(new ElementoFormato( "Estructura Soporte",  "radiobtn",  "estructurasoporte", R.array.EstructuraSoporte1));
+        listaElementosUGSS.add(new ElementoFormato( "Porcentajes",  "porcentajes",  "porcentajematriz_porcentajeclastos", R.array.Porcentajes));
+        listaElementosUGSS.add(new ElementoFormato( "Condicion de Humedad",  "radiobtn",  "condicionhumedad", R.array.CondicionHumedad1));
+        listaElementosUGSS.add(new ElementoFormato( "Estructuras Relictas",  "radiobtn",  "estructurasrelictas", R.array.EstructurasRelictas1));
+        listaElementosUGSS.add(new ElementoFormato( "Color Litología 1",  "edittext",  "color1", 0));
+        listaElementosUGSS.add(new ElementoFormato( "Color Litología 2",  "edittext",  "color2", 0));
+        listaElementosUGSS.add(new ElementoFormato( "CARACTERÍSTICAS DE LOS CLASTOS",  "titulo",  "", 0));
+        listaElementosUGSS.add(new ElementoFormato( "Granulometria de los Clastos",  "radiobtn",  "granulometria", R.array.Granulometria1));
+        listaElementosUGSS.add(new ElementoFormato( "Forma de los Clastos",  "radiobtn",  "forma", R.array.Forma1));
+        listaElementosUGSS.add(new ElementoFormato( "Redondez de los Clastos",  "radiobtn",  "redondez", R.array.Redondez1));
+        listaElementosUGSS.add(new ElementoFormato( "Orientacion de los Clastos",  "radiobtn",  "orientacion", R.array.OrientacionClastos1));
+        listaElementosUGSS.add(new ElementoFormato( "Meteorizacion de los Clastos",  "radiobtn",  "meteorizacionclastos", R.array.MeteorizacionClastos1));
+        listaElementosUGSS.add(new ElementoFormato( "CARACTERÍSTICAS DE LA MATRIZ",  "titulo",  "", 0));
+        listaElementosUGSS.add(new ElementoFormato( "Granulometría de la Matriz",  "radiobtn",  "granulometriamatriz", R.array.GranulometriaMatriz1));
+        listaElementosUGSS.add(new ElementoFormato( "Gradacion de la Matriz",  "radiobtn",  "gradacion", R.array.Gradacion1));
+        listaElementosUGSS.add(new ElementoFormato( "Seleccion de la Matriz",  "radiobtn",  "seleccion", R.array.Seleccion1));
+        listaElementosUGSS.add(new ElementoFormato( "Plasticidad de la Matriz",  "radiobtn",  "plasticidad", R.array.Plasticidad1));
+        listaElementosUGSS.add(new ElementoFormato( "SUELOS FINOS",  "titulo",  "", 0));
+        listaElementosUGSS.add(new ElementoFormato( "RESISTENCIA AL CORTE NO DRENADO kN/m2 (CONSISTENCIA)",  "radiobtn",  "resiscorte", R.array.ResistenciaAlCorte1));
+        listaElementosUGSS.add(new ElementoFormato( "SUELOS GRUESOS",  "titulo",  "", 0));
+        listaElementosUGSS.add(new ElementoFormato( "Forma de la Matriz",  "radiobtn",  "formasuelosgruesos", R.array.FormaSuelos1));
+        listaElementosUGSS.add(new ElementoFormato( "Redondez de la Matriz",  "radiobtn",  "redondezsuelosgruesos", R.array.RedondezSuelos1));
+        listaElementosUGSS.add(new ElementoFormato( "Orientación de la Matriz",  "radiobtn",  "orientacionsuelosgruesos", R.array.OrientacionSuelos1));
+        listaElementosUGSS.add(new ElementoFormato( "Compacidad de la Matriz",  "radiobtn",  "orientacionsuelosgruesos", R.array.Compacidad1));
+        listaElementosUGSS.add(new ElementoFormato( "Observaciones",  "edittext",  "observacionessuelos", 0));
+        listaElementosUGSS.add(new ElementoFormato( "Descripción Composición Partículas del Suelo",  "edittext",  "descripcionsuelos", 0));
 
 
     }
@@ -4323,3 +3872,8 @@ public class SlideshowFragment extends Fragment {
         binding = null;
     }
 }
+
+
+//    int aux=radioPrueba.getCheckedRadioButtonId()-1;
+//                    Log.d("jaaja", "radiobtn: "+radioPrueba.getChildAt(aux).getTag());
+//                            Log.d("jaaja", "radiobtn: "+radioPrueba.getTag());
