@@ -129,10 +129,12 @@ public class SlideshowFragment extends Fragment {
     List<Integer> listContFotosAnexas = new ArrayList<Integer>();
 
     int discontinuidades = 0;
+    List<List<LinearLayout>> ListaDiscontinuidades = new ArrayList<List<LinearLayout>>();
     List<LinearLayout> listDiscontinuidades = new ArrayList<LinearLayout>();
     LinearLayout liFormDiscontinuidades;
 
     int fotosAnexas = 0;
+    List<List<LinearLayout>> ListaFotosAnexas = new ArrayList<List<LinearLayout>>();
     List<LinearLayout> listFotosAnexas = new ArrayList<LinearLayout>();
     LinearLayout liFormFotosAnexas;
 
@@ -260,6 +262,8 @@ public class SlideshowFragment extends Fragment {
         listFormularios.add(formType);
         idLinear = listFormularios.size() - 1;
 
+        listFotosAnexas = new ArrayList<LinearLayout>();
+        listDiscontinuidades = new ArrayList<LinearLayout>();
         listEditText = new ArrayList<EditText>();
         listSpinner = new ArrayList<Spinner>();
         listCheckBox = new ArrayList<CheckBox>();
@@ -270,6 +274,9 @@ public class SlideshowFragment extends Fragment {
         listRadioBtn2Gruesos = new ArrayList<RadioButton>();
         listRadioGrp = new ArrayList<RadioGroup>();
 
+
+        ListaFotosAnexas.add(listFotosAnexas);
+        ListaDiscontinuidades.add(listDiscontinuidades);
         ListaEditText.add(listEditText);
         ListaSpinner.add(listSpinner);
         ListaCheckBox.add(listCheckBox);
@@ -483,7 +490,7 @@ public class SlideshowFragment extends Fragment {
                                     //-------------------> Si es Suelo Residual
 
                                     if (!elNuevoTexto.equals("")){
-
+                                        liFormSecuenciaEstratiSueloR.removeAllViews();
                                         int secuEstratiWidth = 150;
                                         int secuEstratiOrdenWidth = 200;
                                         int secuEstratiEspesorWidth = 300;
@@ -726,7 +733,7 @@ public class SlideshowFragment extends Fragment {
                     liDiscontinuidades.setBackgroundColor(0x22222200);
                     liDiscontinuidades.setVisibility(View.GONE);
                     liFormDiscontinuidades.addView(liDiscontinuidades);
-                    listDiscontinuidades.add(liDiscontinuidades);
+                    ListaDiscontinuidades.get(Integer.parseInt(v.getTag().toString())).add(liDiscontinuidades);
 
                     bDiscont.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -780,7 +787,7 @@ public class SlideshowFragment extends Fragment {
                         String claseElemento = elementoActual.getClaseelemento();
                         String tagElemento = elementoActual.getTagelemento();
                         int idStringArrayElemento = elementoActual.getIdStringArray();
-                        int aux = listDiscontinuidades.size();
+                        int aux = ListaDiscontinuidades.get(Integer.parseInt(v.getTag().toString())).size();
                         if (claseElemento.equals("edittext")){
                             TextView tvGenerico = new TextView(mcont);
                             tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -794,7 +801,7 @@ public class SlideshowFragment extends Fragment {
                             etGenerico.setHint(hintElemento);
                             etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
-                            ListaEditText.get(idLinear).add(etGenerico);
+                            ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liDiscontinuidades.addView(etGenerico);
                         }
                         if (claseElemento.equals("spinner")){
@@ -811,7 +818,7 @@ public class SlideshowFragment extends Fragment {
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             sGenerico.setAdapter(adapter);
                             sGenerico.setTag(tagElemento+aux);
-                            ListaSpinner.get(idLinear).add(sGenerico);
+                            ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sGenerico);
                             liDiscontinuidades.addView(sGenerico);
                         }
                     }
@@ -861,7 +868,7 @@ public class SlideshowFragment extends Fragment {
                     liFotosAnexas.setBackgroundColor(0x22222200);
                     liFotosAnexas.setVisibility(View.GONE);
                     liFormFotosAnexas.addView(liFotosAnexas);
-                    listFotosAnexas.add(liFotosAnexas);
+                    ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).add(liFotosAnexas);
 
                     bFotosAnexasAcordion.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -915,7 +922,7 @@ public class SlideshowFragment extends Fragment {
                         String claseElemento = elementoActual.getClaseelemento();
                         String tagElemento = elementoActual.getTagelemento();
                         int idStringArrayElemento = elementoActual.getIdStringArray();
-                        int aux = listFotosAnexas.size();
+                        int aux = ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).size();
                         if (claseElemento.equals("edittext")){
                             TextView tvGenerico = new TextView(mcont);
                             tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -929,7 +936,7 @@ public class SlideshowFragment extends Fragment {
                             etGenerico.setHint(hintElemento);
                             etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
-                            ListaEditText.get(idLinear).add(etGenerico);
+                            ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liFotosAnexas.addView(etGenerico);
                         }
                     }
@@ -1134,7 +1141,7 @@ public class SlideshowFragment extends Fragment {
                                     //-------------------> Si es Suelo Residual
 
                                     if (!elNuevoTexto.equals("")){
-
+                                        liFormSecuenciaEstratiSueloR.removeAllViews();
                                         int secuEstratiWidth = 450;
                                         int secuEstratiOrdenWidth = 200;
                                         int secuEstratiEspesorWidth = 300;
@@ -1492,7 +1499,7 @@ public class SlideshowFragment extends Fragment {
                                 boolean isChecked = checkedRadioButton.isChecked();
                                 // If the radiobutton that has changed in check state is now checked...
 //                                Log.d("jaaja", "onCheckedChanged: "+checkedRadioButton.getText());
-                                if (isChecked && (checkedId == 57 || checkedId == 153))
+                                if (isChecked && checkedRadioButton.getTag().equals("Imbricado"))
                                 {
                                     String auxTag;
                                     if (group.getTag().toString().equals("orientacion2")){
@@ -1644,7 +1651,7 @@ public class SlideshowFragment extends Fragment {
                     bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
                     String foto = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
                     bFotosAnexasAcordion.setText(foto);
-                    bFotosAnexasAcordion.setTag(idLinear);
+                    bFotosAnexasAcordion.setTag(Integer.parseInt(v.getTag().toString()));
                     liFormFotosAnexasSuelos.addView(bFotosAnexasAcordion);
 
                     LinearLayout liFotosAnexas = new LinearLayout(mcont);
@@ -1653,7 +1660,7 @@ public class SlideshowFragment extends Fragment {
                     liFotosAnexas.setBackgroundColor(0x22222200);
                     liFotosAnexas.setVisibility(View.GONE);
                     liFormFotosAnexasSuelos.addView(liFotosAnexas);
-                    listFotosAnexas.add(liFotosAnexas);
+                    ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).add(liFotosAnexas);
 
                     bFotosAnexasAcordion.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -1707,7 +1714,7 @@ public class SlideshowFragment extends Fragment {
                         String claseElemento = elementoActual.getClaseelemento();
                         String tagElemento = elementoActual.getTagelemento();
                         int idStringArrayElemento = elementoActual.getIdStringArray();
-                        int aux = listFotosAnexas.size();
+                        int aux = ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).size();
                         if (claseElemento.equals("edittext")){
                             TextView tvGenerico = new TextView(mcont);
                             tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -1721,7 +1728,7 @@ public class SlideshowFragment extends Fragment {
                             etGenerico.setHint(hintElemento);
                             etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
-                            ListaEditText.get(idLinear).add(etGenerico);
+                            ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liFotosAnexas.addView(etGenerico);
                         }
                     }
@@ -2119,6 +2126,9 @@ public class SlideshowFragment extends Fragment {
         int countFormatosUGSRocas = 0;
         int countFormatosUGSSuelos = 0;
         for (int i = 0; i < listFormularios.size(); i++) {
+
+            //-------------> Rocas
+
             if (listFormularios.get(i).equals("UGS Rocas")){
                 JSONObject FormatoTemp = new JSONObject()
                         .put("Discontinuidades", listContDiscontinuidades.get(i))
@@ -2145,9 +2155,10 @@ public class SlideshowFragment extends Fragment {
                 JSONObject radioGrp = new JSONObject();
                 int contAux = 0;
                 for (int k = 0; k < ListaRadioGrp.get(i).size(); k++) {
-                    int aux= ListaRadioGrp.get(i).get(k).getCheckedRadioButtonId() - contAux - 1;
-                    contAux += ListaRadioGrp.get(i).get(k).getChildCount();
-                    radioGrp.put(ListaRadioGrp.get(i).get(k).getTag().toString(), ListaRadioGrp.get(i).get(k).getChildAt(aux).getTag());
+                    RadioButton checkedRadioButton = (RadioButton)ListaRadioGrp.get(i).get(k).findViewById(ListaRadioGrp.get(i).get(k).getCheckedRadioButtonId());
+//                    Log.d("jaaja", "onCheckedChanged: "+checkedRadioButton.getTag());
+//                    Log.d("jaaja", "onCheckedChanged: "+ListaRadioGrp.get(i).get(k).getTag());
+                    radioGrp.put(ListaRadioGrp.get(i).get(k).getTag().toString(), checkedRadioButton.getTag());
                 }
                 FormatoTemp.put("RadioGrp", radioGrp);
 
@@ -2155,6 +2166,9 @@ public class SlideshowFragment extends Fragment {
 
                 countFormatosUGSRocas++;
             }
+
+            //-------------> Suelos
+
             if (listFormularios.get(i).equals("UGS Suelos")){
                 JSONObject FormatoTemp = new JSONObject()
                         .put("FotosAnexas", listContFotosAnexas.get(i));
@@ -2180,8 +2194,7 @@ public class SlideshowFragment extends Fragment {
                 JSONObject radioGrp = new JSONObject();
                 int contAux = 0;
                 for (int k = 0; k < ListaRadioGrp.get(i).size(); k++) {
-                    int aux= ListaRadioGrp.get(i).get(k).getCheckedRadioButtonId() - contAux -1;
-                    contAux += ListaRadioGrp.get(i).get(k).getChildCount();
+                    RadioButton checkedRadioButton = (RadioButton)ListaRadioGrp.get(i).get(k).findViewById(ListaRadioGrp.get(i).get(k).getCheckedRadioButtonId());
                     String tagGroup;
                     if (ListaRadioGrp.get(i).get(k).getTag().toString().contains("granulometriamatriz")){
                         tagGroup = ListaRadioGrp.get(i).get(k).getTag().toString().split("_")[0];
@@ -2189,9 +2202,9 @@ public class SlideshowFragment extends Fragment {
                     else{
                         tagGroup = ListaRadioGrp.get(i).get(k).getTag().toString();
                     }
-                    Log.d("jaaja", "onCheckedChanged: "+aux);
-                    Log.d("jaaja", "onCheckedChanged: "+ListaRadioGrp.get(i).get(k).getTag());
-                    radioGrp.put(tagGroup, ListaRadioGrp.get(i).get(k).getChildAt(aux).getTag());
+//                    Log.d("jaaja", "onCheckedChanged: "+checkedRadioButton.getTag());
+//                    Log.d("jaaja", "onCheckedChanged: "+ListaRadioGrp.get(i).get(k).getTag());
+                    radioGrp.put(tagGroup, checkedRadioButton.getTag());
                 }
                 FormatoTemp.put("RadioGrp", radioGrp);
 
