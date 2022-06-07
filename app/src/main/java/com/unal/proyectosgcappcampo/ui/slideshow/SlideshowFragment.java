@@ -788,6 +788,7 @@ public class SlideshowFragment extends Fragment {
                         String tagElemento = elementoActual.getTagelemento();
                         int idStringArrayElemento = elementoActual.getIdStringArray();
                         int aux = ListaDiscontinuidades.get(Integer.parseInt(v.getTag().toString())).size();
+
                         if (claseElemento.equals("edittext")){
                             TextView tvGenerico = new TextView(mcont);
                             tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -836,43 +837,41 @@ public class SlideshowFragment extends Fragment {
             tvFotosAnexas.setPadding(0, mtop, 0, 20);
             liForm.addView(tvFotosAnexas);
 
-            LinearLayout liFormFotosAnexas = new LinearLayout(mcont);
-            liFormFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            liFormFotosAnexas.setOrientation(LinearLayout.VERTICAL);
-            liForm.addView(liFormFotosAnexas);
+            LinearLayout liFormFotosAnexasSuelos = new LinearLayout(mcont);
+            liFormFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormFotosAnexasSuelos.setOrientation(LinearLayout.VERTICAL);
+            liForm.addView(liFormFotosAnexasSuelos);
 
 
-            Button bFotosAnexas = new Button(mcont);
-            bFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            bFotosAnexas.setText("Añadir Foto");
-            bFotosAnexas.setTag(idLinear);
-            bFotosAnexas.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.plus_circle, 0);
-            bFotosAnexas.setOnClickListener(new View.OnClickListener() {
+            Button bFotosAnexasSuelos = new Button(mcont);
+            bFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bFotosAnexasSuelos.setText("Añadir Foto");
+            bFotosAnexasSuelos.setTag(idLinear);
+            bFotosAnexasSuelos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.plus_circle, 0);
+            bFotosAnexasSuelos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
 
                     Button bFotosAnexasAcordion = new Button(mcont);
                     bFotosAnexasAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
-
                     String foto = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
                     bFotosAnexasAcordion.setText(foto);
                     bFotosAnexasAcordion.setTag(Integer.parseInt(v.getTag().toString()));
-                    liFormFotosAnexas.addView(bFotosAnexasAcordion);
+                    liFormFotosAnexasSuelos.addView(bFotosAnexasAcordion);
 
                     LinearLayout liFotosAnexas = new LinearLayout(mcont);
                     liFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     liFotosAnexas.setOrientation(LinearLayout.VERTICAL);
                     liFotosAnexas.setBackgroundColor(0x22222200);
                     liFotosAnexas.setVisibility(View.GONE);
-                    liFormFotosAnexas.addView(liFotosAnexas);
+                    liFormFotosAnexasSuelos.addView(liFotosAnexas);
                     ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).add(liFotosAnexas);
 
                     bFotosAnexasAcordion.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View vi) {
+                        public void onClick(View v) {
 
                             if (liFotosAnexas.getVisibility() == View.VISIBLE) {
                                 ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
@@ -923,6 +922,7 @@ public class SlideshowFragment extends Fragment {
                         String tagElemento = elementoActual.getTagelemento();
                         int idStringArrayElemento = elementoActual.getIdStringArray();
                         int aux = ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).size();
+
                         if (claseElemento.equals("edittext")){
                             TextView tvGenerico = new TextView(mcont);
                             tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -943,7 +943,7 @@ public class SlideshowFragment extends Fragment {
 
                 }
             });
-            liForm.addView(bFotosAnexas);
+            liForm.addView(bFotosAnexasSuelos);
 
             listLiForm.add(liForm);
             liFormularios.addView(liForm);
@@ -1715,6 +1715,7 @@ public class SlideshowFragment extends Fragment {
                         String tagElemento = elementoActual.getTagelemento();
                         int idStringArrayElemento = elementoActual.getIdStringArray();
                         int aux = ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).size();
+
                         if (claseElemento.equals("edittext")){
                             TextView tvGenerico = new TextView(mcont);
                             tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -1961,21 +1962,18 @@ public class SlideshowFragment extends Fragment {
                                         String dirimbricacionmatriz1 = "";
                                         String compacidadsuelosgruesos1 = "";
 
-                                        elNuevoTexto = granulometriamatriz1;
-                                        if (elNuevoTexto.equals("Finos (Limos-Arcillas Menores de 0,075 mm)")){
-                                            resiscorte1 = RadioGrpAux.getString("resiscorte1");
-                                        } else {
-                                            formasuelosgruesos1 = RadioGrpAux.getString("formasuelosgruesos1");
-                                            redondezsuelosgruesos1 = RadioGrpAux.getString("redondezsuelosgruesos1");
-                                            orientacionsuelosgruesos1 = RadioGrpAux.getString("orientacionsuelosgruesos1");
-                                            compacidadsuelosgruesos1 = RadioGrpAux.getString("compacidadsuelosgruesos1");
+                                        resiscorte1 = RadioGrpAux.getString("resiscorte1");
+                                        formasuelosgruesos1 = RadioGrpAux.getString("formasuelosgruesos1");
+                                        redondezsuelosgruesos1 = RadioGrpAux.getString("redondezsuelosgruesos1");
+                                        orientacionsuelosgruesos1 = RadioGrpAux.getString("orientacionsuelosgruesos1");
+                                        compacidadsuelosgruesos1 = RadioGrpAux.getString("compacidadsuelosgruesos1");
 
-                                            String elNuevoTexto2 = orientacionsuelosgruesos1;
-                                            elNuevoTexto2 = elNuevoTexto2.replace(" ","");
-                                            if (elNuevoTexto2.equals("Imbricado")){
-                                                dirimbricacionmatriz1 = EditTextsAux.getString("dirimbricacionmatriz1");
-                                            }
+                                        String elNuevoTexto2 = orientacionsuelosgruesos1;
+                                        elNuevoTexto2 = elNuevoTexto2.replace(" ","");
+                                        if (elNuevoTexto2.equals("Imbricado")){
+                                            dirimbricacionmatriz1 = EditTextsAux.getString("dirimbricacionmatriz1");
                                         }
+
 
                                         String resiscorte2 = "";
                                         String formasuelosgruesos2 = "";
@@ -1984,21 +1982,18 @@ public class SlideshowFragment extends Fragment {
                                         String dirimbricacionmatriz2 = "";
                                         String compacidadsuelosgruesos2 = "";
 
-                                        elNuevoTexto = granulometriamatriz2;
-                                        if (elNuevoTexto.equals("Finos (Limos-Arcillas Menores de 0,075 mm)")){
-                                            resiscorte2 = RadioGrpAux.getString("resiscorte2");
-                                        }else if (!elNuevoTexto.equals("No Aplica")){
-                                            formasuelosgruesos2 = RadioGrpAux.getString("formasuelosgruesos2");
-                                            redondezsuelosgruesos2 = RadioGrpAux.getString("redondezsuelosgruesos2");
-                                            orientacionsuelosgruesos2 = RadioGrpAux.getString("orientacionsuelosgruesos2");
-                                            compacidadsuelosgruesos2 = RadioGrpAux.getString("compacidadsuelosgruesos2");
 
-                                            String elNuevoTexto2 = orientacionsuelosgruesos2;
-                                            elNuevoTexto2 = elNuevoTexto2.replace(" ","");
-                                            if (elNuevoTexto2.equals("Imbricado")){
-                                                dirimbricacionmatriz2 = EditTextsAux.getString("dirimbricacionmatriz2");
-                                            }
+                                        formasuelosgruesos2 = RadioGrpAux.getString("formasuelosgruesos2");
+                                        redondezsuelosgruesos2 = RadioGrpAux.getString("redondezsuelosgruesos2");
+                                        orientacionsuelosgruesos2 = RadioGrpAux.getString("orientacionsuelosgruesos2");
+                                        compacidadsuelosgruesos2 = RadioGrpAux.getString("compacidadsuelosgruesos2");
+
+                                        String elNuevoTexto3 = orientacionsuelosgruesos2;
+                                        elNuevoTexto3 = elNuevoTexto3.replace(" ","");
+                                        if (elNuevoTexto3.equals("Imbricado")){
+                                            dirimbricacionmatriz2 = EditTextsAux.getString("dirimbricacionmatriz2");
                                         }
+
 
                                         String noformato = EditTextsAux.getString("noformato");
                                         String vereda = EditTextsAux.getString("vereda");
@@ -2044,7 +2039,7 @@ public class SlideshowFragment extends Fragment {
 
 
 
-                                        FormatUGSSuelos NuevoFormatoUGSSuelos = new FormatUGSSuelos( municipios,  claseaflor,  estructurasoporte1,  estructurasoporte2,  condicionhumedad1,  condicionhumedad2,  estructurasrelictas1,  estructurasrelictas2,  granulometria1,  granulometria2,  forma1,  forma2,  redondez1,  redondez2,  orientacion1,  orientacion2,  dirimbricacion1,  dirimbricacion2,  meteorizacionclastos1,  meteorizacionclastos2,  granulometriamatriz1,  granulometriamatriz2,  gradacion1,  gradacion2,  seleccion1,  seleccion2,  plasticidad1,  plasticidad2,  resiscorte1,  resiscorte2,  formasuelosgruesos1,  formasuelosgruesos2,  redondezsuelosgruesos1,  redondezsuelosgruesos2,  orientacionsuelosgruesos1,  orientacionsuelosgruesos2,  dirimbricacionmatriz1,  dirimbricacionmatriz2,  noformato,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  porcentajematriz1,  porcentajematriz2,  porcentajeclastos1,  porcentajeclastos2,  color1,  color2,  observacionessuelos, descripcionsuelos);
+                                        FormatUGSSuelos NuevoFormatoUGSSuelos = new FormatUGSSuelos( municipios,  claseaflor,  estructurasoporte1,  estructurasoporte2,  condicionhumedad1,  condicionhumedad2,  estructurasrelictas1,  estructurasrelictas2,  granulometria1,  granulometria2,  forma1,  forma2,  redondez1,  redondez2,  orientacion1,  orientacion2,  dirimbricacion1,  dirimbricacion2,  meteorizacionclastos1,  meteorizacionclastos2,  granulometriamatriz1,  granulometriamatriz2,  gradacion1,  gradacion2,  seleccion1,  seleccion2,  plasticidad1,  plasticidad2,  resiscorte1,  resiscorte2,  formasuelosgruesos1,  formasuelosgruesos2,  redondezsuelosgruesos1,  redondezsuelosgruesos2,  orientacionsuelosgruesos1,  orientacionsuelosgruesos2,  dirimbricacionmatriz1,  dirimbricacionmatriz2,  noformato,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  porcentajematriz1,  porcentajematriz2,  porcentajeclastos1,  porcentajeclastos2,  color1,  color2,  observacionessuelos, descripcionsuelos, compacidadsuelosgruesos1, compacidadsuelosgruesos2);
 
 
                                         databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+j).setValue(NuevoFormatoUGSSuelos);

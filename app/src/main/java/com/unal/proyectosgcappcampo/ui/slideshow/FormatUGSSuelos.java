@@ -37,6 +37,8 @@ public class FormatUGSSuelos {
     public String redondezsuelosgruesos2;
     public String orientacionsuelosgruesos1;
     public String orientacionsuelosgruesos2;
+    public String compacidadsuelosgruesos1;
+    public String compacidadsuelosgruesos2;
     public String dirimbricacionmatriz1;
     public String dirimbricacionmatriz2;
     public String noformato;
@@ -68,7 +70,7 @@ public class FormatUGSSuelos {
     public String observacionessuelos;
     public String descripcionsuelos;
 
-    public FormatUGSSuelos(String municipios, String claseaflor, String estructurasoporte1, String estructurasoporte2, String condicionhumedad1, String condicionhumedad2, String estructurasrelictas1, String estructurasrelictas2, String granulometria1, String granulometria2, String forma1, String forma2, String redondez1, String redondez2, String orientacion1, String orientacion2, String dirimbricacion1, String dirimbricacion2, String meteorizacionclastos1, String meteorizacionclastos2, String granulometriamatriz1, String granulometriamatriz2, String gradacion1, String gradacion2, String seleccion1, String seleccion2, String plasticidad1, String plasticidad2, String resiscorte1, String resiscorte2, String formasuelosgruesos1, String formasuelosgruesos2, String redondezsuelosgruesos1, String redondezsuelosgruesos2, String orientacionsuelosgruesos1, String orientacionsuelosgruesos2, String dirimbricacionmatriz1, String dirimbricacionmatriz2, String noformato, String vereda, String noestacion, String secuenciaestratiopt1orden, String secuenciaestratiopt1espesor, String secuenciaestratiopt2orden, String secuenciaestratiopt2espesor, String secuenciaestratiopt3orden, String secuenciaestratiopt3espesor, String secuenciaestratisuelor1orden, String secuenciaestratisuelor1espesor, String secuenciaestratisuelor2orden, String secuenciaestratisuelor2espesor, String secuenciaestratisuelor3orden, String secuenciaestratisuelor3espesor, String litologiasasociadasopt1exist, String litologiasasociadasopt1espesor, String litologiasasociadasopt2exist, String litologiasasociadasopt2espesor, String nombreugs, String porcentajematriz1, String porcentajematriz2, String porcentajeclastos1, String porcentajeclastos2, String color1, String color2, String observacionessuelos, String descripcionsuelos) {
+    public FormatUGSSuelos(String municipios, String claseaflor, String estructurasoporte1, String estructurasoporte2, String condicionhumedad1, String condicionhumedad2, String estructurasrelictas1, String estructurasrelictas2, String granulometria1, String granulometria2, String forma1, String forma2, String redondez1, String redondez2, String orientacion1, String orientacion2, String dirimbricacion1, String dirimbricacion2, String meteorizacionclastos1, String meteorizacionclastos2, String granulometriamatriz1, String granulometriamatriz2, String gradacion1, String gradacion2, String seleccion1, String seleccion2, String plasticidad1, String plasticidad2, String resiscorte1, String resiscorte2, String formasuelosgruesos1, String formasuelosgruesos2, String redondezsuelosgruesos1, String redondezsuelosgruesos2, String orientacionsuelosgruesos1, String orientacionsuelosgruesos2, String dirimbricacionmatriz1, String dirimbricacionmatriz2, String noformato, String vereda, String noestacion, String secuenciaestratiopt1orden, String secuenciaestratiopt1espesor, String secuenciaestratiopt2orden, String secuenciaestratiopt2espesor, String secuenciaestratiopt3orden, String secuenciaestratiopt3espesor, String secuenciaestratisuelor1orden, String secuenciaestratisuelor1espesor, String secuenciaestratisuelor2orden, String secuenciaestratisuelor2espesor, String secuenciaestratisuelor3orden, String secuenciaestratisuelor3espesor, String litologiasasociadasopt1exist, String litologiasasociadasopt1espesor, String litologiasasociadasopt2exist, String litologiasasociadasopt2espesor, String nombreugs, String porcentajematriz1, String porcentajematriz2, String porcentajeclastos1, String porcentajeclastos2, String color1, String color2, String observacionessuelos, String descripcionsuelos, String compacidadsuelosgruesos1, String compacidadsuelosgruesos2) {
         this.municipios = municipios;
         this.claseaflor = claseaflor;
         this.estructurasoporte1 = estructurasoporte1;
@@ -105,6 +107,8 @@ public class FormatUGSSuelos {
         this.redondezsuelosgruesos2 = redondezsuelosgruesos2;
         this.orientacionsuelosgruesos1 = orientacionsuelosgruesos1;
         this.orientacionsuelosgruesos2 = orientacionsuelosgruesos2;
+        this.compacidadsuelosgruesos1 = compacidadsuelosgruesos1;
+        this.compacidadsuelosgruesos2 = compacidadsuelosgruesos2;
         this.dirimbricacionmatriz1 = dirimbricacionmatriz1;
         this.dirimbricacionmatriz2 = dirimbricacionmatriz2;
         this.noformato = noformato;
