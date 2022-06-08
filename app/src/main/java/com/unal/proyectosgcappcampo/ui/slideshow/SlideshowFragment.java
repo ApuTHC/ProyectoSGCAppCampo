@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -143,8 +144,7 @@ public class SlideshowFragment extends Fragment {
 
     private Context mcont = getActivity();
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SlideshowViewModel slideshowViewModel =
                 new ViewModelProvider(this).get(SlideshowViewModel.class);
 
@@ -153,8 +153,22 @@ public class SlideshowFragment extends Fragment {
 
         mcont = root.getContext();
 
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         firebaseAuth = FirebaseAuth.getInstance();
         checkUser();
+
+        listaElementosUGSR = new ArrayList<ElementoFormato>();
+        listaElementosUGSRDiscont = new ArrayList<ElementoFormato>();
+        listaElementosUGSFotosAnexas = new ArrayList<ElementoFormato>();
+        listaElementosUGSS = new ArrayList<ElementoFormato>();
+        listFormularios = new ArrayList<String>();
+        listLiForm = new ArrayList<LinearLayout>();
 
         GenerarListas();
 
@@ -186,7 +200,6 @@ public class SlideshowFragment extends Fragment {
                 }
             }
         });
-
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -254,8 +267,6 @@ public class SlideshowFragment extends Fragment {
             }
         });
 
-
-        return root;
     }
 
     private void AddFormulario(String formType) {
@@ -263,6 +274,7 @@ public class SlideshowFragment extends Fragment {
         int mtop = 70;
         listFormularios.add(formType);
         idLinear = listFormularios.size() - 1;
+
 
         listFotosAnexas = new ArrayList<LinearLayout>();
         listDiscontinuidades = new ArrayList<LinearLayout>();
@@ -2362,8 +2374,3 @@ public class SlideshowFragment extends Fragment {
         binding = null;
     }
 }
-
-
-//    int aux=radioPrueba.getCheckedRadioButtonId()-1;
-//                    Log.d("jaaja", "radiobtn: "+radioPrueba.getChildAt(aux).getTag());
-//                            Log.d("jaaja", "radiobtn: "+radioPrueba.getTag());
