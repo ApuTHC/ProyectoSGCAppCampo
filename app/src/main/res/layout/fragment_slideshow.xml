@@ -234,11 +234,21 @@
                 android:layout_height="20dp" />
 
 
+            <Button
+                android:id="@+id/AddFormu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Agregar Formulario"
+                app:icon="@drawable/plus_circle"
+                app:iconTint="#38363A" />
+
             <LinearLayout
                 android:id="@+id/li_Formularios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical">
+
+            </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"

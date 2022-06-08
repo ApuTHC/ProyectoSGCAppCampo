@@ -69,6 +69,7 @@ public class SlideshowFragment extends Fragment {
 
     Button btnFormLoad;
     Button btnFormSync;
+    Button btnAddForm;
     EditText etEstacion;
     EditText etTipoEstacion;
     EditText etEste;
@@ -159,6 +160,7 @@ public class SlideshowFragment extends Fragment {
 
         btnFormLoad = binding.btnFormLoad;
         btnFormSync = binding.btnFormSync;
+        btnAddForm = binding.AddFormu;
         etEstacion = binding.etEstacion;
         etTipoEstacion = binding.etTipoEstacion;
         etNorte = binding.etNorte;
@@ -169,19 +171,19 @@ public class SlideshowFragment extends Fragment {
 
         liFormularios = binding.liFormularios;
         sFormularios = binding.sFormularios;
+        liFormularios.removeAllViews();
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, R.array.Formularios , android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sFormularios.setAdapter(adapter);
 
-        sFormularios.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> spn, android.view.View v, int posicion, long id) {
-                String selectForm = spn.getItemAtPosition(posicion).toString();
-                if (!selectForm.equals("Ninguno")) {
-                    Toast.makeText(spn.getContext(), "Se añadió formulario: " + selectForm, Toast.LENGTH_LONG).show();
-                    AddFormulario(selectForm);
+        btnAddForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String eleccion = sFormularios.getSelectedItem().toString();
+                if (!eleccion.equals("Ninguno")) {
+                    Toast.makeText(mcont, "Se añadió formulario: " + eleccion, Toast.LENGTH_LONG).show();
+                    AddFormulario(eleccion);
                 }
-            }
-            public void onNothingSelected(AdapterView<?> spn) {
             }
         });
 

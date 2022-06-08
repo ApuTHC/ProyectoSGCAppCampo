@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_registration"
             android:title="@string/menu_slideshow" />
         <item
+            android:id="@+id/guardadasFragment"
+            android:icon="@drawable/ic_save"
+            android:title="@string/menu_guardadas" />
+        <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_database"
             android:title="@string/menu_gallery" />

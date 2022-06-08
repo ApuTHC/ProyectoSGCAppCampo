@@ -14,11 +14,13 @@
     <string name="menu_gallery">Base de Datos de IPM</string>
     <string name="menu_slideshow">Registro de Estaciones</string>
     <string name="menu_login">Perfil</string>
+    <string name="menu_guardadas">Estaciones Guardadas</string>
 
 
     <string name="title_ipm">Capa de IPM</string>
 
     <string name="title_form_ipm">Registro de Estaciones de Campo</string>
+    <string name="title_form_guardadas">Historial de Estaciones Guardadas</string>
 
 
     <string-array name="Formularios">
@@ -525,6 +527,19 @@
         <item>Moderada (Media)</item>
         <item>Fuerte (Densa)</item>
     </string-array>
+
+    <string-array name="OpcionesEstacion">
+        <item>TipoEstacion</item>
+        <item>Este</item>
+        <item>Norte</item>
+        <item>Altitud</item>
+        <item>Fotos</item>
+        <item>Observaciones</item>
+        <item>Fecha</item>
+        <item>Propietario</item>
+    </string-array>
+
+
 
 
     <!-- TODO: Remove or change this placeholder text -->
