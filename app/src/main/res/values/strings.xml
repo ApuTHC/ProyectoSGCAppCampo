@@ -29,7 +29,7 @@
         <!--        <item>Inventario MM</item>-->
         <item>UGS Rocas</item>
         <item>UGS Suelos</item>
-        <!--        <item>SGMF</item>-->
+        <item>SGMF</item>
     </string-array>
 
     <string-array name="Municipios">
@@ -538,6 +538,241 @@
         <item>Fecha</item>
         <item>Propietario</item>
     </string-array>
+
+
+    <string-array name="Ambientes">
+        <item>Morfoestructural</item>
+        <item>Volcánico</item>
+        <item>Denudacional</item>
+        <item>Fluvial-Lagunar</item>
+        <item>Marino-Costero</item>
+        <item>Glacial-Periglacial</item>
+        <item>Eólico</item>
+        <item>Kárstico</item>
+        <item>Antropogénico</item>
+    </string-array>
+
+    <string-array name="UbicacionGeomorfo">
+        <item>Geomorfoestructura</item>
+        <item>Provincia</item>
+        <item>Region</item>
+        <item>Unidad</item>
+        <item>Subunidad</item>
+        <item>Elemento</item>
+    </string-array>
+
+    <string-array name="TipodeRocaGMF">
+        <item>1. Ígnea ácida</item>
+        <item>2. Ígnea intermedia</item>
+        <item>3. Ígnea básica</item>
+        <item>4. Ígnea ultrabásica</item>
+        <item>5. Volcánica Pirosclástica</item>
+        <item>6. Sediment. cementada</item>
+        <item>7. Sediment. consolidada</item>
+        <item>8. Sedimentaria química</item>
+        <item>9. Metamórfica masiva</item>
+        <item>10. Metamórf. bandeada</item>
+        <item>11. Metamórf. bien foliada</item>
+    </string-array>
+
+    <string-array name="MeteorizacionGMF">
+        <item>1. Fresca</item>
+        <item>2. Débil</item>
+        <item>3. Moderada</item>
+        <item>4. Alta</item>
+    </string-array>
+
+    <string-array name="GradoFracturamientoGMF">
+        <item>1. Roca Sana</item>
+        <item>2. Roca Fracturada</item>
+        <item>3. Roca Muy fracturada</item>
+    </string-array>
+
+    <string-array name="TipoSueloGMF">
+        <item>1. Antrópico</item>
+        <item>2. Residual</item>
+        <item>3. Transportado</item>
+        <item>3.1 Aluviales (Terrazas, Abanicos)</item>
+        <item>3.2 Lacustres</item>
+        <item>3.3 Coluviones</item>
+        <item>3.4 Talus</item>
+        <item>3.5 Flujos</item>
+        <item>3.6 Volcánicos</item>
+        <item>3.7 Eólicos</item>
+        <item>3.8 Glacial</item>
+    </string-array>
+
+    <string-array name="TamañoGranoGMF">
+        <item>1. Grueso</item>
+        <item>2. Fino</item>
+    </string-array>
+
+    <string-array name="TipoRelieveGMF">
+        <item>1. Montañoso (>500 m)</item>
+        <item>2. Colina (20 a 500 m)</item>
+        <item>3. Loma (50 a 200 m)</item>
+        <item>4. Montículo (Menor a 50 m)</item>
+    </string-array>
+
+    <string-array name="IndiceRelieveGMF">
+        <item>1. Muy bajo (Menor a 50 m)</item>
+        <item>2. Bajo (50-250 m)</item>
+        <item>3. Moderado (250-500 m)</item>
+        <item>4. Alto (500-1000 m)</item>
+        <item>5. Muy Alto (1000 a 2500 m)</item>
+    </string-array>
+
+    <string-array name="InclinacionLaderaGMF">
+        <item>1. Plana a suave (Menores a 5°)</item>
+        <item>2.Inclinada (5° a 10°)</item>
+        <item>3. Muy inclinada (10° - 15°)</item>
+        <item>4. Abrupta (15° - 20°)</item>
+        <item>5. Muy abrupta (20° - 30º)</item>
+        <item>6. Escarpada (30º - 45º)</item>
+        <item>7. Muy escarpada (>45º)</item>
+    </string-array>
+
+    <string-array name="LongitudLaderaGMF">
+        <item>1. Muy corta (Menor a 50 m)</item>
+        <item>2. Corta (50-250 m)</item>
+        <item>3. Moderada (250-500 m)</item>
+        <item>4. Larga (500-1000 m)</item>
+        <item>5. Muy larga (1000-2500 m)</item>
+        <item>6. Extremada/ larga (>2500 m)</item>
+    </string-array>
+
+    <string-array name="FormaLaderaGMF">
+        <item>1. Rectilínea</item>
+        <item>2. Cóncava</item>
+        <item>3. Convexa</item>
+        <item>4. Irregular</item>
+        <item>5. Compleja</item>
+    </string-array>
+
+    <string-array name="FormaCrestaGMF">
+        <item>1. Aguda</item>
+        <item>2. Redondeada</item>
+        <item>3. Convexa amplia</item>
+        <item>4. Convexa plana</item>
+        <item>5. Plana</item>
+        <item>6. Plana Disectada</item>
+    </string-array>
+
+    <string-array name="FormaValleGMF">
+        <item>1. Artesa</item>
+        <item>2. Forma de V</item>
+        <item>3. Forma de U</item>
+    </string-array>
+
+    <string-array name="CoberturaGMF">
+        <item>1. Pastos</item>
+        <item>2. Bosques</item>
+        <item>3. Cultivos</item>
+        <item>4. Cantera</item>
+        <item>5. Urbana</item>
+        <item>6. Otro</item>
+    </string-array>
+
+    <string-array name="UsoGMF">
+        <item>1. Ganadería</item>
+        <item>2. Explot.Forestal</item>
+        <item>3. Agricultura</item>
+        <item>4. Explot.Minera</item>
+        <item>5. Viviendas, vías</item>
+        <item>6. Otro</item>
+    </string-array>
+
+    <string-array name="DensidadGMF">
+        <item>1. Baja (Menor a 0,5 Km/Km2)</item>
+        <item>2. Moderada (0,5 a 1 Km/Km2)</item>
+        <item>3. Alta (> 1 Km/Km2)</item>
+    </string-array>
+
+    <string-array name="FrecuenciaGMF">
+        <item>1. Muy Alta (>40 #Frec/Km2)</item>
+        <item>2. Alta (21 a 40 #Frec/Km2)</item>
+        <item>3. Media (11 a 20 #Frec/Km2)</item>
+        <item>4. Baja (5 a 10 #Frec/Km2)</item>
+        <item>5. Muy baja (Menor a 5 #Frec/Km2)</item>
+    </string-array>
+
+    <string-array name="TexturaGMF">
+        <item>1. Gruesa</item>
+        <item>2. Mediana</item>
+        <item>3. Fina</item>
+        <item>4. Muy Fina</item>
+    </string-array>
+
+    <string-array name="PatronGMF">
+        <item>1. Dendrítico</item>
+        <item>2. Subdendrítico</item>
+        <item>3. Paralelo</item>
+        <item>4. Subparalelo</item>
+        <item>5. Pinado</item>
+        <item>6. Rectangular</item>
+        <item>7. Radial</item>
+        <item>8. Anular</item>
+        <item>9. Multicuenca</item>
+        <item>10. Condicionado</item>
+        <item>11. Otro</item>
+    </string-array>
+
+    <string-array name="TipoErosionGMF">
+        <item>1. Laminar</item>
+        <item>2. Surcos</item>
+        <item>3. Barrancos</item>
+        <item>4. Cárcavas</item>
+        <item>5. Socavación</item>
+        <item>6. Tierras malas</item>
+        <item>7. Terracetas</item>
+        <item>8. Eólica</item>
+        <item>9. Glacial</item>
+        <item>10. Kárstica</item>
+        <item>11. Marina</item>
+    </string-array>
+
+    <string-array name="EspaciamientoGMF">
+        <item>1. (Menor a 5 m)</item>
+        <item>2. (5 m a 15 m)</item>
+        <item>3. (15 m a 50 m)</item>
+        <item>4. (50 m a 150 m)</item>
+        <item>5. (150 m a 500 m)</item>
+        <item>6. (> 500 m)</item>
+    </string-array>
+
+    <string-array name="IntensidadErosionGMF">
+        <item>1. Suave</item>
+        <item>2. Moderada</item>
+        <item>3. Severa</item>
+    </string-array>
+
+    <string-array name="TipoMMGMF">
+        <item>1. Caídas</item>
+        <item>2. Volcamientos</item>
+        <item>3. Deslizamiento rotacional</item>
+        <item>4. Deslizamiento traslacional</item>
+        <item>5. Reptación</item>
+        <item>6. Propagación lateral</item>
+        <item>7. Flujos</item>
+        <item>8. Compuestos</item>
+        <item>9. Complejos</item>
+    </string-array>
+
+    <string-array name="TipoMaterialGMF">
+        <item>1. Finos</item>
+        <item>2. Arena (0.075 a 4.75 mm)</item>
+        <item>3. Grava (4,75 - 75,0 mm)</item>
+        <item>4. Guijos (75 - 300 mm)</item>
+        <item>5. Bloques (>300 mm)</item>
+    </string-array>
+
+    <string-array name="ActividadGMF">
+        <item>1. Inactiva: No presenta movimientos en masa</item>
+        <item>2. Poco activa: Presenta pocos MM</item>
+        <item>3. Activa: Presenta varios MM</item>
+    </string-array>
+
+
 
 
 

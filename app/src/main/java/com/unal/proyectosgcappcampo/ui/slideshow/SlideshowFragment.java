@@ -1,11 +1,21 @@
 package com.unal.proyectosgcappcampo.ui.slideshow;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -30,6 +40,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -59,6 +70,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class SlideshowFragment extends Fragment {
 
@@ -78,6 +90,7 @@ public class SlideshowFragment extends Fragment {
     EditText etAltitud;
     EditText etFotos;
     EditText etObservaciones;
+    TextView tvEstadoGPS;
 
     JSONObject attrForm;
     JSONArray formComplete;
@@ -90,6 +103,8 @@ public class SlideshowFragment extends Fragment {
     List<ElementoFormato> listaElementosUGSRDiscont = new ArrayList<ElementoFormato>();
     List<ElementoFormato> listaElementosUGSFotosAnexas = new ArrayList<ElementoFormato>();
     List<ElementoFormato> listaElementosUGSS = new ArrayList<ElementoFormato>();
+    List<ElementoFormato> listaElementosSGMF = new ArrayList<ElementoFormato>();
+    List<ElementoFormato> listaElementosNuevoSGMF = new ArrayList<ElementoFormato>();
 
     ElementoFormato ElementoSueloResidualUGSR = new ElementoFormato( "Horizonte",  "secuenciaestrati",  "secuenciaestratisuelor", R.array.SecuenciaEstratiRocasSueloRes);
     ElementoFormato ElementoSueloResidualUGSS = new ElementoFormato( "Horizonte",  "secuenciaestrati",  "secuenciaestratisuelor", R.array.SecuenciaEstratiSuelosSueloRes);
@@ -124,6 +139,13 @@ public class SlideshowFragment extends Fragment {
     List<List<RadioGroup>> ListaRadioGrp = new ArrayList<List<RadioGroup>>();
 
     boolean subida = false;
+
+
+    int sgmf = 0;
+    List<Integer> listContSGMF = new ArrayList<Integer>();
+    List<List<LinearLayout>> ListaSGMF = new ArrayList<List<LinearLayout>>();
+    List<LinearLayout> listSGMF = new ArrayList<LinearLayout>();
+    LinearLayout liFormSGMF;
 
 
     //Format UGS
@@ -182,6 +204,8 @@ public class SlideshowFragment extends Fragment {
         etAltitud = binding.etAltitud;
         etFotos = binding.etFotos;
         etObservaciones = binding.etObservaciones;
+        tvEstadoGPS = binding.tvEstadoGPS;
+
 
         liFormularios = binding.liFormularios;
         sFormularios = binding.sFormularios;
@@ -267,7 +291,59 @@ public class SlideshowFragment extends Fragment {
             }
         });
 
+        if (ActivityCompat.checkSelfPermission(mcont, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mcont, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+            locationStart();
+        }
+
     }
+
+
+    private void locationStart() {
+        LocationManager mlocManager = (LocationManager) mcont.getSystemService(Context.LOCATION_SERVICE);
+        Localizacion Local = new Localizacion();
+        Local.setMainActivity(this);
+        final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!gpsEnabled) {
+            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settingsIntent);
+        }
+        if (ActivityCompat.checkSelfPermission(mcont, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mcont, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+            return;
+        }
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
+        //etNorte.setText("Localización agregada");
+        //etEste.setText("");
+    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1000) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationStart();
+
+            }
+        }
+    }
+    // public void setLocation(Location loc) {
+        //Obtener la direccion de la calle a partir de la latitud y la longitud
+    //    if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
+    //        try {
+    //           Geocoder geocoder = new Geocoder(mcont, Locale.getDefault());
+    //            List<Address> list = geocoder.getFromLocation(
+    //                    loc.getLatitude(), loc.getLongitude(), 1);
+    //            if (!list.isEmpty()) {
+    //                Address DirCalle = list.get(0);
+    //                etEste.setText(DirCalle.getAddressLine(0));
+    //            }
+    //        } catch (IOException e) {
+    //            e.printStackTrace();
+    //        }
+    //    }
+    //}
+
+
 
     private void AddFormulario(String formType) {
 
@@ -278,6 +354,7 @@ public class SlideshowFragment extends Fragment {
 
         listFotosAnexas = new ArrayList<LinearLayout>();
         listDiscontinuidades = new ArrayList<LinearLayout>();
+        listSGMF = new ArrayList<LinearLayout>();
         listEditText = new ArrayList<EditText>();
         listSpinner = new ArrayList<Spinner>();
         listCheckBox = new ArrayList<CheckBox>();
@@ -291,6 +368,7 @@ public class SlideshowFragment extends Fragment {
 
         ListaFotosAnexas.add(listFotosAnexas);
         ListaDiscontinuidades.add(listDiscontinuidades);
+        ListaSGMF.add(listSGMF);
         ListaEditText.add(listEditText);
         ListaSpinner.add(listSpinner);
         ListaCheckBox.add(listCheckBox);
@@ -303,9 +381,11 @@ public class SlideshowFragment extends Fragment {
 
         fotosAnexas = 0;
         discontinuidades = 0;
+        sgmf = 0;
 
         listContFotosAnexas.add(fotosAnexas);
         listContDiscontinuidades.add(discontinuidades);
+        listContSGMF.add(sgmf);
 
         if (formType.equals("UGS Rocas")) {
             Button bAcordion = new Button(mcont);
@@ -1757,6 +1837,496 @@ public class SlideshowFragment extends Fragment {
             liFormularios.addView(liForm);
         }
 
+        if (formType.equals("SGMF")) {
+            Button bAcordion = new Button(mcont);
+            bAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+            bAcordion.setText("Formato SGMF");
+            bAcordion.setTag(idLinear);
+            listBtnAcordion.add(bAcordion);
+            liFormularios.addView(bAcordion);
+
+            LinearLayout liForm = new LinearLayout(mcont);
+            liForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liForm.setOrientation(LinearLayout.VERTICAL);
+            liForm.setBackgroundColor(0x33333300);
+            //liForm.setVisibility(View.GONE);
+
+            bAcordion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (listLiForm.get(Integer.parseInt(v.getTag().toString())).getVisibility() == View.VISIBLE) {
+                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                        animation.setDuration(220);
+                        animation.setFillAfter(false);
+                        animation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                            }
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.GONE);
+                                listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                            }
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                            }
+                        });
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
+
+                    }
+                    else {
+                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                        animation.setDuration(220);
+                        animation.setFillAfter(false);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
+                        listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                    }
+
+//                    if (listLiForm.get(Integer.parseInt(v.getTag().toString())).getVisibility() == View.VISIBLE) {
+//                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.GONE);
+//                    }
+//                    else {
+//                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
+//                    }
+
+                }
+            });
+
+            //------------> Titulo del Formato
+
+            TextView tvTitulo = new TextView(mcont);
+            tvTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvTitulo.setText("Formato SGMF");
+            tvTitulo.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            tvTitulo.setTextAppearance(R.style.TituloFormato);
+            tvTitulo.setPadding(0, 70, 0, 70);
+            liForm.addView(tvTitulo);
+
+
+            Button bBorrarForm = new Button(mcont);
+            bBorrarForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bBorrarForm.setText("Borrar Este Formulario");
+            bBorrarForm.setTag(idLinear);
+            bBorrarForm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("jaaj", "BOrrarRocas: "+listFormularios);
+                    listLiForm.get(Integer.parseInt(v.getTag().toString())).removeAllViews();
+                    liFormularios.removeView(listBtnAcordion.get(Integer.parseInt(v.getTag().toString())));
+                    listFormularios.set(Integer.parseInt(v.getTag().toString()), "Ninguno");
+
+                }
+            });
+            liForm.addView(bBorrarForm);
+
+            for (int i = 0; i < listaElementosSGMF.size(); i++) {
+                ElementoFormato elementoActual = listaElementosSGMF.get(i);
+                String nombreElemento = elementoActual.getNombreelemento();
+                String hintElemento = elementoActual.getNombreelemento();
+                String claseElemento = elementoActual.getClaseelemento();
+                String tagElemento = elementoActual.getTagelemento();
+                int idStringArrayElemento = elementoActual.getIdStringArray();
+
+                if (claseElemento.equals("edittext")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    EditText etGenerico = new EditText(mcont);
+                    etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    etGenerico.setHint(hintElemento);
+                    etGenerico.setEms(10);
+                    etGenerico.setTag(tagElemento);
+                    ListaEditText.get(idLinear).add(etGenerico);
+                    liForm.addView(etGenerico);
+                }
+                if (claseElemento.equals("spinner")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    Spinner sGenerico = new Spinner(mcont);
+                    sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, idStringArrayElemento, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    sGenerico.setAdapter(adapter);
+                    sGenerico.setTag(tagElemento);
+                    ListaSpinner.get(idLinear).add(sGenerico);
+                    liForm.addView(sGenerico);
+
+                    if (nombreElemento.equals("COBERTURA, C") || nombreElemento.equals("USO DEL TERRENO, U") || nombreElemento.equals("PATRÓN, PT")){
+                        TextView tvGenerico1 = new TextView(mcont);
+                        tvGenerico1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvGenerico1.setText("Otro:");
+                        tvGenerico1.setTextAppearance(R.style.TituloItem);
+                        tvGenerico1.setPadding(0, mtop, 0, 0);
+                        liForm.addView(tvGenerico1);
+
+                        EditText etGenerico = new EditText(mcont);
+                        etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etGenerico.setHint(hintElemento);
+                        etGenerico.setEms(10);
+                        etGenerico.setTag(tagElemento+"otro");
+                        ListaEditText.get(idLinear).add(etGenerico);
+                        liForm.addView(etGenerico);
+                    }
+                }
+                if (claseElemento.equals("titulo")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloFormato);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+                }
+                if (claseElemento.equals("ambientes")){
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    for (int j = 0; j < opciones.length ; j++) {
+
+                        CheckBox checkbox = new CheckBox(mcont);
+                        checkbox.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        String aux = opciones[j];
+                        checkbox.setText(aux);
+                        checkbox.setTag(tagElemento+j+"check");
+                        ListaCheckBox.get(idLinear).add(checkbox);
+                        liForm.addView(checkbox);
+
+                        if (j == 0){
+                            checkbox.setChecked(true);
+                        }
+                    }
+
+                }
+                if (claseElemento.equals("ubicacionGeo")){
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloFormato);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    for (int j = 0; j < opciones.length ; j++) {
+
+                        LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                        liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                        TextView tvSecuenciaEstratiOpt = new TextView(mcont);
+                        tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvSecuenciaEstratiOpt.setText(opciones[j]);
+                        tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
+                        liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+                        EditText etSecuenciaEstratiOpt = new EditText(mcont);
+                        etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etSecuenciaEstratiOpt.setHint(opciones[j]);
+                        etSecuenciaEstratiOpt.setEms(10);
+                        etSecuenciaEstratiOpt.setTag(tagElemento+opciones[j]);
+                        ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
+                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
+
+                        liForm.addView(liFormSecuenciaEstrati);
+
+                    }
+
+                }
+
+
+            }
+
+            //------------> LEVANTAMIENTO DE DISCONTINUIDADES
+
+            TextView tvLevantamientoDisc = new TextView(mcont);
+            tvLevantamientoDisc.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvLevantamientoDisc.setText("Caracterización de SGMF - EGMF");
+            tvLevantamientoDisc.setTextAppearance(R.style.TituloFormato);
+            tvLevantamientoDisc.setPadding(0, mtop, 0, 20);
+            liForm.addView(tvLevantamientoDisc);
+
+            LinearLayout liFormDiscontinuidades = new LinearLayout(mcont);
+            liFormDiscontinuidades.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormDiscontinuidades.setOrientation(LinearLayout.VERTICAL);
+            liForm.addView(liFormDiscontinuidades);
+
+            Button bAnadirDiscont = new Button(mcont);
+            bAnadirDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bAnadirDiscont.setText("Añadir SGMF-EGMF");
+            bAnadirDiscont.setTag(idLinear);
+            bAnadirDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.plus_circle, 0);
+            bAnadirDiscont.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    listContSGMF.set(Integer.parseInt(v.getTag().toString()), listContSGMF.get(Integer.parseInt(v.getTag().toString())) + 1);
+
+                    Button bDiscont = new Button(mcont);
+                    bDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    bDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                    bDiscont.setText("SGMF - EGMF "+ listContSGMF.get(Integer.parseInt(v.getTag().toString())));
+                    bDiscont.setTag(Integer.parseInt(v.getTag().toString()));
+                    liFormDiscontinuidades.addView(bDiscont);
+
+
+                    LinearLayout liDiscontinuidades = new LinearLayout(mcont);
+                    liDiscontinuidades.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liDiscontinuidades.setOrientation(LinearLayout.VERTICAL);
+                    liDiscontinuidades.setBackgroundColor(0x22222200);
+                    liDiscontinuidades.setVisibility(View.GONE);
+                    liFormDiscontinuidades.addView(liDiscontinuidades);
+                    ListaSGMF.get(Integer.parseInt(v.getTag().toString())).add(liDiscontinuidades);
+
+                    bDiscont.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View vi) {
+
+                            if (liDiscontinuidades.getVisibility() == View.VISIBLE) {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                animation.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                    }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        liDiscontinuidades.setVisibility(View.GONE);
+                                        bDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                    }
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+                                    }
+                                });
+                                liDiscontinuidades.startAnimation(animation);
+
+                            }
+                            else {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                liDiscontinuidades.startAnimation(animation);
+                                liDiscontinuidades.setVisibility(View.VISIBLE);
+                                bDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                            }
+
+                        }
+                    });
+
+
+                    TextView tvNameDiscont = new TextView(mcont);
+                    tvNameDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    String nuevo = "SGMF - EGMF "+ listContSGMF.get(Integer.parseInt(v.getTag().toString()));
+                    tvNameDiscont.setText(nuevo);
+                    tvNameDiscont.setTextAppearance(R.style.TituloFormato);
+                    tvNameDiscont.setPadding(0, 100, 0, 50);
+                    liDiscontinuidades.addView(tvNameDiscont);
+
+                    for (int i = 0; i < listaElementosNuevoSGMF.size(); i++){
+                        ElementoFormato elementoActual = listaElementosNuevoSGMF.get(i);
+                        String nombreElemento = elementoActual.getNombreelemento();
+                        String hintElemento = elementoActual.getNombreelemento();
+                        String claseElemento = elementoActual.getClaseelemento();
+                        String tagElemento = elementoActual.getTagelemento();
+                        int idStringArrayElemento = elementoActual.getIdStringArray();
+                        int aux = ListaSGMF.get(Integer.parseInt(v.getTag().toString())).size();
+
+                        if (claseElemento.equals("edittext")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, mtop, 0, 0);
+                            liDiscontinuidades.addView(tvGenerico);
+
+                            EditText etGenerico = new EditText(mcont);
+                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            etGenerico.setHint(hintElemento);
+                            etGenerico.setEms(10);
+                            etGenerico.setTag(tagElemento+aux);
+                            ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
+                            liDiscontinuidades.addView(etGenerico);
+                        }
+                        if (claseElemento.equals("spinner")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, mtop, 0, 0);
+                            liDiscontinuidades.addView(tvGenerico);
+
+                            Spinner sGenerico = new Spinner(mcont);
+                            sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, idStringArrayElemento, android.R.layout.simple_spinner_item);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            sGenerico.setAdapter(adapter);
+                            sGenerico.setTag(tagElemento+aux);
+                            ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sGenerico);
+                            liDiscontinuidades.addView(sGenerico);
+
+                            if (nombreElemento.equals("COBERTURA, C") || nombreElemento.equals("USO DEL TERRENO, U") || nombreElemento.equals("PATRÓN, PT")){
+                                TextView tvGenerico1 = new TextView(mcont);
+                                tvGenerico1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvGenerico1.setText("Otro:");
+                                tvGenerico1.setTextAppearance(R.style.TituloItem);
+                                tvGenerico1.setPadding(0, mtop, 0, 0);
+                                liDiscontinuidades.addView(tvGenerico1);
+
+                                EditText etGenerico = new EditText(mcont);
+                                etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                etGenerico.setHint(hintElemento);
+                                etGenerico.setEms(10);
+                                etGenerico.setTag(tagElemento+"otro"+aux);
+                                ListaEditText.get(idLinear).add(etGenerico);
+                                liDiscontinuidades.addView(etGenerico);
+                            }
+                        }
+                    }
+
+                }
+            });
+            liForm.addView(bAnadirDiscont);
+
+            //------------> Fotografías Anexas
+
+            TextView tvFotosAnexas = new TextView(mcont);
+            tvFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvFotosAnexas.setText("Fotografías Anexas");
+            tvFotosAnexas.setTextAppearance(R.style.TituloFormato);
+            tvFotosAnexas.setPadding(0, mtop, 0, 20);
+            liForm.addView(tvFotosAnexas);
+
+            LinearLayout liFormFotosAnexasSuelos = new LinearLayout(mcont);
+            liFormFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormFotosAnexasSuelos.setOrientation(LinearLayout.VERTICAL);
+            liForm.addView(liFormFotosAnexasSuelos);
+
+
+            Button bFotosAnexasSuelos = new Button(mcont);
+            bFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bFotosAnexasSuelos.setText("Añadir Foto");
+            bFotosAnexasSuelos.setTag(idLinear);
+            bFotosAnexasSuelos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.plus_circle, 0);
+            bFotosAnexasSuelos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
+
+                    Button bFotosAnexasAcordion = new Button(mcont);
+                    bFotosAnexasAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                    String foto = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
+                    bFotosAnexasAcordion.setText(foto);
+                    bFotosAnexasAcordion.setTag(Integer.parseInt(v.getTag().toString()));
+                    liFormFotosAnexasSuelos.addView(bFotosAnexasAcordion);
+
+                    LinearLayout liFotosAnexas = new LinearLayout(mcont);
+                    liFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liFotosAnexas.setOrientation(LinearLayout.VERTICAL);
+                    liFotosAnexas.setBackgroundColor(0x22222200);
+                    liFotosAnexas.setVisibility(View.GONE);
+                    liFormFotosAnexasSuelos.addView(liFotosAnexas);
+                    ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).add(liFotosAnexas);
+
+                    bFotosAnexasAcordion.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (liFotosAnexas.getVisibility() == View.VISIBLE) {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                animation.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                    }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        liFotosAnexas.setVisibility(View.GONE);
+                                        bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                    }
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+                                    }
+                                });
+                                liFotosAnexas.startAnimation(animation);
+
+                            }
+                            else {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                liFotosAnexas.startAnimation(animation);
+                                liFotosAnexas.setVisibility(View.VISIBLE);
+                                bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                            }
+
+                        }
+                    });
+
+                    TextView tvNameFotos = new TextView(mcont);
+                    tvNameFotos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    String foto1 = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
+                    tvNameFotos.setText(foto1);
+                    tvNameFotos.setTextAppearance(R.style.TituloFormato);
+                    tvNameFotos.setPadding(0, 100, 0, 50);
+                    liFotosAnexas.addView(tvNameFotos);
+
+
+                    for (int i = 0; i < listaElementosUGSFotosAnexas.size(); i++){
+                        ElementoFormato elementoActual = listaElementosUGSFotosAnexas.get(i);
+                        String nombreElemento = elementoActual.getNombreelemento();
+                        String hintElemento = elementoActual.getNombreelemento();
+                        String claseElemento = elementoActual.getClaseelemento();
+                        String tagElemento = elementoActual.getTagelemento();
+                        int idStringArrayElemento = elementoActual.getIdStringArray();
+                        int aux = ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).size();
+
+                        if (claseElemento.equals("edittext")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, 40, 0, 0);
+                            liFotosAnexas.addView(tvGenerico);
+
+                            EditText etGenerico = new EditText(mcont);
+                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            etGenerico.setHint(hintElemento);
+                            etGenerico.setEms(10);
+                            etGenerico.setTag(tagElemento+aux);
+                            ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
+                            liFotosAnexas.addView(etGenerico);
+                        }
+                    }
+
+                }
+            });
+            liForm.addView(bFotosAnexasSuelos);
+
+            listLiForm.add(liForm);
+            liFormularios.addView(liForm);
+        }
+
     }
 
     private boolean ArchivoExiste(String[] file, String name) {
@@ -1802,7 +2372,7 @@ public class SlideshowFragment extends Fragment {
                                     String Fecha = form.getString("Fecha");
                                     String Propietario = form.getString("Propietario");
 
-                                    FormFeature nuevaEstacion = new FormFeature(Estacion, TipoEstacion, Este, Norte, Altitud, Fotos, Observaciones, Fecha, Propietario);
+                                    FormFeature nuevaEstacion = new FormFeature("true", Estacion, TipoEstacion, Este, Norte, Altitud, Fotos, Observaciones, Fecha, Propietario);
 
 
                                     databaseReference.child("EstacionesCampo/estacion_"+cont).setValue(nuevaEstacion);
@@ -1812,9 +2382,11 @@ public class SlideshowFragment extends Fragment {
 
                                     int contUGS_Rocas = Integer.parseInt(counts.getString("UGS_Rocas"));
                                     int contUGS_Suelos = Integer.parseInt(counts.getString("UGS_Suelos"));
+                                    int contSGMF = Integer.parseInt(counts.getString("SGMF"));
 
                                     databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_UGS_Rocas").setValue(contUGS_Rocas);
                                     databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_UGS_Suelos").setValue(contUGS_Suelos);
+                                    databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_SGMF").setValue(contSGMF);
 
 
                                     for (int j = 0; j < contUGS_Rocas; j++) {
@@ -1877,7 +2449,7 @@ public class SlideshowFragment extends Fragment {
                                         String composicionmineral1 = EditTextsAux.getString("composicionmineral1");
                                         String composicionmineral2 = EditTextsAux.getString("composicionmineral2");
 
-                                        FormatUGSRocas nuevoFormatoUGSRocas = new FormatUGSRocas(noformato, municipios,  claseaflor,  gsi,  fabrica1,  fabrica2,  humedad1,  humedad2,  tamanograno1,  tamanograno2,  gradometeo1,  gradometeo2,  resistenciacomp1,  resistenciacomp2,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratiopt4orden,  secuenciaestratiopt4espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  perfilmeteorizacion,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  color1,  color2,  composicionmineral1,  composicionmineral2);
+                                        FormatUGSRocas nuevoFormatoUGSRocas = new FormatUGSRocas("true", noformato, municipios,  claseaflor,  gsi,  fabrica1,  fabrica2,  humedad1,  humedad2,  tamanograno1,  tamanograno2,  gradometeo1,  gradometeo2,  resistenciacomp1,  resistenciacomp2,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratiopt4orden,  secuenciaestratiopt4espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  perfilmeteorizacion,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  color1,  color2,  composicionmineral1,  composicionmineral2);
 
                                         databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j).setValue(nuevoFormatoUGSRocas);
 
@@ -1902,7 +2474,7 @@ public class SlideshowFragment extends Fragment {
                                             String AlturaDiscont = EditTextsAux.getString("AlturaDiscont"+k);
                                             String ObservacionesDiscont = EditTextsAux.getString("ObservacionesDiscont"+k);
 
-                                            FormatDiscont nuevoFormatoDiscont = new FormatDiscont( TipoDiscont,  PersistenciaDiscont,  AnchoAberDiscont,  TipoRellenoDiscont,  RugosidadSuperDiscont,  FormaSuperDiscont,  HumedadDiscont,  EspaciamientoDiscont,  MeteorizacionDiscont,  DirBuzamiento,  Buzamiento,  RakePitch,  DirRakePitch,  AzBzBz1,  AzBzBz2,  AlturaDiscont,  ObservacionesDiscont);
+                                            FormatDiscont nuevoFormatoDiscont = new FormatDiscont("true", TipoDiscont,  PersistenciaDiscont,  AnchoAberDiscont,  TipoRellenoDiscont,  RugosidadSuperDiscont,  FormaSuperDiscont,  HumedadDiscont,  EspaciamientoDiscont,  MeteorizacionDiscont,  DirBuzamiento,  Buzamiento,  RakePitch,  DirRakePitch,  AzBzBz1,  AzBzBz2,  AlturaDiscont,  ObservacionesDiscont);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j+"/Discontinuidades/Discont_"+k).setValue(nuevoFormatoDiscont);
 
                                         }
@@ -1914,7 +2486,7 @@ public class SlideshowFragment extends Fragment {
                                             String NombreFotosAnexas = EditTextsAux.getString("NombreFotosAnexas"+k);
                                             String DescriFotosAnexas = EditTextsAux.getString("DescriFotosAnexas"+k);
 
-                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas(NombreFotosAnexas, DescriFotosAnexas);
+                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas("true", NombreFotosAnexas, DescriFotosAnexas);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
 
                                         }
@@ -1996,7 +2568,7 @@ public class SlideshowFragment extends Fragment {
                                         String dirimbricacionmatriz2 = "";
                                         String compacidadsuelosgruesos2 = "";
 
-
+                                        resiscorte2 = RadioGrpAux.getString("resiscorte2");
                                         formasuelosgruesos2 = RadioGrpAux.getString("formasuelosgruesos2");
                                         redondezsuelosgruesos2 = RadioGrpAux.getString("redondezsuelosgruesos2");
                                         orientacionsuelosgruesos2 = RadioGrpAux.getString("orientacionsuelosgruesos2");
@@ -2053,7 +2625,7 @@ public class SlideshowFragment extends Fragment {
 
 
 
-                                        FormatUGSSuelos NuevoFormatoUGSSuelos = new FormatUGSSuelos( municipios,  claseaflor,  estructurasoporte1,  estructurasoporte2,  condicionhumedad1,  condicionhumedad2,  estructurasrelictas1,  estructurasrelictas2,  granulometria1,  granulometria2,  forma1,  forma2,  redondez1,  redondez2,  orientacion1,  orientacion2,  dirimbricacion1,  dirimbricacion2,  meteorizacionclastos1,  meteorizacionclastos2,  granulometriamatriz1,  granulometriamatriz2,  gradacion1,  gradacion2,  seleccion1,  seleccion2,  plasticidad1,  plasticidad2,  resiscorte1,  resiscorte2,  formasuelosgruesos1,  formasuelosgruesos2,  redondezsuelosgruesos1,  redondezsuelosgruesos2,  orientacionsuelosgruesos1,  orientacionsuelosgruesos2,  dirimbricacionmatriz1,  dirimbricacionmatriz2,  noformato,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  porcentajematriz1,  porcentajematriz2,  porcentajeclastos1,  porcentajeclastos2,  color1,  color2,  observacionessuelos, descripcionsuelos, compacidadsuelosgruesos1, compacidadsuelosgruesos2);
+                                        FormatUGSSuelos NuevoFormatoUGSSuelos = new FormatUGSSuelos("true", municipios,  claseaflor,  estructurasoporte1,  estructurasoporte2,  condicionhumedad1,  condicionhumedad2,  estructurasrelictas1,  estructurasrelictas2,  granulometria1,  granulometria2,  forma1,  forma2,  redondez1,  redondez2,  orientacion1,  orientacion2,  dirimbricacion1,  dirimbricacion2,  meteorizacionclastos1,  meteorizacionclastos2,  granulometriamatriz1,  granulometriamatriz2,  gradacion1,  gradacion2,  seleccion1,  seleccion2,  plasticidad1,  plasticidad2,  resiscorte1,  resiscorte2,  formasuelosgruesos1,  formasuelosgruesos2,  redondezsuelosgruesos1,  redondezsuelosgruesos2,  orientacionsuelosgruesos1,  orientacionsuelosgruesos2,  dirimbricacionmatriz1,  dirimbricacionmatriz2,  noformato,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  porcentajematriz1,  porcentajematriz2,  porcentajeclastos1,  porcentajeclastos2,  color1,  color2,  observacionessuelos, descripcionsuelos, compacidadsuelosgruesos1, compacidadsuelosgruesos2);
 
 
                                         databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+j).setValue(NuevoFormatoUGSSuelos);
@@ -2066,8 +2638,97 @@ public class SlideshowFragment extends Fragment {
                                             String NombreFotosAnexas = EditTextsAux.getString("NombreFotosAnexas"+k);
                                             String DescriFotosAnexas = EditTextsAux.getString("DescriFotosAnexas"+k);
 
-                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas(NombreFotosAnexas, DescriFotosAnexas);
+                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas("true", NombreFotosAnexas, DescriFotosAnexas);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
+
+                                        }
+
+                                    }
+
+                                    for (int j = 0; j < contSGMF; j++) {
+                                        JSONObject FromatoAux = Formularios.getJSONObject("Form_SGMF_"+j);
+                                        JSONObject SpinnersAux = FromatoAux.getJSONObject("Spinners");
+                                        JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
+                                        JSONObject CheckBoxAux = FromatoAux.getJSONObject("CheckBox");
+
+                                        String activo = "true";
+                                        String municipios = SpinnersAux.getString("municipios");;
+                                        String noformato = EditTextsAux.getString("noformato");
+                                        String vereda = EditTextsAux.getString("vereda");
+                                        String noestacion = EditTextsAux.getString("noestacion");
+                                        String ubicacionGeomorfoestructura = EditTextsAux.getString("ubicacionGeomorfoestructura");
+                                        String ubicacionProvincia = EditTextsAux.getString("ubicacionProvincia");
+                                        String ubicacionRegion = EditTextsAux.getString("ubicacionRegion");
+                                        String ubicacionUnidad = EditTextsAux.getString("ubicacionUnidad");
+                                        String ubicacionSubunidad = EditTextsAux.getString("ubicacionSubunidad");
+                                        String ubicacionElemento = EditTextsAux.getString("ubicacionElemento");
+                                        String nombreSGMF = EditTextsAux.getString("nombreSGMF");
+                                        String codigoSGMF = EditTextsAux.getString("codigoSGMF");
+                                        String observacionesSGMF = EditTextsAux.getString("observacionesSGMF");
+                                        String ambiente0check = CheckBoxAux.getString("ambiente0check");
+                                        String ambiente1check = CheckBoxAux.getString("ambiente1check");
+                                        String ambiente2check = CheckBoxAux.getString("ambiente2check");
+                                        String ambiente3check = CheckBoxAux.getString("ambiente3check");
+                                        String ambiente4check = CheckBoxAux.getString("ambiente4check");
+                                        String ambiente5check = CheckBoxAux.getString("ambiente5check");
+                                        String ambiente6check = CheckBoxAux.getString("ambiente6check");
+                                        String ambiente7check = CheckBoxAux.getString("ambiente7check");
+                                        String ambiente8check = CheckBoxAux.getString("ambiente8check");
+
+
+                                        FormatSGMF nuevoFormatoSGMF = new FormatSGMF( activo,  municipios,  noformato,  vereda,  noestacion,  ubicacionGeomorfoestructura,  ubicacionProvincia,  ubicacionRegion,  ubicacionUnidad,  ubicacionSubunidad,  ubicacionElemento,  nombreSGMF,  codigoSGMF,  observacionesSGMF,  ambiente0check,  ambiente1check,  ambiente2check,  ambiente3check,  ambiente4check,  ambiente5check,  ambiente6check,  ambiente7check,  ambiente8check);
+
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_SGMF/Form_SGMF_"+j).setValue(nuevoFormatoSGMF);
+
+                                        int contSGMFNew = Integer.parseInt(FromatoAux.getString("SGMF"));
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_SGMF/Form_SGMF_"+j+"/SGMF/count").setValue(contSGMFNew);
+                                        for (int k = 1; k <= contSGMFNew; k++) {
+
+
+                                            String tiporoca = SpinnersAux.getString("tiporoca"+k);
+                                            String gradometeor = SpinnersAux.getString("gradometeor"+k);
+                                            String gradofractura = SpinnersAux.getString("gradofractura"+k);
+                                            String tiposuelo = SpinnersAux.getString("tiposuelo"+k);
+                                            String tamanograno = SpinnersAux.getString("tamanograno"+k);
+                                            String tiporelieve = SpinnersAux.getString("tiporelieve"+k);
+                                            String indicerelieve = SpinnersAux.getString("indicerelieve"+k);
+                                            String inclinacionladera = SpinnersAux.getString("inclinacionladera"+k);
+                                            String longiladera = SpinnersAux.getString("longiladera"+k);
+                                            String formaladera = SpinnersAux.getString("formaladera"+k);
+                                            String formacresta = SpinnersAux.getString("formacresta"+k);
+                                            String formavalle = SpinnersAux.getString("formavalle"+k);
+                                            String cobertura = SpinnersAux.getString("cobertura"+k);
+                                            String uso = SpinnersAux.getString("uso"+k);
+                                            String densidad = SpinnersAux.getString("densidad"+k);
+                                            String frecuencia = SpinnersAux.getString("frecuencia"+k);
+                                            String textura = SpinnersAux.getString("textura"+k);
+                                            String patron = SpinnersAux.getString("patron"+k);
+                                            String tipoerosion = SpinnersAux.getString("tipoerosion"+k);
+                                            String espaciamiento = SpinnersAux.getString("espaciamiento"+k);
+                                            String intensidaderosion = SpinnersAux.getString("intensidaderosion"+k);
+                                            String tipodemm = SpinnersAux.getString("tipodemm"+k);
+                                            String tipomaterial = SpinnersAux.getString("tipomaterial"+k);
+                                            String actividad = SpinnersAux.getString("actividad"+k);
+                                            String codigonuevaSGMF = EditTextsAux.getString("codigonuevaSGMF"+k);
+                                            String coberturaotro = EditTextsAux.getString("coberturaotro"+k);
+                                            String usootro = EditTextsAux.getString("usootro"+k);
+                                            String patronotro = EditTextsAux.getString("patronotro"+k);
+
+
+                                            FormatNewSGMF nuevoFormatoNewSGMF = new FormatNewSGMF("true",  tiporoca,  gradometeor,  gradofractura,  tiposuelo,  tamanograno,  tiporelieve,  indicerelieve,  inclinacionladera,  longiladera,  formaladera,  formacresta,  formavalle,  cobertura,  uso,  densidad,  frecuencia,  textura,  patron,  tipoerosion,  espaciamiento,  intensidaderosion,  tipodemm,  tipomaterial,  actividad,  codigonuevaSGMF,  coberturaotro,  usootro,  patronotro);
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_SGMF/Form_SGMF_"+j+"/SGMF/SGMF_"+k).setValue(nuevoFormatoNewSGMF);
+
+                                        }
+
+                                        int contFotosAnexas = Integer.parseInt(FromatoAux.getString("FotosAnexas"));
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_SGMF/Form_SGMF_"+j+"/FotosAnexas/count").setValue(contFotosAnexas);
+                                        for (int k = 1; k <= contFotosAnexas; k++) {
+
+                                            String NombreFotosAnexas = EditTextsAux.getString("NombreFotosAnexas"+k);
+                                            String DescriFotosAnexas = EditTextsAux.getString("DescriFotosAnexas"+k);
+
+                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas("true", NombreFotosAnexas, DescriFotosAnexas);
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_SGMF/Form_SGMF_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
 
                                         }
 
@@ -2134,6 +2795,7 @@ public class SlideshowFragment extends Fragment {
         JSONObject countFormatos = new JSONObject();
         int countFormatosUGSRocas = 0;
         int countFormatosUGSSuelos = 0;
+        int countFormatosSGMF = 0;
         for (int i = 0; i < listFormularios.size(); i++) {
 
             //-------------> Rocas
@@ -2221,9 +2883,43 @@ public class SlideshowFragment extends Fragment {
 
                 countFormatosUGSSuelos++;
             }
+
+            //-------------> Rocas
+
+            if (listFormularios.get(i).equals("SGMF")){
+                JSONObject FormatoTemp = new JSONObject()
+                        .put("SGMF", listContSGMF.get(i))
+                        .put("FotosAnexas", listContFotosAnexas.get(i));
+
+                JSONObject spinnerList = new JSONObject();
+                for (int j = 0; j < ListaSpinner.get(i).size(); j++) {
+                    spinnerList.put(ListaSpinner.get(i).get(j).getTag().toString(), ListaSpinner.get(i).get(j).getSelectedItem().toString());
+                }
+                FormatoTemp.put("Spinners", spinnerList);
+
+                JSONObject editTextList = new JSONObject();
+                for (int k = 0; k < ListaEditText.get(i).size(); k++) {
+                    editTextList.put(ListaEditText.get(i).get(k).getTag().toString(), ListaEditText.get(i).get(k).getText().toString());
+                }
+                FormatoTemp.put("EditText", editTextList);
+
+                JSONObject checkBox = new JSONObject();
+                for (int k = 0; k < ListaCheckBox.get(i).size(); k++) {
+                    checkBox.put(ListaCheckBox.get(i).get(k).getTag().toString().split("_")[0], ListaCheckBox.get(i).get(k).isChecked());
+                }
+                FormatoTemp.put("CheckBox", checkBox);
+
+
+                FormatosList.put("Form_SGMF_"+countFormatosSGMF, FormatoTemp);
+
+                countFormatosSGMF++;
+            }
+
+
         }
         countFormatos.put("UGS_Rocas", countFormatosUGSRocas);
         countFormatos.put("UGS_Suelos", countFormatosUGSSuelos);
+        countFormatos.put("SGMF", countFormatosSGMF);
 
         FormatosList.put("counts", countFormatos);
         attrForm.put("Formularios", FormatosList);
@@ -2365,6 +3061,49 @@ public class SlideshowFragment extends Fragment {
         listaElementosUGSS.add(new ElementoFormato( "Observaciones",  "edittext",  "observacionessuelos", 0));
         listaElementosUGSS.add(new ElementoFormato( "Descripción Composición Partículas del Suelo",  "edittext",  "descripcionsuelos", 0));
 
+        //--------------> SGMF
+
+        listaElementosSGMF.add(new ElementoFormato( "Número Formato",  "edittext",  "noformato", 0));
+        listaElementosSGMF.add(new ElementoFormato( "Municipio",  "spinner",  "municipios", R.array.Municipios));
+        listaElementosSGMF.add(new ElementoFormato( "Vereda",  "edittext",  "vereda", 0));
+        listaElementosSGMF.add(new ElementoFormato( "Número de la Estación",  "edittext",  "noestacion", 0));
+        listaElementosSGMF.add(new ElementoFormato( "MORFOGÉNESIS",  "titulo",  "", 0));
+        listaElementosSGMF.add(new ElementoFormato( "Tipo de Ambiente (Marque varios si es necesario)","ambientes","ambiente",R.array.Ambientes));
+        listaElementosSGMF.add(new ElementoFormato( "UBICACIÓN GEOMORFOLÓGICA","ubicacionGeo","ubicacion",R.array.UbicacionGeomorfo));
+        listaElementosSGMF.add(new ElementoFormato( "CARACTERIZACIÓN DE LA (S) GEOFORMA (S)",  "titulo",  "", 0));
+        listaElementosSGMF.add(new ElementoFormato( "Nombre SGMF / EGMF","edittext","nombreSGMF",0));
+        listaElementosSGMF.add(new ElementoFormato( "ID - Código SGMF / EGMF","edittext","codigoSGMF",0));
+        listaElementosSGMF.add(new ElementoFormato( "Observaciones","edittext","observacionesSGMF",0));
+
+        listaElementosNuevoSGMF.add(new ElementoFormato( "MORFOLITOLOGÍA - MORFOLOGÍA - MORFOMETRÍA - COBERTURA",  "titulo",  "", 0));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "ID-Código SGMF-EGMF","edittext","codigonuevaSGMF",0));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "TIPO DE ROCA, TRO","spinner","tiporoca",R.array.TipodeRocaGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "GRADO DE METEORIZACIÓN, GM","spinner","gradometeor",R.array.MeteorizacionGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "GRADO DE FRACTURAMIENTO, GF","spinner","gradofractura",R.array.GradoFracturamientoGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "TIPO DE SUELO, TSU","spinner","tiposuelo",R.array.TipoSueloGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "TAMAÑO DE GRANO, TG","spinner","tamanograno",R.array.TamañoGranoGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "TIPO DE RELIEVE, TR","spinner","tiporelieve",R.array.TipoRelieveGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "INDICE DE RELIEVE, IR","spinner","indicerelieve",R.array.IndiceRelieveGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "INCLINACIÓN LADERA, IL","spinner","inclinacionladera",R.array.InclinacionLaderaGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "LONGITUD LADERA, LL","spinner","longiladera",R.array.LongitudLaderaGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "FORMA LADERA, FL","spinner","formaladera",R.array.FormaLaderaGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "FORMA DE LA CRESTA, FC","spinner","formacresta",R.array.FormaCrestaGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "FORMAS DEL VALLE, FV","spinner","formavalle",R.array.FormaValleGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "COBERTURA, C","spinner","cobertura",R.array.CoberturaGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "USO DEL TERRENO, U","spinner","uso",R.array.UsoGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "CARACTERÍSTICAS DE DRENAJE",  "titulo",  "", 0));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "DENSIDAD, D","spinner","densidad",R.array.DensidadGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "FRECUENCIA, FR","spinner","frecuencia",R.array.FrecuenciaGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "TEXTURA, TEX","spinner","textura",R.array.TexturaGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "PATRÓN, PT","spinner","patron",R.array.PatronGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "MORFODINÁMICA",  "titulo",  "", 0));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "TIPO DE EROSIÓN, TE","spinner","tipoerosion",R.array.TipoErosionGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "ESPACIAMIENTO ENTRE CANALES, EC","spinner","espaciamiento",R.array.EspaciamientoGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "INTENSIDAD DE LA EROSIÓN, IER","spinner","intensidaderosion",R.array.IntensidadErosionGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "TIPOS DE MM, TMM","spinner","tipodemm",R.array.TipoMMGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "TIPO DE MATERIAL ASOCIADO, TMA","spinner","tipomaterial",R.array.TipoMaterialGMF));
+        listaElementosNuevoSGMF.add(new ElementoFormato( "ACTIVIDAD, ACT","spinner","actividad",R.array.ActividadGMF));
+
 
     }
 
@@ -2373,4 +3112,59 @@ public class SlideshowFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    public class Localizacion implements LocationListener {
+        SlideshowFragment mainActivity;
+        public SlideshowFragment getMainActivity() {
+            return mainActivity;
+        }
+        public void setMainActivity(SlideshowFragment context) {
+            this.mainActivity = context;
+        }
+        @Override
+        public void onLocationChanged(Location loc) {
+            // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
+            // debido a la deteccion de un cambio de ubicacion
+            loc.getLatitude();
+            loc.getLongitude();
+            loc.getAltitude();
+            loc.getAccuracy();
+            String sLatitud = String.valueOf(loc.getLatitude());
+            String sLongitud = String.valueOf(loc.getLongitude());
+            String sAltitud = String.valueOf(loc.getAltitude());
+            String sAccuracy = String.valueOf(loc.getAccuracy());
+            etNorte.setText(sLatitud);
+            etEste.setText(sLongitud);
+            etAltitud.setText(sAltitud);
+            //tvEstadoGPS.setText("Precisión: "+ sAccuracy);
+            //this.mainActivity.setLocation(loc);
+        }
+        @Override
+        public void onProviderDisabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es desactivado
+            tvEstadoGPS.setText("GPS Desactivado");
+        }
+        @Override
+        public void onProviderEnabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es activado
+            tvEstadoGPS.setText("GPS Activado");
+        }
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            switch (status) {
+                case LocationProvider.AVAILABLE:
+                    Log.d("debug", "LocationProvider.AVAILABLE");
+                    tvEstadoGPS.setText("GPS Disponible");
+                    break;
+                case LocationProvider.OUT_OF_SERVICE:
+                    Log.d("debug", "LocationProvider.OUT_OF_SERVICE");
+                    tvEstadoGPS.setText("GPS Fuera de Servicio");
+                    break;
+                case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                    tvEstadoGPS.setText("GPS Temporalmente NO Disponible");
+                    break;
+            }
+        }
+    }
+
 }

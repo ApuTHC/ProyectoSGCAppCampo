@@ -2,6 +2,7 @@ package com.unal.proyectosgcappcampo.ui.slideshow;
 
 public class FormatDiscont {
 
+    public String activo;
     public String TipoDiscont;
     public String PersistenciaDiscont;
     public String AnchoAberDiscont;
@@ -20,7 +21,8 @@ public class FormatDiscont {
     public String AlturaDiscont;
     public String ObservacionesDiscont;
 
-    public FormatDiscont(String tipoDiscont, String persistenciaDiscont, String anchoAberDiscont, String tipoRellenoDiscont, String rugosidadSuperDiscont, String formaSuperDiscont, String humedadDiscont, String espaciamientoDiscont, String meteorizacionDiscont, String dirBuzamiento, String buzamiento, String rakePitch, String dirRakePitch, String azBzBz1, String azBzBz2, String alturaDiscont, String observacionesDiscont) {
+    public FormatDiscont(String activo, String tipoDiscont, String persistenciaDiscont, String anchoAberDiscont, String tipoRellenoDiscont, String rugosidadSuperDiscont, String formaSuperDiscont, String humedadDiscont, String espaciamientoDiscont, String meteorizacionDiscont, String dirBuzamiento, String buzamiento, String rakePitch, String dirRakePitch, String azBzBz1, String azBzBz2, String alturaDiscont, String observacionesDiscont) {
+        activo = activo;
         TipoDiscont = tipoDiscont;
         PersistenciaDiscont = persistenciaDiscont;
         AnchoAberDiscont = anchoAberDiscont;
