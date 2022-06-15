@@ -1,29 +1,29 @@
 package com.unal.proyectosgcappcampo.ui.slideshow;
 
 public class FormatSGMF {
-    private String activo;
-    private String municipios;
-    private String noformato;
-    private String vereda;
-    private String noestacion;
-    private String ubicacionGeomorfoestructura;
-    private String ubicacionProvincia;
-    private String ubicacionRegion;
-    private String ubicacionUnidad;
-    private String ubicacionSubunidad;
-    private String ubicacionElemento;
-    private String nombreSGMF;
-    private String codigoSGMF;
-    private String observacionesSGMF;
-    private String ambiente0check;
-    private String ambiente1check;
-    private String ambiente2check;
-    private String ambiente3check;
-    private String ambiente4check;
-    private String ambiente5check;
-    private String ambiente6check;
-    private String ambiente7check;
-    private String ambiente8check;
+    public String activo;
+    public String municipios;
+    public String noformato;
+    public String vereda;
+    public String noestacion;
+    public String ubicacionGeomorfoestructura;
+    public String ubicacionProvincia;
+    public String ubicacionRegion;
+    public String ubicacionUnidad;
+    public String ubicacionSubunidad;
+    public String ubicacionElemento;
+    public String nombreSGMF;
+    public String codigoSGMF;
+    public String observacionesSGMF;
+    public String ambiente0check;
+    public String ambiente1check;
+    public String ambiente2check;
+    public String ambiente3check;
+    public String ambiente4check;
+    public String ambiente5check;
+    public String ambiente6check;
+    public String ambiente7check;
+    public String ambiente8check;
 
     public FormatSGMF(String activo, String municipios, String noformato, String vereda, String noestacion, String ubicacionGeomorfoestructura, String ubicacionProvincia, String ubicacionRegion, String ubicacionUnidad, String ubicacionSubunidad, String ubicacionElemento, String nombreSGMF, String codigoSGMF, String observacionesSGMF, String ambiente0check, String ambiente1check, String ambiente2check, String ambiente3check, String ambiente4check, String ambiente5check, String ambiente6check, String ambiente7check, String ambiente8check) {
         this.activo = activo;

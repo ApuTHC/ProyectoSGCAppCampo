@@ -774,8 +774,84 @@
 
 
 
+    <string-array name="Importancia">
+        <item>Alta</item>
+        <item>Media</item>
+        <item>Baja</item>
+    </string-array>
+
+    <string-array name="FuenteFechaEvento">
+        <item>Sensores remotos</item>
+        <item>Reportada por terceros</item>
+        <item>Consultada en pagina web</item>
+    </string-array>
+
+    <string-array name="ConfiFecha">
+        <item>Incierta</item>
+        <item>Confiabilidad baja</item>
+        <item>Certeza Año</item>
+        <item>Certeza mes y año</item>
+        <item>Exacta</item>
+    </string-array>
+
+    <string-array name="TipoMovimiento">
+        <item>Caída</item>
+        <item>Volcamiento</item>
+        <item>Deslizamiento</item>
+        <item>Flujo</item>
+        <item>Propagación Lateral</item>
+        <item>Reptación</item>
+        <item>Deform. Gravit. Profundas</item>
+    </string-array>
+
+    <string-array name="SubtipoMovimiento">
+        <item>Caída de roca</item>
+        <item>Caída de detritos</item>
+        <item>Caída de tierras</item>
+        <item>Volcam. flexural de roca</item>
+        <item>Volcam. de roca</item>
+        <item>Volcam. macizo rocoso</item>
+        <item>Desliz. rotacional </item>
+        <item>Desliz. traslacional</item>
+        <item>Desliz. en cuña</item>
+        <item>Desliz. traslacional en cuña</item>
+        <item>Desliz. traslacional planar</item>
+        <item>Avalancha de rocas</item>
+        <item>Flujo de detritos</item>
+        <item>Flujo de lodo</item>
+        <item>Desliz. por flujo</item>
+        <item>Avalancha de detritos</item>
+        <item>Flujo de tierra</item>
+        <item>Crecida de detritos</item>
+        <item>Flujo de turba</item>
+        <item>Desliz. licuación de arena</item>
+        <item>Desliz. licuación de limo</item>
+        <item>Desliz. licuación detritos</item>
+        <item>Desliz. licuación roca fracturada</item>
+        <item>Propag. lateral lenta</item>
+        <item>Propag. lateral licuación</item>
+        <item>Reptación de suelos</item>
+        <item>Solifluxión</item>
+        <item>Gelifluxión (en permafrost)</item>
+    </string-array>
 
 
+
+    <string-array name="ClaseDaño">
+        <item>I: Infraestructura</item>
+        <item>E: Económicos</item>
+        <item>A: Ambientales</item>
+    </string-array>
+
+    <string-array name="TiposDaño">
+        <item>DL: Daño leve</item>
+        <item>DM: Daño moderado</item>
+        <item>DS: Daño severo</item>
+        <item>DT: Daño total</item>
+        <item>NC: No cuantificable</item>
+    </string-array>
+
+    <string name="NotaDaños">Infraestructura: edificios, carreteras, inst. educativa, puentes, servicios publicos, vía ferrea, torre conducción eléctrica, obras lineales, planta eléctrica, torre de energía, capa asfaltica, galpones, tanque almacenamiento, espolones, distrito riego, puentes peatonales, puentes veredales, acueducto. Económicos: agricultura, ganadería, cultivos, semovientes, transporte pasajeros y carga. Ambientales: parques, bosques, planta tratamiento de agua.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,6 +17,8 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
@@ -31,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -38,6 +43,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -45,11 +52,15 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.unal.proyectosgcappcampo.R;
@@ -63,6 +74,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -72,17 +86,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.xml.transform.Result;
+
 public class SlideshowFragment extends Fragment {
 
     private FragmentSlideshowBinding binding;
 
     private FirebaseAuth firebaseAuth;
+    StorageReference storageRef;
     String userName;
     boolean login = false;
+
+    private ActivityResultLauncher<Intent> intentLaucher;
 
     Button btnFormLoad;
     Button btnFormSync;
     Button btnAddForm;
+    Button btnFoto;
+    LinearLayout liFotosGeneral;
     EditText etEstacion;
     EditText etTipoEstacion;
     EditText etEste;
@@ -105,10 +126,15 @@ public class SlideshowFragment extends Fragment {
     List<ElementoFormato> listaElementosUGSS = new ArrayList<ElementoFormato>();
     List<ElementoFormato> listaElementosSGMF = new ArrayList<ElementoFormato>();
     List<ElementoFormato> listaElementosNuevoSGMF = new ArrayList<ElementoFormato>();
+    List<ElementoFormato> listaElementosCAT = new ArrayList<ElementoFormato>();
+    List<ElementoFormato> listaElementosCATDANOS = new ArrayList<ElementoFormato>();
+    List<ElementoFormato> listaElementosINV = new ArrayList<ElementoFormato>();
 
     ElementoFormato ElementoSueloResidualUGSR = new ElementoFormato( "Horizonte",  "secuenciaestrati",  "secuenciaestratisuelor", R.array.SecuenciaEstratiRocasSueloRes);
     ElementoFormato ElementoSueloResidualUGSS = new ElementoFormato( "Horizonte",  "secuenciaestrati",  "secuenciaestratisuelor", R.array.SecuenciaEstratiSuelosSueloRes);
 
+
+    List<Uri> listFotosGeneral = new ArrayList<Uri>();
 
 
     int idLinear;
@@ -194,6 +220,8 @@ public class SlideshowFragment extends Fragment {
 
         GenerarListas();
 
+        btnFoto = binding.btnFoto;
+        liFotosGeneral = binding.liFotos;
         btnFormLoad = binding.btnFormLoad;
         btnFormSync = binding.btnFormSync;
         btnAddForm = binding.AddFormu;
@@ -205,6 +233,8 @@ public class SlideshowFragment extends Fragment {
         etFotos = binding.etFotos;
         etObservaciones = binding.etObservaciones;
         tvEstadoGPS = binding.tvEstadoGPS;
+
+        ActivityResult();
 
 
         liFormularios = binding.liFormularios;
@@ -226,6 +256,7 @@ public class SlideshowFragment extends Fragment {
         });
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        storageRef =  FirebaseStorage.getInstance().getReference();
 
         String[] files = mcont.fileList();
 
@@ -254,6 +285,13 @@ public class SlideshowFragment extends Fragment {
         } else {
             formComplete = new JSONArray();
         }
+
+        btnFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CargarImagen();
+            }
+        });
 
         btnFormLoad.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,6 +336,51 @@ public class SlideshowFragment extends Fragment {
         }
 
     }
+
+    private void ActivityResult() {
+        intentLaucher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+           if (result.getResultCode() == Activity.RESULT_OK){
+               Uri imageUri;
+               if (result.getData().getClipData() != null){
+                   //Seleccionar multiples Imagenes
+                   int count = result.getData().getClipData().getItemCount();
+                   for (int i = 0; i<count; i++){
+                       imageUri = result.getData().getClipData().getItemAt(i).getUri();
+                       listFotosGeneral.add(imageUri);
+                   }
+               }
+               else{
+                   //Seleccionar una imagen
+                   imageUri = result.getData().getData();
+                   listFotosGeneral.add(imageUri);
+               }
+
+               liFotosGeneral.removeAllViews();
+               String name = "";
+               for (int i = 0; i < listFotosGeneral.size(); i++) {
+                   ImageView imagen = new ImageView(mcont);
+                   imagen.setLayoutParams(new ActionBar.LayoutParams(400, 400));
+                   imagen.setImageURI(listFotosGeneral.get(i));
+                   String path = listFotosGeneral.get(i).getPath();
+
+                   name += path.substring(path.lastIndexOf('/') + 1) + ", ";
+                   liFotosGeneral.addView(imagen);
+               }
+               etFotos.setText(name);
+           }
+        });
+    }
+
+    private void CargarImagen() {
+
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        //intent.setAction(Intent.ACTION_GET_CONTENT);
+        intentLaucher.launch(Intent.createChooser(intent, "Seleccione la aplicación"));
+
+    }
+
 
 
     private void locationStart() {
@@ -2374,8 +2457,48 @@ public class SlideshowFragment extends Fragment {
 
                                     FormFeature nuevaEstacion = new FormFeature("true", Estacion, TipoEstacion, Este, Norte, Altitud, Fotos, Observaciones, Fecha, Propietario);
 
-
                                     databaseReference.child("EstacionesCampo/estacion_"+cont).setValue(nuevaEstacion);
+
+                                    int fotosCount = Integer.parseInt(form.getString("FotosCount"));
+
+                                    for (int j = 0; j < fotosCount; j++) {
+                                        String uriFoto = form.getString("Fotos_Generales_"+j);
+                                        Uri urifotos = Uri.parse(uriFoto);
+                                        Bitmap imagen = getBitmapFromUri (urifotos);
+                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                        imagen.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                        byte[] data = baos.toByteArray();
+                                        //Uri file = Uri.fromFile(new File(Uri.parse(uriFoto)));
+                                        //String path = listFotosGeneral.get(i).getPath();
+                                        String subpath = uriFoto.substring(uriFoto.lastIndexOf('/') + 1);
+                                        StorageReference estacionRef = storageRef.child("FotosEstaciones/estacion_"+cont+"/"+subpath);
+//                                        UploadTask uploadTask = estacionRef.putFile(file);
+                                        UploadTask uploadTask = estacionRef.putBytes(data);
+                                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                            @Override
+                                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                                if (!task.isSuccessful()) {
+                                                    throw task.getException();
+                                                }
+
+                                                // Continue with the task to get the download URL
+                                                return estacionRef.getDownloadUrl();
+                                            }
+                                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Uri> task) {
+                                                if (task.isSuccessful()) {
+                                                    Uri downloadUri = task.getResult();
+
+                                                    Log.d("jaaj", "onComplete: "+downloadUri);
+                                                } else {
+                                                    // Handle failures
+                                                    // ...
+                                                }
+                                            }
+                                        });
+
+                                    }
 
                                     JSONObject Formularios = form.getJSONObject("Formularios");
                                     JSONObject counts = Formularios.getJSONObject("counts");
@@ -2774,6 +2897,13 @@ public class SlideshowFragment extends Fragment {
 
     }
 
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException{
+        ParcelFileDescriptor parcelFileDescriptor = mcont.getContentResolver(). openFileDescriptor ( uri , "r" );
+        FileDescriptor fileDescriptor = parcelFileDescriptor . getFileDescriptor ();
+        Bitmap image = BitmapFactory. decodeFileDescriptor ( fileDescriptor );
+        parcelFileDescriptor . close ();
+        return image ;
+    }
 
     private void GuardarForm() throws JSONException, IOException {
 
@@ -2787,9 +2917,13 @@ public class SlideshowFragment extends Fragment {
                 .put("Norte", etNorte.getText().toString())
                 .put("Altitud", etAltitud.getText().toString())
                 .put("Fotos", etFotos.getText().toString())
+                .put("FotosCount", listFotosGeneral.size())
                 .put("Observaciones", etObservaciones.getText().toString())
                 .put("Fecha", s.toString())
                 .put("Propietario", userName);
+        for (int i = 0; i < listFotosGeneral.size(); i++) {
+            attrForm.put("Fotos_Generales_"+i, listFotosGeneral.get(i).toString());
+        }
 
         JSONObject FormatosList = new JSONObject();
         JSONObject countFormatos = new JSONObject();
@@ -3103,6 +3237,76 @@ public class SlideshowFragment extends Fragment {
         listaElementosNuevoSGMF.add(new ElementoFormato( "TIPOS DE MM, TMM","spinner","tipodemm",R.array.TipoMMGMF));
         listaElementosNuevoSGMF.add(new ElementoFormato( "TIPO DE MATERIAL ASOCIADO, TMA","spinner","tipomaterial",R.array.TipoMaterialGMF));
         listaElementosNuevoSGMF.add(new ElementoFormato( "ACTIVIDAD, ACT","spinner","actividad",R.array.ActividadGMF));
+
+        //--------------> CATALOGO MM
+
+//        listaElementosCAT.add(new ElementoFormato("ID PARTE del MM","edittext","ID_PARTE", 0));
+        listaElementosCAT.add(new ElementoFormato("IMPORTANCIA","checkradio","IMPORTANC",R.array.Importancia));
+        listaElementosCAT.add(new ElementoFormato("ENCUESTADOR","edittext","ENCUESTAD",0));
+        listaElementosCAT.add(new ElementoFormato("FECHA EVENTO","fecha","FECHA_MOV",0));
+        listaElementosCAT.add(new ElementoFormato("FUENTE FECHA EVENTO","spinner","FECHA_FUENTE",R.array.FuenteFechaEvento));
+        listaElementosCAT.add(new ElementoFormato("CONFIABILIDAD FECHA EVENTO","spinner","ConfiFechaMM",R.array.ConfiFecha));
+        listaElementosCAT.add(new ElementoFormato("FECHA REPORTE","fecha","FECHA_REP",0));
+        listaElementosCAT.add(new ElementoFormato("INSTITUCIÓN","edittext","INSTITUC",0));
+        listaElementosCAT.add(new ElementoFormato("SIMMA","edittext","COD_SIMMA",0));
+        listaElementosCAT.add(new ElementoFormato("Municipio",  "spinner",  "municipios", R.array.Municipios));
+        listaElementosCAT.add(new ElementoFormato("Vereda",  "edittext",  "vereda", 0));
+        listaElementosCAT.add(new ElementoFormato("SITIO","edittext","SITIO",0));
+        listaElementosCAT.add(new ElementoFormato("REFERENCIA GEOGRÁFICA","edittext","REF_GEOGRF",0));
+        listaElementosCAT.add(new ElementoFormato("CLASIFICACIÓN DEL MOVIMIENTO",  "titulo",  "", 0));
+        listaElementosCAT.add(new ElementoFormato("TIPO MOVIMIENTO",  "radiobtn",  "TIPO_MOV", R.array.TipoMovimiento));
+        listaElementosCAT.add(new ElementoFormato("SUBTIPO PRIMER MOVIMIENTO",  "spinner",  "SUBTIPO1", R.array.SubtipoMovimiento));
+        listaElementosCAT.add(new ElementoFormato("SUBTIPO SEGUNDO MOVIMIENTO",  "spinner",  "SUBTIPO2", R.array.SubtipoMovimiento));
+        listaElementosCAT.add(new ElementoFormato("POBLACION AFECTADA",  "titulo",  "", 0));
+        listaElementosCAT.add(new ElementoFormato("Heridos","edittext","HERIDOS",0));
+        listaElementosCAT.add(new ElementoFormato("Vidas","edittext","VIDAS",0));
+        listaElementosCAT.add(new ElementoFormato("Desaparecidos","edittext","DESAPARECIDOS",0));
+        listaElementosCAT.add(new ElementoFormato("Personas","edittext","PERSONAS",0));
+        listaElementosCAT.add(new ElementoFormato("Familias","edittext","FAMILIAS",0));
+        listaElementosCAT.add(new ElementoFormato("TIPO DE DAÑO:","textview","",0));
+        listaElementosCAT.add(new ElementoFormato("DAÑOS A INFRASTRUCTURA, ACTIVIDADES ECONÓMICAS, DAÑOS AMBIENTALES:","linear","",0));
+        listaElementosCAT.add(new ElementoFormato("NOTAS (Ej: Causas y observaciones generales):","textview","",0));
+        listaElementosCAT.add(new ElementoFormato("SENSORES REMOTOS","textview","sensoresremotos",0));
+        listaElementosCAT.add(new ElementoFormato("FOTOGRAFÍAS AÉREAS","textview","FTE_INFSEC",0));
+
+        listaElementosCATDANOS.add(new ElementoFormato("CLASE DE DAÑO", "checkradio", "clasedaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("TIPO", "textview", "tipodaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("CANTIDAD", "textview", "cantidaddaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("UNIDAD", "textview", "unidaddaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("TIPO DAÑO", "checkradio", "tiposdaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("VALOR (US$)", "textview", "valordaño", 0));
+
+
+        //--------------> INVENTARIO MM
+
+//        listaElementosINV.add(new ElementoFormato("ID PARTE del MM","edittext","ID_PARTE", 0));
+        listaElementosINV.add(new ElementoFormato("IMPORTANCIA","checkradio","IMPORTANC",R.array.Importancia));
+        listaElementosINV.add(new ElementoFormato("ENCUESTADOR","edittext","ENCUESTAD",0));
+        listaElementosINV.add(new ElementoFormato("FECHA EVENTO","fecha","FECHA_MOV",0));
+        listaElementosINV.add(new ElementoFormato("FUENTE FECHA EVENTO","spinner","FECHA_FUENTE",R.array.FuenteFechaEvento));
+        listaElementosINV.add(new ElementoFormato("CONFIABILIDAD FECHA EVENTO","spinner","ConfiFechaMM",R.array.ConfiFecha));
+        listaElementosINV.add(new ElementoFormato("FECHA REPORTE","fecha","FECHA_REP",0));
+        listaElementosINV.add(new ElementoFormato("INSTITUCIÓN","edittext","INSTITUC",0));
+        listaElementosINV.add(new ElementoFormato("SIMMA","edittext","COD_SIMMA",0));
+        listaElementosINV.add(new ElementoFormato("Municipio",  "spinner",  "municipios", R.array.Municipios));
+        listaElementosINV.add(new ElementoFormato("Vereda",  "edittext",  "vereda", 0));
+        listaElementosINV.add(new ElementoFormato("Sitio","edittext","SITIO",0));
+        listaElementosINV.add(new ElementoFormato("REFERENCIA GEOGRÁFICA","edittext","REF_GEOGRF",0));
+        listaElementosINV.add(new ElementoFormato("DOCUMENTACIÓN",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("PLANCHAS","textview","planchas",0));
+        listaElementosINV.add(new ElementoFormato("SENSORES REMOTOS","textview","sensoresremotos",0));
+        listaElementosINV.add(new ElementoFormato("FOTOGRAFÍAS AÉREAS","textview","FTE_INFSEC",0));
+        listaElementosINV.add(new ElementoFormato("ACTIVIDAD DEL MOVIMIENTO",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("EDAD","spinner","edadmm",R.array.FuenteFechaEvento));
+        listaElementosINV.add(new ElementoFormato("ESTADO","spinner","ESTADO_ACT",R.array.FuenteFechaEvento));
+        listaElementosINV.add(new ElementoFormato("ESTILO","spinner","ESTILO",R.array.FuenteFechaEvento));
+        listaElementosINV.add(new ElementoFormato("DISTRIBUCIÓN","spinner","DISTRIBUC",R.array.FuenteFechaEvento));
+        listaElementosINV.add(new ElementoFormato("LITOLOGIA Y ESTRUCTURA",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("DESCRIPCIÓN","textview","DESCRIP",0));
+        listaElementosINV.add(new ElementoFormato("ESTRUCTURA",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("","","",R.array.FuenteFechaEvento));
+
+
 
 
     }
