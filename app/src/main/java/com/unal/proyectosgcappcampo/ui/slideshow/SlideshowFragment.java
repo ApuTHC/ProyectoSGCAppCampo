@@ -69,6 +69,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.unal.proyectosgcappcampo.ui.gallery.Feature;
 
+import org.jetbrains.annotations.Contract;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -116,9 +117,16 @@ public class SlideshowFragment extends Fragment {
     JSONObject attrForm;
     JSONArray formComplete;
 
+    JSONObject attrBD;
+    JSONArray BDComplete;
+
     InputStreamReader archivo;
     Boolean auxTextExist = false;
     String listaFormText = "";
+
+    InputStreamReader archivoBD;
+    Boolean auxBDMM = false;
+    String listaBDText = "";
 
     List<ElementoFormato> listaElementosUGSR = new ArrayList<ElementoFormato>();
     List<ElementoFormato> listaElementosUGSRDiscont = new ArrayList<ElementoFormato>();
@@ -1967,14 +1975,6 @@ public class SlideshowFragment extends Fragment {
                         listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
                         listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
                     }
-
-//                    if (listLiForm.get(Integer.parseInt(v.getTag().toString())).getVisibility() == View.VISIBLE) {
-//                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.GONE);
-//                    }
-//                    else {
-//                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
-//                    }
-
                 }
             });
 
@@ -2138,7 +2138,7 @@ public class SlideshowFragment extends Fragment {
 
             }
 
-            //------------> LEVANTAMIENTO DE DISCONTINUIDADES
+            //------------> LEVANTAMIENTO DE SGMF
 
             TextView tvLevantamientoDisc = new TextView(mcont);
             tvLevantamientoDisc.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -2412,6 +2412,7 @@ public class SlideshowFragment extends Fragment {
 
     }
 
+    @Contract(pure = true)
     private boolean ArchivoExiste(String[] file, String name) {
         for (String s : file)
             if (name.equals(s))
@@ -3256,7 +3257,7 @@ public class SlideshowFragment extends Fragment {
         listaElementosCAT.add(new ElementoFormato("CLASIFICACIÓN DEL MOVIMIENTO",  "titulo",  "", 0));
         listaElementosCAT.add(new ElementoFormato("TIPO MOVIMIENTO",  "radiobtn",  "TIPO_MOV", R.array.TipoMovimiento));
         listaElementosCAT.add(new ElementoFormato("SUBTIPO PRIMER MOVIMIENTO",  "spinner",  "SUBTIPO1", R.array.SubtipoMovimiento));
-        listaElementosCAT.add(new ElementoFormato("SUBTIPO SEGUNDO MOVIMIENTO",  "spinner",  "SUBTIPO2", R.array.SubtipoMovimiento));
+        listaElementosCAT.add(new ElementoFormato("SUBTIPO SEGUNDO MOVIMIENTO",  "spinner",  "SUBTIPO2", R.array.SubtipoMovimiento1));
         listaElementosCAT.add(new ElementoFormato("POBLACION AFECTADA",  "titulo",  "", 0));
         listaElementosCAT.add(new ElementoFormato("Heridos","edittext","HERIDOS",0));
         listaElementosCAT.add(new ElementoFormato("Vidas","edittext","VIDAS",0));
@@ -3265,16 +3266,16 @@ public class SlideshowFragment extends Fragment {
         listaElementosCAT.add(new ElementoFormato("Familias","edittext","FAMILIAS",0));
         listaElementosCAT.add(new ElementoFormato("TIPO DE DAÑO:","textview","",0));
         listaElementosCAT.add(new ElementoFormato("DAÑOS A INFRASTRUCTURA, ACTIVIDADES ECONÓMICAS, DAÑOS AMBIENTALES:","linear","",0));
-        listaElementosCAT.add(new ElementoFormato("NOTAS (Ej: Causas y observaciones generales):","textview","",0));
-        listaElementosCAT.add(new ElementoFormato("SENSORES REMOTOS","textview","sensoresremotos",0));
-        listaElementosCAT.add(new ElementoFormato("FOTOGRAFÍAS AÉREAS","textview","FTE_INFSEC",0));
+        listaElementosCAT.add(new ElementoFormato("NOTAS (Ej: Causas y observaciones generales):","edittext","notas",0));
+        listaElementosCAT.add(new ElementoFormato("SENSORES REMOTOS","edittext","sensoresremotos",0));
+        listaElementosCAT.add(new ElementoFormato("FOTOGRAFÍAS AÉREAS","edittext","FTE_INFSEC",0));
 
         listaElementosCATDANOS.add(new ElementoFormato("CLASE DE DAÑO", "checkradio", "clasedaño", 0));
-        listaElementosCATDANOS.add(new ElementoFormato("TIPO", "textview", "tipodaño", 0));
-        listaElementosCATDANOS.add(new ElementoFormato("CANTIDAD", "textview", "cantidaddaño", 0));
-        listaElementosCATDANOS.add(new ElementoFormato("UNIDAD", "textview", "unidaddaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("TIPO", "edittext", "tipodaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("CANTIDAD", "edittext", "cantidaddaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("UNIDAD", "edittext", "unidaddaño", 0));
         listaElementosCATDANOS.add(new ElementoFormato("TIPO DAÑO", "checkradio", "tiposdaño", 0));
-        listaElementosCATDANOS.add(new ElementoFormato("VALOR (US$)", "textview", "valordaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("VALOR (US$)", "edittext", "valordaño", 0));
 
 
         //--------------> INVENTARIO MM
@@ -3293,21 +3294,77 @@ public class SlideshowFragment extends Fragment {
         listaElementosINV.add(new ElementoFormato("Sitio","edittext","SITIO",0));
         listaElementosINV.add(new ElementoFormato("REFERENCIA GEOGRÁFICA","edittext","REF_GEOGRF",0));
         listaElementosINV.add(new ElementoFormato("DOCUMENTACIÓN",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("PLANCHAS","textview","planchas",0));
-        listaElementosINV.add(new ElementoFormato("SENSORES REMOTOS","textview","sensoresremotos",0));
-        listaElementosINV.add(new ElementoFormato("FOTOGRAFÍAS AÉREAS","textview","FTE_INFSEC",0));
+        listaElementosINV.add(new ElementoFormato("PLANCHAS","edittext","planchas",0));
+        listaElementosINV.add(new ElementoFormato("SENSORES REMOTOS","edittext","sensoresremotos",0));
+        listaElementosINV.add(new ElementoFormato("FOTOGRAFÍAS AÉREAS","edittext","FTE_INFSEC",0));
         listaElementosINV.add(new ElementoFormato("ACTIVIDAD DEL MOVIMIENTO",  "titulo",  "", 0));
         listaElementosINV.add(new ElementoFormato("EDAD","spinner","edadmm",R.array.FuenteFechaEvento));
         listaElementosINV.add(new ElementoFormato("ESTADO","spinner","ESTADO_ACT",R.array.FuenteFechaEvento));
         listaElementosINV.add(new ElementoFormato("ESTILO","spinner","ESTILO",R.array.FuenteFechaEvento));
         listaElementosINV.add(new ElementoFormato("DISTRIBUCIÓN","spinner","DISTRIBUC",R.array.FuenteFechaEvento));
         listaElementosINV.add(new ElementoFormato("LITOLOGIA Y ESTRUCTURA",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("DESCRIPCIÓN","textview","DESCRIP",0));
-        listaElementosINV.add(new ElementoFormato("ESTRUCTURA",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("","","",R.array.FuenteFechaEvento));
-
-
-
+        listaElementosINV.add(new ElementoFormato("DESCRIPCIÓN","edittext","DESCRIP",0));
+        listaElementosINV.add(new ElementoFormato("ESTRUCTURA","estructuras","estructura",R.array.FuenteFechaEvento));
+        listaElementosINV.add(new ElementoFormato("CLASIFICACIÓN DEL MOVIMIENTO",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("TIPO MOVIMIENTO",  "radiobtn",  "TIPO_MOV", R.array.TipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("SUBTIPO PRIMER MOVIMIENTO",  "spinner",  "SUBTIPO1", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("SUBTIPO SEGUNDO MOVIMIENTO",  "spinner",  "SUBTIPO2", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("TIPO MATERIAL",  "radiobtn",  "tipomaterial", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("HUMEDAD",  "radiobtn",  "humedad", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("PLASTICIDAD",  "radiobtn",  "plasticidad", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("ORIGEN SUELO",  "origensuelo",  "origensuelo", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("VELOCIDAD",  "spinner",  "velocidad", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("VELOCIDAD MÁXIMA","edittext","velocidadmax",0));
+        listaElementosINV.add(new ElementoFormato("VELOCIDAD MÍNIMA","edittext","velocidadmin",0));
+        listaElementosINV.add(new ElementoFormato("SISTEMA DE CLASIFICACIÓN",  "spinner",  "sisclasificacion", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("MORFOMETRÍA",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("GENERAL",  "multitext",  "morfogeneral", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("DIMENSIONES DEL TERRENO",  "multitext",  "morfodimensiones", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("DEFORMACIÓN TERRENO",  "titulito",  "", 0));
+        listaElementosINV.add(new ElementoFormato("MODO",  "spinner",  "morfomodo", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("SEVERIDAD",  "spinner",  "morfoseveridad", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("GEOFORMA",  "edittext",  "morfogeoforma", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("CAUSAS DEL MOVIMIENTO",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("INHERENTES",  "spinner",  "causasinherentes", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("CONTRIBUYENTES - DETONANTES",  "radiobtn2",  "causascontrideto", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("TIPO DE EROSIÓN",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("SUPERFICIAL",  "spinner",  "erosionsuperficial", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("SUBSUPERFICIAL",  "spinner",  "erosionsubsuperficial", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("EDAD",  "spinner",  "erosionedad", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("ESTADO",  "spinner",  "erosionestado", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("FLUVIAL",  "spinner",  "erosionfluvial", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("EOLICA",  "spinner",  "erosioneolica", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("COBERTURA Y USO DEL SUELO",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("COBERTURA DEL SUELO",  "multitext",  "cobertura", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("USO DEL SUELO",  "multitext",  "usosuelo", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("REFERENCIAS",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("AUTOR","edittext","referenciasautor",0));
+        listaElementosINV.add(new ElementoFormato("AÑO","edittext","referenciasaño",0));
+        listaElementosINV.add(new ElementoFormato("TITULO","edittext","referenciastitulo",0));
+        listaElementosINV.add(new ElementoFormato("EDITOR","edittext","referenciaseditor",0));
+        listaElementosINV.add(new ElementoFormato("CIUDAD","edittext","referenciasciudad",0));
+        listaElementosINV.add(new ElementoFormato("PAGINAS","edittext","referenciaspaginas",0));
+        listaElementosINV.add(new ElementoFormato("EFECTOS SECUNDARIOS",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("REPRESAMIENTO",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("TIPO (Costa & Schuster, 1988)",  "spinner",  "represamientotipo", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("MORFOMETRÍA DE LA PRESA",  "multitext",  "represamientopresa", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("CONDICIONES DE LA PRESA",  "multicheck",  "represamientocondiciones", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("EFECTOS",  "multicheck",  "represamientoefectos", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("POBLACION AFECTADA",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("HERIDOS","edittext","heridos",0));
+        listaElementosINV.add(new ElementoFormato("VIDAS","edittext","vidas",0));
+        listaElementosINV.add(new ElementoFormato("DESAPARECIDOS","edittext","desaparecidos",0));
+        listaElementosINV.add(new ElementoFormato("PERSONAS","edittext","personas",0));
+        listaElementosINV.add(new ElementoFormato("FAMILIAS","edittext","familias",0));
+        listaElementosINV.add(new ElementoFormato("TIPO DE DAÑO:","textview","",0));
+        listaElementosINV.add(new ElementoFormato("DAÑOS A INFRASTRUCTURA, ACTIVIDADES ECONÓMICAS, DAÑOS AMBIENTALES:","linear","",0));
+        listaElementosINV.add(new ElementoFormato("NOTAS","edittext","notas",0));
+        listaElementosINV.add(new ElementoFormato("APRECIACIÓN DEL RIESGO","edittext","apreciacionriesgo",0));
+        listaElementosINV.add(new ElementoFormato("ESQUEMA DEL MOVIMIENTO",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("FOTO EN PLANTA",  "edittext",  "fotoplanta", 0));
+        listaElementosINV.add(new ElementoFormato("OBSERVACIONES",  "edittext",  "fotoplantaobs", 0));
+        listaElementosINV.add(new ElementoFormato("FOTO EN PERFIL",  "edittext",  "fotoperfil", 0));
+        listaElementosINV.add(new ElementoFormato("OBSERVACIONES",  "edittext",  "fotoperfilobs", 0));
 
     }
 

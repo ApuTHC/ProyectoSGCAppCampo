@@ -835,6 +835,38 @@
         <item>Gelifluxión (en permafrost)</item>
     </string-array>
 
+    <string-array name="SubtipoMovimiento1">
+        <item>No Aplica</item>
+        <item>Caída de roca</item>
+        <item>Caída de detritos</item>
+        <item>Caída de tierras</item>
+        <item>Volcam. flexural de roca</item>
+        <item>Volcam. de roca</item>
+        <item>Volcam. macizo rocoso</item>
+        <item>Desliz. rotacional </item>
+        <item>Desliz. traslacional</item>
+        <item>Desliz. en cuña</item>
+        <item>Desliz. traslacional en cuña</item>
+        <item>Desliz. traslacional planar</item>
+        <item>Avalancha de rocas</item>
+        <item>Flujo de detritos</item>
+        <item>Flujo de lodo</item>
+        <item>Desliz. por flujo</item>
+        <item>Avalancha de detritos</item>
+        <item>Flujo de tierra</item>
+        <item>Crecida de detritos</item>
+        <item>Flujo de turba</item>
+        <item>Desliz. licuación de arena</item>
+        <item>Desliz. licuación de limo</item>
+        <item>Desliz. licuación detritos</item>
+        <item>Desliz. licuación roca fracturada</item>
+        <item>Propag. lateral lenta</item>
+        <item>Propag. lateral licuación</item>
+        <item>Reptación de suelos</item>
+        <item>Solifluxión</item>
+        <item>Gelifluxión (en permafrost)</item>
+    </string-array>
+
 
 
     <string-array name="ClaseDaño">
