@@ -1,7 +1,7 @@
 package com.unal.proyectosgcappcampo.ui.slideshow;
 
 public class FormatUGSRocas {
-   public String activo;
+   public boolean activo;
    public String noformato;
    public String municipios;
    public String claseaflor;
@@ -43,7 +43,7 @@ public class FormatUGSRocas {
    public String composicionmineral1;
    public String composicionmineral2;
 
-    public FormatUGSRocas(String activo, String noformato, String municipios, String claseaflor, String gsi, String fabrica1, String fabrica2, String humedad1, String humedad2, String tamanograno1, String tamanograno2, String gradometeo1, String gradometeo2, String resistenciacomp1, String resistenciacomp2, String vereda, String noestacion, String secuenciaestratiopt1orden, String secuenciaestratiopt1espesor, String secuenciaestratiopt2orden, String secuenciaestratiopt2espesor, String secuenciaestratiopt3orden, String secuenciaestratiopt3espesor, String secuenciaestratiopt4orden, String secuenciaestratiopt4espesor, String secuenciaestratisuelor1orden, String secuenciaestratisuelor1espesor, String secuenciaestratisuelor2orden, String secuenciaestratisuelor2espesor, String secuenciaestratisuelor3orden, String secuenciaestratisuelor3espesor, String perfilmeteorizacion, String litologiasasociadasopt1exist, String litologiasasociadasopt1espesor, String litologiasasociadasopt2exist, String litologiasasociadasopt2espesor, String nombreugs, String color1, String color2, String composicionmineral1, String composicionmineral2) {
+    public FormatUGSRocas(boolean activo, String noformato, String municipios, String claseaflor, String gsi, String fabrica1, String fabrica2, String humedad1, String humedad2, String tamanograno1, String tamanograno2, String gradometeo1, String gradometeo2, String resistenciacomp1, String resistenciacomp2, String vereda, String noestacion, String secuenciaestratiopt1orden, String secuenciaestratiopt1espesor, String secuenciaestratiopt2orden, String secuenciaestratiopt2espesor, String secuenciaestratiopt3orden, String secuenciaestratiopt3espesor, String secuenciaestratiopt4orden, String secuenciaestratiopt4espesor, String secuenciaestratisuelor1orden, String secuenciaestratisuelor1espesor, String secuenciaestratisuelor2orden, String secuenciaestratisuelor2espesor, String secuenciaestratisuelor3orden, String secuenciaestratisuelor3espesor, String perfilmeteorizacion, String litologiasasociadasopt1exist, String litologiasasociadasopt1espesor, String litologiasasociadasopt2exist, String litologiasasociadasopt2espesor, String nombreugs, String color1, String color2, String composicionmineral1, String composicionmineral2) {
         this.activo = activo;
         this.noformato = noformato;
         this.municipios = municipios;

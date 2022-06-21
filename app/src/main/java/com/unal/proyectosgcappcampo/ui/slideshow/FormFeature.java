@@ -1,7 +1,7 @@
 package com.unal.proyectosgcappcampo.ui.slideshow;
 
 public class FormFeature {
-    public FormFeature(String activo,String estacion, String tipoEstacion, String este, String norte, String altitud, String fotos, String observaciones, String fecha, String propietario) {
+    public FormFeature(boolean activo,String estacion, String tipoEstacion, String este, String norte, String altitud, String fotos, String observaciones, String fecha, String propietario) {
         Activo = activo;
         Estacion = estacion;
         TipoEstacion = tipoEstacion;
@@ -14,7 +14,7 @@ public class FormFeature {
         Propietario = propietario;
     }
 
-    public String Activo;
+    public boolean Activo;
     public String Estacion;
     public String TipoEstacion;
     public String Este;

@@ -1,7 +1,7 @@
 package com.unal.proyectosgcappcampo.ui.slideshow;
 
 public class FormatNewSGMF {
-    public String activo;
+    public boolean activo;
     public String tiporoca;
     public String gradometeor;
     public String gradofractura;
@@ -31,7 +31,7 @@ public class FormatNewSGMF {
     public String usootro;
     public String patronotro;
 
-    public FormatNewSGMF(String activo, String tiporoca, String gradometeor, String gradofractura, String tiposuelo, String tamanograno, String tiporelieve, String indicerelieve, String inclinacionladera, String longiladera, String formaladera, String formacresta, String formavalle, String cobertura, String uso, String densidad, String frecuencia, String textura, String patron, String tipoerosion, String espaciamiento, String intensidaderosion, String tipodemm, String tipomaterial, String actividad, String codigonuevaSGMF, String coberturaotro, String usootro, String patronotro) {
+    public FormatNewSGMF(boolean activo, String tiporoca, String gradometeor, String gradofractura, String tiposuelo, String tamanograno, String tiporelieve, String indicerelieve, String inclinacionladera, String longiladera, String formaladera, String formacresta, String formavalle, String cobertura, String uso, String densidad, String frecuencia, String textura, String patron, String tipoerosion, String espaciamiento, String intensidaderosion, String tipodemm, String tipomaterial, String actividad, String codigonuevaSGMF, String coberturaotro, String usootro, String patronotro) {
         this.activo = activo;
         this.tiporoca = tiporoca;
         this.gradometeor = gradometeor;

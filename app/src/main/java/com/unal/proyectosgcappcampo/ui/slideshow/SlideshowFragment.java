@@ -117,8 +117,14 @@ public class SlideshowFragment extends Fragment {
     JSONObject attrForm;
     JSONArray formComplete;
 
-    JSONObject attrBD;
     JSONArray BDComplete;
+    JSONObject feature;
+    JSONObject layergeojson;
+    JSONObject properties;
+    String idparte;
+
+
+    String[] files;
 
     InputStreamReader archivo;
     Boolean auxTextExist = false;
@@ -127,6 +133,7 @@ public class SlideshowFragment extends Fragment {
     InputStreamReader archivoBD;
     Boolean auxBDMM = false;
     String listaBDText = "";
+
 
     List<ElementoFormato> listaElementosUGSR = new ArrayList<ElementoFormato>();
     List<ElementoFormato> listaElementosUGSRDiscont = new ArrayList<ElementoFormato>();
@@ -181,6 +188,14 @@ public class SlideshowFragment extends Fragment {
     List<LinearLayout> listSGMF = new ArrayList<LinearLayout>();
     LinearLayout liFormSGMF;
 
+    //Daños
+
+    int daños = 0;
+    List<Integer> listContDAÑOS = new ArrayList<Integer>();
+    List<List<LinearLayout>> ListaDAÑOS = new ArrayList<List<LinearLayout>>();
+    List<LinearLayout> listDAÑOS = new ArrayList<LinearLayout>();
+    LinearLayout liFormDAÑOS;
+
 
     //Format UGS
     List<Integer> listContDiscontinuidades = new ArrayList<Integer>();
@@ -219,10 +234,16 @@ public class SlideshowFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         checkUser();
 
+        files = mcont.fileList();
+
         listaElementosUGSR = new ArrayList<ElementoFormato>();
         listaElementosUGSRDiscont = new ArrayList<ElementoFormato>();
         listaElementosUGSFotosAnexas = new ArrayList<ElementoFormato>();
         listaElementosUGSS = new ArrayList<ElementoFormato>();
+        listaElementosSGMF = new ArrayList<ElementoFormato>();
+        listaElementosNuevoSGMF = new ArrayList<ElementoFormato>();
+        listaElementosCAT = new ArrayList<ElementoFormato>();
+        listaElementosCATDANOS = new ArrayList<ElementoFormato>();
         listFormularios = new ArrayList<String>();
         listLiForm = new ArrayList<LinearLayout>();
 
@@ -257,16 +278,105 @@ public class SlideshowFragment extends Fragment {
             public void onClick(View v) {
                 String eleccion = sFormularios.getSelectedItem().toString();
                 if (!eleccion.equals("Ninguno")) {
-                    Toast.makeText(mcont, "Se añadió formulario: " + eleccion, Toast.LENGTH_LONG).show();
-                    AddFormulario(eleccion);
+                    Toast.makeText(mcont, "Se añadió formulario: " + eleccion, Toast.LENGTH_SHORT).show();
+                    if (eleccion.equals("Catálogo MM") || eleccion.equals("Inventario MM")) {
+                        LinearLayout liMM = new LinearLayout(mcont);
+                        liMM.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liMM.setOrientation(LinearLayout.HORIZONTAL);
+
+                        EditText etMM = new EditText(mcont);
+                        etMM.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etMM.setHint("ID_PARTE del MM");
+                        etMM.setEms(10);
+                        etMM.setTag("editMM");
+                        liFormularios.addView(etMM);
+
+                        Button bBuscarMM = new Button(mcont);
+                        bBuscarMM.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        bBuscarMM.setText("Buscar MM");
+                        bBuscarMM.setTag("buscar");
+                        bBuscarMM.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (ArchivoExiste(files, "listaFeatures.txt")){
+                                    Toast.makeText(mcont, "Por favor espere mientras se busca el MM: "+etMM.getText().toString(), Toast.LENGTH_SHORT).show();
+                                    try {
+                                        if(!auxBDMM){
+                                            archivoBD = new InputStreamReader(mcont.openFileInput("listaFeatures.txt"));
+                                            BufferedReader br = new BufferedReader(archivoBD);
+                                            String linea = br.readLine();
+                                            listaBDText = "";
+
+                                            while (linea != null){
+                                                listaBDText = listaBDText + linea + "\n";
+                                                linea = br.readLine();
+                                            }
+                                            BDComplete = new JSONArray(listaBDText);
+                                            Log.d("alprincipio", "GuardarForm: "+BDComplete);
+
+                                            br.close();
+                                            archivoBD.close();
+
+                                            auxBDMM = true;
+                                        }
+                                        boolean featExist = false;
+                                        for (int i = 1; i < BDComplete.length(); i++) {
+                                            feature = BDComplete.getJSONObject(i);
+                                            layergeojson = feature.getJSONObject("layergeojson");
+                                            properties = layergeojson.getJSONObject("properties");
+                                            idparte = properties.getString("ID_PARTE");
+
+                                            if (etMM.getText().toString().equals(idparte)){
+                                                featExist = true;
+                                                break;
+                                            }
+                                        }
+                                        if (featExist){
+                                            Toast.makeText(mcont, "Cargando los datos del MM: "+etMM.getText().toString(), Toast.LENGTH_LONG).show();
+                                            AddFormulario(eleccion, true);
+                                        }
+                                        else{
+                                            Toast.makeText(mcont, "No se encontró en la base de datos el MM: "+etMM.getText().toString(), Toast.LENGTH_LONG).show();
+                                        }
+
+
+                                    } catch (IOException | JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                else {
+                                    Toast.makeText(mcont, "No se encuentra ninguna base de datos de MM en el dispositivo", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                        liMM.addView(bBuscarMM);
+
+                        Button bAñadirMM = new Button(mcont);
+                        bAñadirMM.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        bAñadirMM.setText("Añadir Nuevo MM");
+                        bAñadirMM.setTag("añadir");
+                        bAñadirMM.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                idparte = "Nuevo MM";
+                                AddFormulario(eleccion, false);
+                            }
+                        });
+                        liMM.addView(bAñadirMM);
+
+                        liFormularios.addView(liMM);
+
+
+                    }
+                    else{
+                        AddFormulario(eleccion, false);
+                    }
                 }
             }
         });
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         storageRef =  FirebaseStorage.getInstance().getReference();
-
-        String[] files = mcont.fileList();
 
         if (ArchivoExiste(files, "listaForm.txt")){
             try {
@@ -390,7 +500,6 @@ public class SlideshowFragment extends Fragment {
     }
 
 
-
     private void locationStart() {
         LocationManager mlocManager = (LocationManager) mcont.getSystemService(Context.LOCATION_SERVICE);
         Localizacion Local = new Localizacion();
@@ -417,26 +526,9 @@ public class SlideshowFragment extends Fragment {
             }
         }
     }
-    // public void setLocation(Location loc) {
-        //Obtener la direccion de la calle a partir de la latitud y la longitud
-    //    if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
-    //        try {
-    //           Geocoder geocoder = new Geocoder(mcont, Locale.getDefault());
-    //            List<Address> list = geocoder.getFromLocation(
-    //                    loc.getLatitude(), loc.getLongitude(), 1);
-    //            if (!list.isEmpty()) {
-    //                Address DirCalle = list.get(0);
-    //                etEste.setText(DirCalle.getAddressLine(0));
-    //            }
-    //        } catch (IOException e) {
-    //            e.printStackTrace();
-    //        }
-    //    }
-    //}
 
 
-
-    private void AddFormulario(String formType) {
+    private void AddFormulario(String formType, boolean auxMM){
 
         int mtop = 70;
         listFormularios.add(formType);
@@ -446,6 +538,7 @@ public class SlideshowFragment extends Fragment {
         listFotosAnexas = new ArrayList<LinearLayout>();
         listDiscontinuidades = new ArrayList<LinearLayout>();
         listSGMF = new ArrayList<LinearLayout>();
+        listDAÑOS = new ArrayList<LinearLayout>();
         listEditText = new ArrayList<EditText>();
         listSpinner = new ArrayList<Spinner>();
         listCheckBox = new ArrayList<CheckBox>();
@@ -460,6 +553,7 @@ public class SlideshowFragment extends Fragment {
         ListaFotosAnexas.add(listFotosAnexas);
         ListaDiscontinuidades.add(listDiscontinuidades);
         ListaSGMF.add(listSGMF);
+        ListaDAÑOS.add(listDAÑOS);
         ListaEditText.add(listEditText);
         ListaSpinner.add(listSpinner);
         ListaCheckBox.add(listCheckBox);
@@ -473,10 +567,12 @@ public class SlideshowFragment extends Fragment {
         fotosAnexas = 0;
         discontinuidades = 0;
         sgmf = 0;
+        daños = 0;
 
         listContFotosAnexas.add(fotosAnexas);
         listContDiscontinuidades.add(discontinuidades);
         listContSGMF.add(sgmf);
+        listContDAÑOS.add(daños);
 
         if (formType.equals("UGS Rocas")) {
             Button bAcordion = new Button(mcont);
@@ -2410,6 +2506,499 @@ public class SlideshowFragment extends Fragment {
             liFormularios.addView(liForm);
         }
 
+        if (formType.equals("Catálogo MM")) {
+            Button bAcordion = new Button(mcont);
+            bAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+            bAcordion.setText("Formato Cátalogo de Movimiento en Masa: "+idparte);
+            bAcordion.setTag(idLinear);
+            listBtnAcordion.add(bAcordion);
+            liFormularios.addView(bAcordion);
+
+            LinearLayout liForm = new LinearLayout(mcont);
+            liForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liForm.setOrientation(LinearLayout.VERTICAL);
+            liForm.setBackgroundColor(0x33333300);
+            //liForm.setVisibility(View.GONE);
+
+            bAcordion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (listLiForm.get(Integer.parseInt(v.getTag().toString())).getVisibility() == View.VISIBLE) {
+                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                        animation.setDuration(220);
+                        animation.setFillAfter(false);
+                        animation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                            }
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.GONE);
+                                listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                            }
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                            }
+                        });
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
+
+                    }
+                    else {
+                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                        animation.setDuration(220);
+                        animation.setFillAfter(false);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
+                        listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                    }
+                }
+            });
+
+            //------------> Titulo del Formato
+
+            TextView tvTitulo = new TextView(mcont);
+            tvTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvTitulo.setText("Formato Cátalogo de Movimiento en Masa: "+idparte);
+            tvTitulo.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            tvTitulo.setTextAppearance(R.style.TituloFormato);
+            tvTitulo.setPadding(0, 70, 0, 70);
+            liForm.addView(tvTitulo);
+
+
+            Button bBorrarForm = new Button(mcont);
+            bBorrarForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bBorrarForm.setText("Borrar Este Formulario");
+            bBorrarForm.setTag(idLinear);
+            bBorrarForm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("jaaj", "BOrrarRocas: "+listFormularios);
+                    listLiForm.get(Integer.parseInt(v.getTag().toString())).removeAllViews();
+                    liFormularios.removeView(listBtnAcordion.get(Integer.parseInt(v.getTag().toString())));
+                    listFormularios.set(Integer.parseInt(v.getTag().toString()), "Ninguno");
+
+                }
+            });
+            liForm.addView(bBorrarForm);
+
+            for (int i = 0; i < listaElementosCAT.size(); i++) {
+                ElementoFormato elementoActual = listaElementosCAT.get(i);
+                String nombreElemento = elementoActual.getNombreelemento();
+                String hintElemento = elementoActual.getNombreelemento();
+                String claseElemento = elementoActual.getClaseelemento();
+                String tagElemento = elementoActual.getTagelemento();
+                int idStringArrayElemento = elementoActual.getIdStringArray();
+
+                if (claseElemento.equals("edittext")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    EditText etGenerico = new EditText(mcont);
+                    etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    etGenerico.setHint(hintElemento);
+                    etGenerico.setEms(10);
+                    etGenerico.setTag(tagElemento);
+                    ListaEditText.get(idLinear).add(etGenerico);
+                    liForm.addView(etGenerico);
+                }
+                if (claseElemento.equals("edittextMM")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    EditText etGenerico = new EditText(mcont);
+                    etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    etGenerico.setHint(hintElemento);
+                    etGenerico.setEms(10);
+                    etGenerico.setTag(tagElemento);
+                    try {
+                        etGenerico.setText(properties.getString(tagElemento));
+                        Log.d("pruebis", "EditTextOPT: "+properties.getString(tagElemento));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ListaEditText.get(idLinear).add(etGenerico);
+                    liForm.addView(etGenerico);
+                }
+                if (claseElemento.equals("spinner")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    Spinner sGenerico = new Spinner(mcont);
+                    sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, idStringArrayElemento, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    sGenerico.setAdapter(adapter);
+                    sGenerico.setTag(tagElemento);
+                    ListaSpinner.get(idLinear).add(sGenerico);
+                    liForm.addView(sGenerico);
+                }
+                if (claseElemento.equals("spinnerMM")){
+
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+                    int indexSpinner = 120;
+                    String opc = "1";
+                    try {
+                        opc = properties.getString(tagElemento).toString();
+                        Log.d("pruebis", "SpinnerOPT: "+opc);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (opc.equals("Rotacional")){
+                        opc = "Deslizamiento rotacional";
+                    }
+                    if (opc.equals("Traslacional")){
+                        opc = "Deslizamiento traslacional";
+                    }
+                    if (opc.equals("Flujo de Lodo")){
+                        opc = "Flujo de lodo";
+                    }
+                    if (opc.equals("Flujo de tierra")){
+                        opc = "Flujo de Tierra";
+                    }
+                    if (opc.split("").length == 0){
+                        opc = "1";
+                    }
+                    if (opc.split(" ").length == 3){
+                        if (opc.split(" ")[2].equals("Roca")) {
+                            opc = "Caída de Roca";
+                        }
+                        if (opc.split(" ")[2].equals("Suelo")) {
+                            opc = "Caída de Suelo";
+                        }
+                    }
+                    for (int j = 0; j < opciones.length; j++) {
+                        if (opciones[j].equals(opc)){
+                            indexSpinner = j;
+                        }
+                    }
+                    if (!tagElemento.equals("SUBTIPO_1") && !tagElemento.equals("SUBTIPO_2")){
+                        if (indexSpinner == 120){
+                            indexSpinner = Integer.parseInt(opc) - 1;
+                        }
+                    }
+                    if (indexSpinner == 120){
+                        indexSpinner = 0;
+                    }
+
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    Spinner sGenerico = new Spinner(mcont);
+                    sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, idStringArrayElemento, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    sGenerico.setAdapter(adapter);
+                    sGenerico.setTag(tagElemento);
+                    sGenerico.setSelection(indexSpinner);
+                    ListaSpinner.get(idLinear).add(sGenerico);
+                    liForm.addView(sGenerico);
+
+                }
+                if (claseElemento.equals("titulo")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloFormato);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+                }
+                if (claseElemento.equals("radiobtnMM")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView pruebatext = new TextView(mcont);
+                    pruebatext.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext.setText("2");
+                    pruebatext.setTextAppearance(R.style.TituloItem);
+                    pruebatext.setPadding(30, 20, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext);
+
+                    TextView pruebatext1 = new TextView(mcont);
+                    pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext1.setText("1");
+                    pruebatext1.setTextAppearance(R.style.TituloItem);
+                    pruebatext1.setPadding(30, 20, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext1);
+
+                    liForm.addView(liradiobtnTitulo);
+
+                    LinearLayout liradiobtn = new LinearLayout(mcont);
+                    liradiobtn.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtn.setOrientation(LinearLayout.HORIZONTAL);
+
+                    Resources res = getResources();
+                    String[] opciones2 = res.getStringArray(idStringArrayElemento);
+
+                    RadioGroup radioGroup2 = new RadioGroup(mcont);
+                    radioGroup2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    radioGroup2.setTag(tagElemento+2);
+                    for(String opt : opciones2) {
+                        RadioButton nuevoRadio = new RadioButton(mcont);
+                        LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
+                                100,
+                                RadioGroup.LayoutParams.WRAP_CONTENT);
+                        nuevoRadio.setLayoutParams(params);
+                        //nuevoRadio.setText(opt);
+                        nuevoRadio.setTag(opt);
+                        nuevoRadio.setClickable(true);
+                        nuevoRadio.setEnabled(true);
+                        ListaRadioBtn.get(idLinear).add(nuevoRadio);
+                        radioGroup2.addView(nuevoRadio);
+                    }
+
+                    Resources res2 = getResources();
+                    String[] opciones = res2.getStringArray(idStringArrayElemento);
+                    int indexSpinner2 = 0;
+                    String opc = "0";
+                    try {
+                        opc = properties.getString(tagElemento+2).toString();
+                        Log.d("pruebis", "SpinnerOPT: "+opc);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (opc.split("")[0].equals("C")) {
+                        opc = "Caída";
+                    }
+
+                    for (int j = 0; j < opciones.length; j++) {
+                        if (opciones[j].equals(opc)){
+                            indexSpinner2 = j;
+                        }
+                    }
+
+
+                    RadioButton primerRadio2 = (RadioButton) radioGroup2.getChildAt(indexSpinner2);
+                    primerRadio2.setChecked(true);
+                    liradiobtn.addView(radioGroup2);
+                    ListaRadioGrp.get(idLinear).add(radioGroup2);
+
+                    Resources res1 = getResources();
+                    String[] opciones1 = res.getStringArray(idStringArrayElemento);
+
+                    RadioGroup radioGroup1 = new RadioGroup(mcont);
+                    radioGroup1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    radioGroup1.setTag(tagElemento+1);
+                    for(String opt : opciones1) {
+                        RadioButton nuevoRadio = new RadioButton(mcont);
+                        LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
+                                RadioGroup.LayoutParams.WRAP_CONTENT,
+                                RadioGroup.LayoutParams.WRAP_CONTENT);
+                        nuevoRadio.setLayoutParams(params);
+                        nuevoRadio.setText(opt);
+                        nuevoRadio.setTag(opt);
+                        radioGroup1.addView(nuevoRadio);
+                    }
+
+                    int indexSpinner1=0;
+                    String opc1 = "1";
+                    try {
+                        opc1 = properties.getString(tagElemento+1);
+                        indexSpinner1 = Integer.parseInt(opc1);
+                        Log.d("pruebis", "RadioBtnOPT: "+opc1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    RadioButton primerRadio1 = (RadioButton) radioGroup1.getChildAt(indexSpinner1);
+                    primerRadio1.setChecked(true);
+                    liradiobtn.addView(radioGroup1);
+                    ListaRadioGrp.get(idLinear).add(radioGroup1);
+
+                    liForm.addView(liradiobtn);
+                }
+                if (claseElemento.equals("textview")){
+
+                    Resources res = getResources();
+                    String opciones = res.getString(idStringArrayElemento);
+
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(opciones);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                }
+            }
+
+//            Levantamiento Daños
+
+            LinearLayout liFormDiscontinuidades = new LinearLayout(mcont);
+            liFormDiscontinuidades.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormDiscontinuidades.setOrientation(LinearLayout.VERTICAL);
+            liForm.addView(liFormDiscontinuidades);
+
+            Button bAnadirDiscont = new Button(mcont);
+            bAnadirDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bAnadirDiscont.setText("Añadir Daño");
+            bAnadirDiscont.setTag(idLinear);
+            bAnadirDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.plus_circle, 0);
+            bAnadirDiscont.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    listContDAÑOS.set(Integer.parseInt(v.getTag().toString()), listContDAÑOS.get(Integer.parseInt(v.getTag().toString())) + 1);
+
+                    Button bDiscont = new Button(mcont);
+                    bDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    bDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                    bDiscont.setText("DAÑOS "+ listContDAÑOS.get(Integer.parseInt(v.getTag().toString())));
+                    bDiscont.setTag(Integer.parseInt(v.getTag().toString()));
+                    liFormDiscontinuidades.addView(bDiscont);
+
+
+                    LinearLayout liDiscontinuidades = new LinearLayout(mcont);
+                    liDiscontinuidades.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liDiscontinuidades.setOrientation(LinearLayout.VERTICAL);
+                    liDiscontinuidades.setBackgroundColor(0x22222200);
+                    liDiscontinuidades.setVisibility(View.GONE);
+                    liFormDiscontinuidades.addView(liDiscontinuidades);
+                    ListaDAÑOS.get(Integer.parseInt(v.getTag().toString())).add(liDiscontinuidades);
+
+                    bDiscont.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View vi) {
+
+                            if (liDiscontinuidades.getVisibility() == View.VISIBLE) {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                animation.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                    }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        liDiscontinuidades.setVisibility(View.GONE);
+                                        bDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                    }
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+                                    }
+                                });
+                                liDiscontinuidades.startAnimation(animation);
+
+                            }
+                            else {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                liDiscontinuidades.startAnimation(animation);
+                                liDiscontinuidades.setVisibility(View.VISIBLE);
+                                bDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                            }
+
+                        }
+                    });
+
+
+                    TextView tvNameDiscont = new TextView(mcont);
+                    tvNameDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    String nuevo = "DAÑOS "+ listContDAÑOS.get(Integer.parseInt(v.getTag().toString()));
+                    tvNameDiscont.setText(nuevo);
+                    tvNameDiscont.setTextAppearance(R.style.TituloFormato);
+                    tvNameDiscont.setPadding(0, 100, 0, 50);
+                    liDiscontinuidades.addView(tvNameDiscont);
+
+                    for (int i = 0; i < listaElementosCATDANOS.size(); i++){
+                        ElementoFormato elementoActual = listaElementosCATDANOS.get(i);
+                        String nombreElemento = elementoActual.getNombreelemento();
+                        String hintElemento = elementoActual.getNombreelemento();
+                        String claseElemento = elementoActual.getClaseelemento();
+                        String tagElemento = elementoActual.getTagelemento();
+                        int idStringArrayElemento = elementoActual.getIdStringArray();
+                        int aux = ListaDAÑOS.get(Integer.parseInt(v.getTag().toString())).size();
+
+                        if (claseElemento.equals("edittext")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, mtop, 0, 0);
+                            liDiscontinuidades.addView(tvGenerico);
+
+                            EditText etGenerico = new EditText(mcont);
+                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            etGenerico.setHint(hintElemento);
+                            etGenerico.setEms(10);
+                            etGenerico.setTag(tagElemento+aux);
+                            ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
+                            liDiscontinuidades.addView(etGenerico);
+                        }
+                        if (claseElemento.equals("spinner")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, mtop, 0, 0);
+                            liDiscontinuidades.addView(tvGenerico);
+
+                            Spinner sGenerico = new Spinner(mcont);
+                            sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, idStringArrayElemento, android.R.layout.simple_spinner_item);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            sGenerico.setAdapter(adapter);
+                            sGenerico.setTag(tagElemento+aux);
+                            ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sGenerico);
+                            liDiscontinuidades.addView(sGenerico);
+
+                            if (nombreElemento.equals("COBERTURA, C") || nombreElemento.equals("USO DEL TERRENO, U") || nombreElemento.equals("PATRÓN, PT")){
+                                TextView tvGenerico1 = new TextView(mcont);
+                                tvGenerico1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvGenerico1.setText("Otro:");
+                                tvGenerico1.setTextAppearance(R.style.TituloItem);
+                                tvGenerico1.setPadding(0, mtop, 0, 0);
+                                liDiscontinuidades.addView(tvGenerico1);
+
+                                EditText etGenerico = new EditText(mcont);
+                                etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                etGenerico.setHint(hintElemento);
+                                etGenerico.setEms(10);
+                                etGenerico.setTag(tagElemento+"otro"+aux);
+                                ListaEditText.get(idLinear).add(etGenerico);
+                                liDiscontinuidades.addView(etGenerico);
+                            }
+                        }
+                    }
+
+                }
+            });
+            liForm.addView(bAnadirDiscont);
+
+
+            listLiForm.add(liForm);
+            liFormularios.addView(liForm);
+        }
+
     }
 
     @Contract(pure = true)
@@ -2456,50 +3045,50 @@ public class SlideshowFragment extends Fragment {
                                     String Fecha = form.getString("Fecha");
                                     String Propietario = form.getString("Propietario");
 
-                                    FormFeature nuevaEstacion = new FormFeature("true", Estacion, TipoEstacion, Este, Norte, Altitud, Fotos, Observaciones, Fecha, Propietario);
+                                    FormFeature nuevaEstacion = new FormFeature(true, Estacion, TipoEstacion, Este, Norte, Altitud, Fotos, Observaciones, Fecha, Propietario);
 
                                     databaseReference.child("EstacionesCampo/estacion_"+cont).setValue(nuevaEstacion);
 
                                     int fotosCount = Integer.parseInt(form.getString("FotosCount"));
 
-                                    for (int j = 0; j < fotosCount; j++) {
-                                        String uriFoto = form.getString("Fotos_Generales_"+j);
-                                        Uri urifotos = Uri.parse(uriFoto);
-                                        Bitmap imagen = getBitmapFromUri (urifotos);
-                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                        imagen.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                                        byte[] data = baos.toByteArray();
-                                        //Uri file = Uri.fromFile(new File(Uri.parse(uriFoto)));
-                                        //String path = listFotosGeneral.get(i).getPath();
-                                        String subpath = uriFoto.substring(uriFoto.lastIndexOf('/') + 1);
-                                        StorageReference estacionRef = storageRef.child("FotosEstaciones/estacion_"+cont+"/"+subpath);
-//                                        UploadTask uploadTask = estacionRef.putFile(file);
-                                        UploadTask uploadTask = estacionRef.putBytes(data);
-                                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                                            @Override
-                                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                                if (!task.isSuccessful()) {
-                                                    throw task.getException();
-                                                }
-
-                                                // Continue with the task to get the download URL
-                                                return estacionRef.getDownloadUrl();
-                                            }
-                                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Uri> task) {
-                                                if (task.isSuccessful()) {
-                                                    Uri downloadUri = task.getResult();
-
-                                                    Log.d("jaaj", "onComplete: "+downloadUri);
-                                                } else {
-                                                    // Handle failures
-                                                    // ...
-                                                }
-                                            }
-                                        });
-
-                                    }
+//                                    for (int j = 0; j < fotosCount; j++) {
+//                                        String uriFoto = form.getString("Fotos_Generales_"+j);
+//                                        Uri urifotos = Uri.parse(uriFoto);
+//                                        Bitmap imagen = getBitmapFromUri (urifotos);
+//                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                                        imagen.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//                                        byte[] data = baos.toByteArray();
+//                                        //Uri file = Uri.fromFile(new File(Uri.parse(uriFoto)));
+//                                        //String path = listFotosGeneral.get(i).getPath();
+//                                        String subpath = uriFoto.substring(uriFoto.lastIndexOf('/') + 1);
+//                                        StorageReference estacionRef = storageRef.child("FotosEstaciones/estacion_"+cont+"/"+subpath);
+////                                        UploadTask uploadTask = estacionRef.putFile(file);
+//                                        UploadTask uploadTask = estacionRef.putBytes(data);
+//                                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+//                                            @Override
+//                                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+//                                                if (!task.isSuccessful()) {
+//                                                    throw task.getException();
+//                                                }
+//
+//                                                // Continue with the task to get the download URL
+//                                                return estacionRef.getDownloadUrl();
+//                                            }
+//                                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                                            @Override
+//                                            public void onComplete(@NonNull Task<Uri> task) {
+//                                                if (task.isSuccessful()) {
+//                                                    Uri downloadUri = task.getResult();
+//
+//                                                    Log.d("jaaj", "onComplete: "+downloadUri);
+//                                                } else {
+//                                                    // Handle failures
+//                                                    // ...
+//                                                }
+//                                            }
+//                                        });
+//
+//                                    }
 
                                     JSONObject Formularios = form.getJSONObject("Formularios");
                                     JSONObject counts = Formularios.getJSONObject("counts");
@@ -2507,10 +3096,12 @@ public class SlideshowFragment extends Fragment {
                                     int contUGS_Rocas = Integer.parseInt(counts.getString("UGS_Rocas"));
                                     int contUGS_Suelos = Integer.parseInt(counts.getString("UGS_Suelos"));
                                     int contSGMF = Integer.parseInt(counts.getString("SGMF"));
+                                    int contCAT = Integer.parseInt(counts.getString("CATALOGO"));
 
                                     databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_UGS_Rocas").setValue(contUGS_Rocas);
                                     databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_UGS_Suelos").setValue(contUGS_Suelos);
                                     databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_SGMF").setValue(contSGMF);
+                                    databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_CATALOGO").setValue(contCAT);
 
 
                                     for (int j = 0; j < contUGS_Rocas; j++) {
@@ -2573,7 +3164,7 @@ public class SlideshowFragment extends Fragment {
                                         String composicionmineral1 = EditTextsAux.getString("composicionmineral1");
                                         String composicionmineral2 = EditTextsAux.getString("composicionmineral2");
 
-                                        FormatUGSRocas nuevoFormatoUGSRocas = new FormatUGSRocas("true", noformato, municipios,  claseaflor,  gsi,  fabrica1,  fabrica2,  humedad1,  humedad2,  tamanograno1,  tamanograno2,  gradometeo1,  gradometeo2,  resistenciacomp1,  resistenciacomp2,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratiopt4orden,  secuenciaestratiopt4espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  perfilmeteorizacion,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  color1,  color2,  composicionmineral1,  composicionmineral2);
+                                        FormatUGSRocas nuevoFormatoUGSRocas = new FormatUGSRocas(true, noformato, municipios,  claseaflor,  gsi,  fabrica1,  fabrica2,  humedad1,  humedad2,  tamanograno1,  tamanograno2,  gradometeo1,  gradometeo2,  resistenciacomp1,  resistenciacomp2,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratiopt4orden,  secuenciaestratiopt4espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  perfilmeteorizacion,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  color1,  color2,  composicionmineral1,  composicionmineral2);
 
                                         databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j).setValue(nuevoFormatoUGSRocas);
 
@@ -2598,7 +3189,7 @@ public class SlideshowFragment extends Fragment {
                                             String AlturaDiscont = EditTextsAux.getString("AlturaDiscont"+k);
                                             String ObservacionesDiscont = EditTextsAux.getString("ObservacionesDiscont"+k);
 
-                                            FormatDiscont nuevoFormatoDiscont = new FormatDiscont("true", TipoDiscont,  PersistenciaDiscont,  AnchoAberDiscont,  TipoRellenoDiscont,  RugosidadSuperDiscont,  FormaSuperDiscont,  HumedadDiscont,  EspaciamientoDiscont,  MeteorizacionDiscont,  DirBuzamiento,  Buzamiento,  RakePitch,  DirRakePitch,  AzBzBz1,  AzBzBz2,  AlturaDiscont,  ObservacionesDiscont);
+                                            FormatDiscont nuevoFormatoDiscont = new FormatDiscont(true, TipoDiscont,  PersistenciaDiscont,  AnchoAberDiscont,  TipoRellenoDiscont,  RugosidadSuperDiscont,  FormaSuperDiscont,  HumedadDiscont,  EspaciamientoDiscont,  MeteorizacionDiscont,  DirBuzamiento,  Buzamiento,  RakePitch,  DirRakePitch,  AzBzBz1,  AzBzBz2,  AlturaDiscont,  ObservacionesDiscont);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j+"/Discontinuidades/Discont_"+k).setValue(nuevoFormatoDiscont);
 
                                         }
@@ -2610,7 +3201,7 @@ public class SlideshowFragment extends Fragment {
                                             String NombreFotosAnexas = EditTextsAux.getString("NombreFotosAnexas"+k);
                                             String DescriFotosAnexas = EditTextsAux.getString("DescriFotosAnexas"+k);
 
-                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas("true", NombreFotosAnexas, DescriFotosAnexas);
+                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas(true, NombreFotosAnexas, DescriFotosAnexas);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
 
                                         }
@@ -2749,7 +3340,7 @@ public class SlideshowFragment extends Fragment {
 
 
 
-                                        FormatUGSSuelos NuevoFormatoUGSSuelos = new FormatUGSSuelos("true", municipios,  claseaflor,  estructurasoporte1,  estructurasoporte2,  condicionhumedad1,  condicionhumedad2,  estructurasrelictas1,  estructurasrelictas2,  granulometria1,  granulometria2,  forma1,  forma2,  redondez1,  redondez2,  orientacion1,  orientacion2,  dirimbricacion1,  dirimbricacion2,  meteorizacionclastos1,  meteorizacionclastos2,  granulometriamatriz1,  granulometriamatriz2,  gradacion1,  gradacion2,  seleccion1,  seleccion2,  plasticidad1,  plasticidad2,  resiscorte1,  resiscorte2,  formasuelosgruesos1,  formasuelosgruesos2,  redondezsuelosgruesos1,  redondezsuelosgruesos2,  orientacionsuelosgruesos1,  orientacionsuelosgruesos2,  dirimbricacionmatriz1,  dirimbricacionmatriz2,  noformato,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  porcentajematriz1,  porcentajematriz2,  porcentajeclastos1,  porcentajeclastos2,  color1,  color2,  observacionessuelos, descripcionsuelos, compacidadsuelosgruesos1, compacidadsuelosgruesos2);
+                                        FormatUGSSuelos NuevoFormatoUGSSuelos = new FormatUGSSuelos(true, municipios,  claseaflor,  estructurasoporte1,  estructurasoporte2,  condicionhumedad1,  condicionhumedad2,  estructurasrelictas1,  estructurasrelictas2,  granulometria1,  granulometria2,  forma1,  forma2,  redondez1,  redondez2,  orientacion1,  orientacion2,  dirimbricacion1,  dirimbricacion2,  meteorizacionclastos1,  meteorizacionclastos2,  granulometriamatriz1,  granulometriamatriz2,  gradacion1,  gradacion2,  seleccion1,  seleccion2,  plasticidad1,  plasticidad2,  resiscorte1,  resiscorte2,  formasuelosgruesos1,  formasuelosgruesos2,  redondezsuelosgruesos1,  redondezsuelosgruesos2,  orientacionsuelosgruesos1,  orientacionsuelosgruesos2,  dirimbricacionmatriz1,  dirimbricacionmatriz2,  noformato,  vereda,  noestacion,  secuenciaestratiopt1orden,  secuenciaestratiopt1espesor,  secuenciaestratiopt2orden,  secuenciaestratiopt2espesor,  secuenciaestratiopt3orden,  secuenciaestratiopt3espesor,  secuenciaestratisuelor1orden,  secuenciaestratisuelor1espesor,  secuenciaestratisuelor2orden,  secuenciaestratisuelor2espesor,  secuenciaestratisuelor3orden,  secuenciaestratisuelor3espesor,  litologiasasociadasopt1exist,  litologiasasociadasopt1espesor,  litologiasasociadasopt2exist,  litologiasasociadasopt2espesor,  nombreugs,  porcentajematriz1,  porcentajematriz2,  porcentajeclastos1,  porcentajeclastos2,  color1,  color2,  observacionessuelos, descripcionsuelos, compacidadsuelosgruesos1, compacidadsuelosgruesos2);
 
 
                                         databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+j).setValue(NuevoFormatoUGSSuelos);
@@ -2762,7 +3353,7 @@ public class SlideshowFragment extends Fragment {
                                             String NombreFotosAnexas = EditTextsAux.getString("NombreFotosAnexas"+k);
                                             String DescriFotosAnexas = EditTextsAux.getString("DescriFotosAnexas"+k);
 
-                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas("true", NombreFotosAnexas, DescriFotosAnexas);
+                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas(true, NombreFotosAnexas, DescriFotosAnexas);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
 
                                         }
@@ -2775,7 +3366,7 @@ public class SlideshowFragment extends Fragment {
                                         JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
                                         JSONObject CheckBoxAux = FromatoAux.getJSONObject("CheckBox");
 
-                                        String activo = "true";
+                                        boolean activo = true;
                                         String municipios = SpinnersAux.getString("municipios");;
                                         String noformato = EditTextsAux.getString("noformato");
                                         String vereda = EditTextsAux.getString("vereda");
@@ -2839,7 +3430,7 @@ public class SlideshowFragment extends Fragment {
                                             String patronotro = EditTextsAux.getString("patronotro"+k);
 
 
-                                            FormatNewSGMF nuevoFormatoNewSGMF = new FormatNewSGMF("true",  tiporoca,  gradometeor,  gradofractura,  tiposuelo,  tamanograno,  tiporelieve,  indicerelieve,  inclinacionladera,  longiladera,  formaladera,  formacresta,  formavalle,  cobertura,  uso,  densidad,  frecuencia,  textura,  patron,  tipoerosion,  espaciamiento,  intensidaderosion,  tipodemm,  tipomaterial,  actividad,  codigonuevaSGMF,  coberturaotro,  usootro,  patronotro);
+                                            FormatNewSGMF nuevoFormatoNewSGMF = new FormatNewSGMF(true,  tiporoca,  gradometeor,  gradofractura,  tiposuelo,  tamanograno,  tiporelieve,  indicerelieve,  inclinacionladera,  longiladera,  formaladera,  formacresta,  formavalle,  cobertura,  uso,  densidad,  frecuencia,  textura,  patron,  tipoerosion,  espaciamiento,  intensidaderosion,  tipodemm,  tipomaterial,  actividad,  codigonuevaSGMF,  coberturaotro,  usootro,  patronotro);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_SGMF/Form_SGMF_"+j+"/SGMF/SGMF_"+k).setValue(nuevoFormatoNewSGMF);
 
                                         }
@@ -2851,8 +3442,64 @@ public class SlideshowFragment extends Fragment {
                                             String NombreFotosAnexas = EditTextsAux.getString("NombreFotosAnexas"+k);
                                             String DescriFotosAnexas = EditTextsAux.getString("DescriFotosAnexas"+k);
 
-                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas("true", NombreFotosAnexas, DescriFotosAnexas);
+                                            FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas(true, NombreFotosAnexas, DescriFotosAnexas);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_SGMF/Form_SGMF_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
+
+                                        }
+
+                                    }
+
+                                    for (int j = 0; j < contCAT; j++) {
+                                        JSONObject FromatoAux = Formularios.getJSONObject("Form_CATALOGO_"+j);
+                                        JSONObject SpinnersAux = FromatoAux.getJSONObject("Spinners");
+                                        JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
+                                        JSONObject RadioGrpAux = FromatoAux.getJSONObject("RadioGrp");
+
+                                        boolean activo = true;
+                                        String IMPORTANC = SpinnersAux.getString("IMPORTANC");
+                                        String FECHA_FUENTE = SpinnersAux.getString("FECHA_FUENTE");
+                                        String confiFechaMM = SpinnersAux.getString("ConfiFechaMM");
+                                        String NOM_MUN = SpinnersAux.getString("NOM_MUN");
+                                        String SUBTIPO_1 = SpinnersAux.getString("SUBTIPO_1");
+                                        String SUBTIPO_2 = SpinnersAux.getString("SUBTIPO_2");
+                                        String ID_PARTE = EditTextsAux.getString("ID_PARTE");
+                                        String ENCUESTAD = EditTextsAux.getString("ENCUESTAD");
+                                        String FECHA_MOV = EditTextsAux.getString("FECHA_MOV");
+                                        String FECHA_REP = EditTextsAux.getString("FECHA_REP");
+                                        String COD_SIMMA = EditTextsAux.getString("COD_SIMMA");
+                                        String VEREDA = EditTextsAux.getString("VEREDA");
+                                        String SITIO = EditTextsAux.getString("SITIO");
+                                        String REF_GEOGRF = EditTextsAux.getString("REF_GEOGRF");
+                                        String HERIDOS = EditTextsAux.getString("HERIDOS");
+                                        String VIDAS = EditTextsAux.getString("VIDAS");
+                                        String DESAPARECIDOS = EditTextsAux.getString("DESAPARECIDOS");
+                                        String PERSONAS = EditTextsAux.getString("PERSONAS");
+                                        String FAMILIAS = EditTextsAux.getString("FAMILIAS");
+                                        String sensoresremotos = EditTextsAux.getString("sensoresremotos");
+                                        String FTE_INFSEC = EditTextsAux.getString("FTE_INFSEC");
+                                        String notas = EditTextsAux.getString("notas");
+                                        String TIPO_MOV2 = RadioGrpAux.getString("TIPO_MOV2");
+                                        String TIPO_MOV1 = RadioGrpAux.getString("TIPO_MOV1");
+
+
+                                        FormatCAT nuevoFormatoCAT = new FormatCAT(activo,IMPORTANC,FECHA_FUENTE,confiFechaMM,NOM_MUN,SUBTIPO_1,SUBTIPO_2,ID_PARTE,ENCUESTAD,FECHA_MOV,FECHA_REP,COD_SIMMA,VEREDA,SITIO,REF_GEOGRF,HERIDOS,VIDAS,DESAPARECIDOS,PERSONAS,FAMILIAS,sensoresremotos,FTE_INFSEC,notas,TIPO_MOV2,TIPO_MOV1);
+
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_CATALOGO/Form_CATALOGO_"+j).setValue(nuevoFormatoCAT);
+
+                                        int contDANOSNew = Integer.parseInt(FromatoAux.getString("DAÑOS"));
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_CATALOGO/Form_CATALOGO_"+j+"/DANOS/count").setValue(contDANOSNew);
+                                        for (int k = 1; k <= contDANOSNew; k++) {
+
+                                            String tiposdano = SpinnersAux.getString("tiposdaño"+k);
+                                            String clasedano = SpinnersAux.getString("clasedaño"+k);
+                                            String tipodano = EditTextsAux.getString("tipodaño"+k);
+                                            String cantidaddano = EditTextsAux.getString("cantidaddaño"+k);
+                                            String unidaddano = EditTextsAux.getString("unidaddaño"+k);
+                                            String valordano = EditTextsAux.getString("valordaño"+k);
+
+
+                                            FormatNewDANO nuevoFormatoNewDANO = new FormatNewDANO(tiposdano, clasedano, tipodano, cantidaddano, unidaddano, valordano);
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_CATALOGO/Form_CATALOGO_"+j+"/DANOS/DANOS_"+k).setValue(nuevoFormatoNewDANO);
 
                                         }
 
@@ -2931,6 +3578,7 @@ public class SlideshowFragment extends Fragment {
         int countFormatosUGSRocas = 0;
         int countFormatosUGSSuelos = 0;
         int countFormatosSGMF = 0;
+        int countFormatosCAT = 0;
         for (int i = 0; i < listFormularios.size(); i++) {
 
             //-------------> Rocas
@@ -2962,8 +3610,6 @@ public class SlideshowFragment extends Fragment {
                 int contAux = 0;
                 for (int k = 0; k < ListaRadioGrp.get(i).size(); k++) {
                     RadioButton checkedRadioButton = (RadioButton)ListaRadioGrp.get(i).get(k).findViewById(ListaRadioGrp.get(i).get(k).getCheckedRadioButtonId());
-//                    Log.d("jaaja", "onCheckedChanged: "+checkedRadioButton.getTag());
-//                    Log.d("jaaja", "onCheckedChanged: "+ListaRadioGrp.get(i).get(k).getTag());
                     radioGrp.put(ListaRadioGrp.get(i).get(k).getTag().toString(), checkedRadioButton.getTag());
                 }
                 FormatoTemp.put("RadioGrp", radioGrp);
@@ -3019,7 +3665,7 @@ public class SlideshowFragment extends Fragment {
                 countFormatosUGSSuelos++;
             }
 
-            //-------------> Rocas
+            //-------------> SGMF
 
             if (listFormularios.get(i).equals("SGMF")){
                 JSONObject FormatoTemp = new JSONObject()
@@ -3050,11 +3696,44 @@ public class SlideshowFragment extends Fragment {
                 countFormatosSGMF++;
             }
 
+            //-------------> CATALOGO
+
+            if (listFormularios.get(i).equals("Catálogo MM")){
+                JSONObject FormatoTemp = new JSONObject()
+                        .put("DAÑOS", listContDAÑOS.get(i));
+
+                JSONObject spinnerList = new JSONObject();
+                for (int j = 0; j < ListaSpinner.get(i).size(); j++) {
+                    spinnerList.put(ListaSpinner.get(i).get(j).getTag().toString(), ListaSpinner.get(i).get(j).getSelectedItem().toString());
+                }
+                FormatoTemp.put("Spinners", spinnerList);
+
+                JSONObject editTextList = new JSONObject();
+                for (int k = 0; k < ListaEditText.get(i).size(); k++) {
+                    editTextList.put(ListaEditText.get(i).get(k).getTag().toString(), ListaEditText.get(i).get(k).getText().toString());
+                }
+                FormatoTemp.put("EditText", editTextList);
+
+                JSONObject radioGrp = new JSONObject();
+                for (int k = 0; k < ListaRadioGrp.get(i).size(); k++) {
+                    RadioButton checkedRadioButton = (RadioButton)ListaRadioGrp.get(i).get(k).findViewById(ListaRadioGrp.get(i).get(k).getCheckedRadioButtonId());
+//                    Log.d("jaaja", "onCheckedChanged: "+checkedRadioButton.getTag());
+//                    Log.d("jaaja", "onCheckedChanged: "+ListaRadioGrp.get(i).get(k).getTag());
+                    radioGrp.put(ListaRadioGrp.get(i).get(k).getTag().toString(), checkedRadioButton.getTag());
+                }
+                FormatoTemp.put("RadioGrp", radioGrp);
+
+
+                FormatosList.put("Form_CATALOGO_"+countFormatosCAT, FormatoTemp);
+                countFormatosCAT++;
+            }
+
 
         }
         countFormatos.put("UGS_Rocas", countFormatosUGSRocas);
         countFormatos.put("UGS_Suelos", countFormatosUGSSuelos);
         countFormatos.put("SGMF", countFormatosSGMF);
+        countFormatos.put("CATALOGO", countFormatosCAT);
 
         FormatosList.put("counts", countFormatos);
         attrForm.put("Formularios", FormatosList);
@@ -3241,40 +3920,39 @@ public class SlideshowFragment extends Fragment {
 
         //--------------> CATALOGO MM
 
-//        listaElementosCAT.add(new ElementoFormato("ID PARTE del MM","edittext","ID_PARTE", 0));
-        listaElementosCAT.add(new ElementoFormato("IMPORTANCIA","checkradio","IMPORTANC",R.array.Importancia));
-        listaElementosCAT.add(new ElementoFormato("ENCUESTADOR","edittext","ENCUESTAD",0));
-        listaElementosCAT.add(new ElementoFormato("FECHA EVENTO","fecha","FECHA_MOV",0));
+        listaElementosCAT.add(new ElementoFormato("ID PARTE del MM","edittextMM","ID_PARTE", 0));
+        listaElementosCAT.add(new ElementoFormato("IMPORTANCIA","spinnerMM","IMPORTANC",R.array.Importancia));
+        listaElementosCAT.add(new ElementoFormato("ENCUESTADOR","edittextMM","ENCUESTAD",0));
+        listaElementosCAT.add(new ElementoFormato("FECHA EVENTO","edittextMM","FECHA_MOV",0));
         listaElementosCAT.add(new ElementoFormato("FUENTE FECHA EVENTO","spinner","FECHA_FUENTE",R.array.FuenteFechaEvento));
-        listaElementosCAT.add(new ElementoFormato("CONFIABILIDAD FECHA EVENTO","spinner","ConfiFechaMM",R.array.ConfiFecha));
-        listaElementosCAT.add(new ElementoFormato("FECHA REPORTE","fecha","FECHA_REP",0));
-        listaElementosCAT.add(new ElementoFormato("INSTITUCIÓN","edittext","INSTITUC",0));
-        listaElementosCAT.add(new ElementoFormato("SIMMA","edittext","COD_SIMMA",0));
-        listaElementosCAT.add(new ElementoFormato("Municipio",  "spinner",  "municipios", R.array.Municipios));
-        listaElementosCAT.add(new ElementoFormato("Vereda",  "edittext",  "vereda", 0));
+        listaElementosCAT.add(new ElementoFormato("CONFIABILIDAD FECHA EVENTO","spinnerMM","ConfiFechaMM",R.array.ConfiFecha));
+        listaElementosCAT.add(new ElementoFormato("FECHA REPORTE","edittextMM","FECHA_REP",0));
+        listaElementosCAT.add(new ElementoFormato("SIMMA","edittextMM","COD_SIMMA",0));
+        listaElementosCAT.add(new ElementoFormato("Municipio",  "spinnerMM",  "NOM_MUN", R.array.Municipios));
+        listaElementosCAT.add(new ElementoFormato("Vereda",  "edittextMM",  "VEREDA", 0));
         listaElementosCAT.add(new ElementoFormato("SITIO","edittext","SITIO",0));
-        listaElementosCAT.add(new ElementoFormato("REFERENCIA GEOGRÁFICA","edittext","REF_GEOGRF",0));
+        listaElementosCAT.add(new ElementoFormato("REFERENCIA GEOGRÁFICA","edittextMM","REF_GEOGRF",0));
         listaElementosCAT.add(new ElementoFormato("CLASIFICACIÓN DEL MOVIMIENTO",  "titulo",  "", 0));
-        listaElementosCAT.add(new ElementoFormato("TIPO MOVIMIENTO",  "radiobtn",  "TIPO_MOV", R.array.TipoMovimiento));
-        listaElementosCAT.add(new ElementoFormato("SUBTIPO PRIMER MOVIMIENTO",  "spinner",  "SUBTIPO1", R.array.SubtipoMovimiento));
-        listaElementosCAT.add(new ElementoFormato("SUBTIPO SEGUNDO MOVIMIENTO",  "spinner",  "SUBTIPO2", R.array.SubtipoMovimiento1));
+        listaElementosCAT.add(new ElementoFormato("TIPO MOVIMIENTO",  "radiobtnMM",  "TIPO_MOV", R.array.TipoMovimiento));
+        listaElementosCAT.add(new ElementoFormato("SUBTIPO PRIMER MOVIMIENTO",  "spinnerMM",  "SUBTIPO_1", R.array.SubtipoMovimiento));
+        listaElementosCAT.add(new ElementoFormato("SUBTIPO SEGUNDO MOVIMIENTO",  "spinnerMM",  "SUBTIPO_2", R.array.SubtipoMovimiento1));
         listaElementosCAT.add(new ElementoFormato("POBLACION AFECTADA",  "titulo",  "", 0));
         listaElementosCAT.add(new ElementoFormato("Heridos","edittext","HERIDOS",0));
         listaElementosCAT.add(new ElementoFormato("Vidas","edittext","VIDAS",0));
         listaElementosCAT.add(new ElementoFormato("Desaparecidos","edittext","DESAPARECIDOS",0));
         listaElementosCAT.add(new ElementoFormato("Personas","edittext","PERSONAS",0));
         listaElementosCAT.add(new ElementoFormato("Familias","edittext","FAMILIAS",0));
-        listaElementosCAT.add(new ElementoFormato("TIPO DE DAÑO:","textview","",0));
-        listaElementosCAT.add(new ElementoFormato("DAÑOS A INFRASTRUCTURA, ACTIVIDADES ECONÓMICAS, DAÑOS AMBIENTALES:","linear","",0));
+        listaElementosCAT.add(new ElementoFormato("IMÁGENES SATELITALES","edittext","sensoresremotos",0));
+        listaElementosCAT.add(new ElementoFormato("FOTOGRAFÍAS AÉREAS","edittextMM","FTE_INFSEC",0));
         listaElementosCAT.add(new ElementoFormato("NOTAS (Ej: Causas y observaciones generales):","edittext","notas",0));
-        listaElementosCAT.add(new ElementoFormato("SENSORES REMOTOS","edittext","sensoresremotos",0));
-        listaElementosCAT.add(new ElementoFormato("FOTOGRAFÍAS AÉREAS","edittext","FTE_INFSEC",0));
+        listaElementosCAT.add(new ElementoFormato("DAÑOS A INFRASTRUCTURA, ACTIVIDADES ECONÓMICAS, DAÑOS AMBIENTALES:","titulo","",0));
+        listaElementosCAT.add(new ElementoFormato("TIPO DE DAÑO:","textview","",R.string.NotaDaños));
 
-        listaElementosCATDANOS.add(new ElementoFormato("CLASE DE DAÑO", "checkradio", "clasedaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("CLASE DE DAÑO", "spinner", "clasedaño", R.array.ClaseDaño));
         listaElementosCATDANOS.add(new ElementoFormato("TIPO", "edittext", "tipodaño", 0));
         listaElementosCATDANOS.add(new ElementoFormato("CANTIDAD", "edittext", "cantidaddaño", 0));
         listaElementosCATDANOS.add(new ElementoFormato("UNIDAD", "edittext", "unidaddaño", 0));
-        listaElementosCATDANOS.add(new ElementoFormato("TIPO DAÑO", "checkradio", "tiposdaño", 0));
+        listaElementosCATDANOS.add(new ElementoFormato("TIPO DAÑO", "spinner", "tiposdaño", R.array.TiposDaño));
         listaElementosCATDANOS.add(new ElementoFormato("VALOR (US$)", "edittext", "valordaño", 0));
 
 
@@ -3289,8 +3967,8 @@ public class SlideshowFragment extends Fragment {
         listaElementosINV.add(new ElementoFormato("FECHA REPORTE","fecha","FECHA_REP",0));
         listaElementosINV.add(new ElementoFormato("INSTITUCIÓN","edittext","INSTITUC",0));
         listaElementosINV.add(new ElementoFormato("SIMMA","edittext","COD_SIMMA",0));
-        listaElementosINV.add(new ElementoFormato("Municipio",  "spinner",  "municipios", R.array.Municipios));
-        listaElementosINV.add(new ElementoFormato("Vereda",  "edittext",  "vereda", 0));
+        listaElementosINV.add(new ElementoFormato("Municipio",  "spinner",  "NOM_MUN", R.array.Municipios));
+        listaElementosINV.add(new ElementoFormato("Vereda",  "edittext",  "VEREDA", 0));
         listaElementosINV.add(new ElementoFormato("Sitio","edittext","SITIO",0));
         listaElementosINV.add(new ElementoFormato("REFERENCIA GEOGRÁFICA","edittext","REF_GEOGRF",0));
         listaElementosINV.add(new ElementoFormato("DOCUMENTACIÓN",  "titulo",  "", 0));

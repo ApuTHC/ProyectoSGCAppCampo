@@ -25,8 +25,8 @@
 
     <string-array name="Formularios">
         <item>Ninguno</item>
-        <!--        <item>Catálogo MM</item>-->
-        <!--        <item>Inventario MM</item>-->
+        <item>Catálogo MM</item>
+        <!--<item>Inventario MM</item>-->
         <item>UGS Rocas</item>
         <item>UGS Suelos</item>
         <item>SGMF</item>
@@ -38,7 +38,7 @@
         <item>FILADELFIA</item>
         <item>MARQUETALIA</item>
         <item>RIOSUCIO</item>
-        <item>SUPÍA</item>
+        <item>SUPIA</item>
     </string-array>
 
     <string-array name="ClaseAfloramiento">
@@ -787,49 +787,50 @@
     </string-array>
 
     <string-array name="ConfiFecha">
-        <item>Incierta</item>
-        <item>Confiabilidad baja</item>
-        <item>Certeza Año</item>
-        <item>Certeza mes y año</item>
         <item>Exacta</item>
+        <item>Certeza mes y año</item>
+        <item>Certeza Año</item>
+        <item>Confiabilidad baja</item>
+        <item>Incierta</item>
     </string-array>
 
     <string-array name="TipoMovimiento">
-        <item>Caída</item>
-        <item>Volcamiento</item>
+        <item>No Aplica</item>
         <item>Deslizamiento</item>
-        <item>Flujo</item>
-        <item>Propagación Lateral</item>
         <item>Reptación</item>
+        <item>Caída</item>
+        <item>Flujo</item>
+        <item>Volcamiento</item>
+        <item>Propagación Lateral</item>
         <item>Deform. Gravit. Profundas</item>
     </string-array>
 
     <string-array name="SubtipoMovimiento">
-        <item>Caída de roca</item>
+        <item>Caída de Roca</item>
+        <item>Caída de Suelo</item>
         <item>Caída de detritos</item>
-        <item>Caída de tierras</item>
-        <item>Volcam. flexural de roca</item>
-        <item>Volcam. de roca</item>
-        <item>Volcam. macizo rocoso</item>
-        <item>Desliz. rotacional </item>
-        <item>Desliz. traslacional</item>
-        <item>Desliz. en cuña</item>
-        <item>Desliz. traslacional en cuña</item>
-        <item>Desliz. traslacional planar</item>
-        <item>Avalancha de rocas</item>
+        <item>Volcamiento flexural de roca</item>
+        <item>Volcamiento de roca</item>
+        <item>Volcamiento macizo rocoso</item>
+        <item>Deslizamiento rotacional</item>
+        <item>Deslizamiento traslacional</item>
+        <item>Deslizamiento en cuña</item>
+        <item>Deslizamiento traslacional en cuña</item>
+        <item>Deslizamiento traslacional planar</item>
+        <item>Deslizamiento licuación de arena</item>
+        <item>Deslizamiento licuación de limo</item>
+        <item>Deslizamiento licuación detritos</item>
+        <item>Deslizamiento licuación roca fracturada</item>
+        <item>Deslizamiento por flujo</item>
         <item>Flujo de detritos</item>
         <item>Flujo de lodo</item>
-        <item>Desliz. por flujo</item>
-        <item>Avalancha de detritos</item>
-        <item>Flujo de tierra</item>
-        <item>Crecida de detritos</item>
+        <item>Flujo de Tierra</item>
         <item>Flujo de turba</item>
-        <item>Desliz. licuación de arena</item>
-        <item>Desliz. licuación de limo</item>
-        <item>Desliz. licuación detritos</item>
-        <item>Desliz. licuación roca fracturada</item>
-        <item>Propag. lateral lenta</item>
-        <item>Propag. lateral licuación</item>
+        <item>Avalancha de rocas</item>
+        <item>Avalancha de detritos</item>
+        <item>Crecida de detritos</item>
+        <item>Propagación lateral lenta</item>
+        <item>Propagación lateral licuación</item>
         <item>Reptación de suelos</item>
         <item>Solifluxión</item>
         <item>Gelifluxión (en permafrost)</item>
@@ -837,31 +838,31 @@
 
     <string-array name="SubtipoMovimiento1">
         <item>No Aplica</item>
-        <item>Caída de roca</item>
+        <item>Caída de Roca</item>
+        <item>Caída de Suelo</item>
         <item>Caída de detritos</item>
-        <item>Caída de tierras</item>
-        <item>Volcam. flexural de roca</item>
-        <item>Volcam. de roca</item>
-        <item>Volcam. macizo rocoso</item>
-        <item>Desliz. rotacional </item>
-        <item>Desliz. traslacional</item>
-        <item>Desliz. en cuña</item>
-        <item>Desliz. traslacional en cuña</item>
-        <item>Desliz. traslacional planar</item>
-        <item>Avalancha de rocas</item>
+        <item>Volcamiento flexural de roca</item>
+        <item>Volcamiento de roca</item>
+        <item>Volcamiento macizo rocoso</item>
+        <item>Deslizamiento rotacional </item>
+        <item>Deslizamiento traslacional</item>
+        <item>Deslizamiento en cuña</item>
+        <item>Deslizamiento traslacional en cuña</item>
+        <item>Deslizamiento traslacional planar</item>
+        <item>Deslizamiento licuación de arena</item>
+        <item>Deslizamiento licuación de limo</item>
+        <item>Deslizamiento licuación detritos</item>
+        <item>Deslizamiento licuación roca fracturada</item>
+        <item>Deslizamiento por flujo</item>
         <item>Flujo de detritos</item>
         <item>Flujo de lodo</item>
-        <item>Desliz. por flujo</item>
-        <item>Avalancha de detritos</item>
-        <item>Flujo de tierra</item>
-        <item>Crecida de detritos</item>
+        <item>Flujo de Tierra</item>
         <item>Flujo de turba</item>
-        <item>Desliz. licuación de arena</item>
-        <item>Desliz. licuación de limo</item>
-        <item>Desliz. licuación detritos</item>
-        <item>Desliz. licuación roca fracturada</item>
-        <item>Propag. lateral lenta</item>
-        <item>Propag. lateral licuación</item>
+        <item>Avalancha de rocas</item>
+        <item>Avalancha de detritos</item>
+        <item>Crecida de detritos</item>
+        <item>Propagación lateral lenta</item>
+        <item>Propagación lateral licuación</item>
         <item>Reptación de suelos</item>
         <item>Solifluxión</item>
         <item>Gelifluxión (en permafrost)</item>

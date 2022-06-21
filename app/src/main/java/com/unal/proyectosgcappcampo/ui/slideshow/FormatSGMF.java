@@ -1,7 +1,7 @@
 package com.unal.proyectosgcappcampo.ui.slideshow;
 
 public class FormatSGMF {
-    public String activo;
+    public boolean activo;
     public String municipios;
     public String noformato;
     public String vereda;
@@ -25,7 +25,7 @@ public class FormatSGMF {
     public String ambiente7check;
     public String ambiente8check;
 
-    public FormatSGMF(String activo, String municipios, String noformato, String vereda, String noestacion, String ubicacionGeomorfoestructura, String ubicacionProvincia, String ubicacionRegion, String ubicacionUnidad, String ubicacionSubunidad, String ubicacionElemento, String nombreSGMF, String codigoSGMF, String observacionesSGMF, String ambiente0check, String ambiente1check, String ambiente2check, String ambiente3check, String ambiente4check, String ambiente5check, String ambiente6check, String ambiente7check, String ambiente8check) {
+    public FormatSGMF(boolean activo, String municipios, String noformato, String vereda, String noestacion, String ubicacionGeomorfoestructura, String ubicacionProvincia, String ubicacionRegion, String ubicacionUnidad, String ubicacionSubunidad, String ubicacionElemento, String nombreSGMF, String codigoSGMF, String observacionesSGMF, String ambiente0check, String ambiente1check, String ambiente2check, String ambiente3check, String ambiente4check, String ambiente5check, String ambiente6check, String ambiente7check, String ambiente8check) {
         this.activo = activo;
         this.municipios = municipios;
         this.noformato = noformato;

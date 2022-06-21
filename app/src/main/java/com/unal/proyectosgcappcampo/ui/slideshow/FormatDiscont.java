@@ -2,7 +2,7 @@ package com.unal.proyectosgcappcampo.ui.slideshow;
 
 public class FormatDiscont {
 
-    public String activo;
+    public boolean activo;
     public String TipoDiscont;
     public String PersistenciaDiscont;
     public String AnchoAberDiscont;
@@ -21,25 +21,25 @@ public class FormatDiscont {
     public String AlturaDiscont;
     public String ObservacionesDiscont;
 
-    public FormatDiscont(String activo, String tipoDiscont, String persistenciaDiscont, String anchoAberDiscont, String tipoRellenoDiscont, String rugosidadSuperDiscont, String formaSuperDiscont, String humedadDiscont, String espaciamientoDiscont, String meteorizacionDiscont, String dirBuzamiento, String buzamiento, String rakePitch, String dirRakePitch, String azBzBz1, String azBzBz2, String alturaDiscont, String observacionesDiscont) {
-        activo = activo;
-        TipoDiscont = tipoDiscont;
-        PersistenciaDiscont = persistenciaDiscont;
-        AnchoAberDiscont = anchoAberDiscont;
-        TipoRellenoDiscont = tipoRellenoDiscont;
-        RugosidadSuperDiscont = rugosidadSuperDiscont;
-        FormaSuperDiscont = formaSuperDiscont;
-        HumedadDiscont = humedadDiscont;
-        EspaciamientoDiscont = espaciamientoDiscont;
-        MeteorizacionDiscont = meteorizacionDiscont;
-        DirBuzamiento = dirBuzamiento;
-        Buzamiento = buzamiento;
-        RakePitch = rakePitch;
-        DirRakePitch = dirRakePitch;
-        AzBzBz1 = azBzBz1;
-        AzBzBz2 = azBzBz2;
-        AlturaDiscont = alturaDiscont;
-        ObservacionesDiscont = observacionesDiscont;
+    public FormatDiscont(boolean activo, String tipoDiscont, String persistenciaDiscont, String anchoAberDiscont, String tipoRellenoDiscont, String rugosidadSuperDiscont, String formaSuperDiscont, String humedadDiscont, String espaciamientoDiscont, String meteorizacionDiscont, String dirBuzamiento, String buzamiento, String rakePitch, String dirRakePitch, String azBzBz1, String azBzBz2, String alturaDiscont, String observacionesDiscont) {
+        this.activo = activo;
+        this.TipoDiscont = tipoDiscont;
+        this.PersistenciaDiscont = persistenciaDiscont;
+        this.AnchoAberDiscont = anchoAberDiscont;
+        this.TipoRellenoDiscont = tipoRellenoDiscont;
+        this.RugosidadSuperDiscont = rugosidadSuperDiscont;
+        this.FormaSuperDiscont = formaSuperDiscont;
+        this.HumedadDiscont = humedadDiscont;
+        this.EspaciamientoDiscont = espaciamientoDiscont;
+        this.MeteorizacionDiscont = meteorizacionDiscont;
+        this.DirBuzamiento = dirBuzamiento;
+        this.Buzamiento = buzamiento;
+        this.RakePitch = rakePitch;
+        this.DirRakePitch = dirRakePitch;
+        this.AzBzBz1 = azBzBz1;
+        this.AzBzBz2 = azBzBz2;
+        this.AlturaDiscont = alturaDiscont;
+        this.ObservacionesDiscont = observacionesDiscont;
     }
 
 }
