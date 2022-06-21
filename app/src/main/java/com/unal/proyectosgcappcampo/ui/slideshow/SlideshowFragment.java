@@ -52,6 +52,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.common.util.NumberUtils;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -400,7 +401,8 @@ public class SlideshowFragment extends Fragment {
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-        } else {
+        }
+        else {
             formComplete = new JSONArray();
         }
 
@@ -449,7 +451,8 @@ public class SlideshowFragment extends Fragment {
 
         if (ActivityCompat.checkSelfPermission(mcont, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mcont, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
-        } else {
+        }
+        else {
             locationStart();
         }
 
@@ -1393,6 +1396,7 @@ public class SlideshowFragment extends Fragment {
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setHint("Espesor (m)");
                         etSecuenciaEstratiOpt1Espesor.setEms(10);
+                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
                         etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+aux+"espesor");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
@@ -1462,6 +1466,7 @@ public class SlideshowFragment extends Fragment {
                                             etSecuenciaEstratiSueloREspesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etSecuenciaEstratiSueloREspesor.setHint("Espesor (m)");
                                             etSecuenciaEstratiSueloREspesor.setEms(10);
+                                            etSecuenciaEstratiSueloREspesor.setInputType(InputType.TYPE_CLASS_NUMBER);
                                             etSecuenciaEstratiSueloREspesor.setTag(tagElemento+ aux +"espesor");
                                             ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloREspesor);
                                             liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloREspesor);
@@ -1514,6 +1519,7 @@ public class SlideshowFragment extends Fragment {
                         etLitologia.setLayoutParams(new ActionBar.LayoutParams(300, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etLitologia.setHint("Espesor (m)");
                         etLitologia.setEms(10);
+                        etLitologia.setInputType(InputType.TYPE_CLASS_NUMBER);
                         etLitologia.setTag(tagElemento+j+"espesor");
                         ListaEditText.get(idLinear).add(etLitologia);
                         liFormLitologias.addView(etLitologia);
@@ -1594,6 +1600,7 @@ public class SlideshowFragment extends Fragment {
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt.setEms(10);
                         etSecuenciaEstratiOpt.setTag(tag+2);
+                        etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
 
@@ -1601,6 +1608,7 @@ public class SlideshowFragment extends Fragment {
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setEms(10);
                         etSecuenciaEstratiOpt1Espesor.setTag(tag+1);
+                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
 
@@ -1664,8 +1672,8 @@ public class SlideshowFragment extends Fragment {
                         nuevoRadio.setLayoutParams(params);
                         //nuevoRadio.setText(marca);
                         nuevoRadio.setTag(opt);
-                        nuevoRadio.setClickable(false);
-                        nuevoRadio.setEnabled(false);
+//                        nuevoRadio.setClickable(false);
+//                        nuevoRadio.setEnabled(false);
                         if (auxtodos2){
                             ListaRadioBtn.get(idLinear).add(nuevoRadio);
                         }
@@ -1679,7 +1687,7 @@ public class SlideshowFragment extends Fragment {
                     }
 
 
-                    Resources res1 = getResources();
+
                     String[] opciones1 = res.getStringArray(idStringArrayElemento);
 
                     RadioGroup radioGroup1 = new RadioGroup(mcont);
@@ -1694,10 +1702,10 @@ public class SlideshowFragment extends Fragment {
                         nuevoRadio.setText(opt);
                         nuevoRadio.setTag(opt);
                         if (auxFinos){
-                            ListaRadioBtn1Finos.get(idLinear).add(nuevoRadio);
+                            //ListaRadioBtn1Finos.get(idLinear).add(nuevoRadio);
                         }
                         if (auxGruesos){
-                            ListaRadioBtn1Gruesos.get(idLinear).add(nuevoRadio);
+                            //ListaRadioBtn1Gruesos.get(idLinear).add(nuevoRadio);
                         }
                         radioGroup1.addView(nuevoRadio);
                     }
@@ -1811,92 +1819,161 @@ public class SlideshowFragment extends Fragment {
                         });
                     }
 
-                    if (nombreElemento.equals("Granulometría de la Matriz")){
+//                    if (nombreElemento.equals("Granulometría de la Matriz")){
+//
+//                        for (int j = 0; j < ListaRadioBtn1Gruesos.get(idLinear).size() ; j++){
+//                            ListaRadioBtn1Gruesos.get(idLinear).get(j).setEnabled(false);
+//                            ListaRadioBtn1Gruesos.get(idLinear).get(j).setClickable(false);
+//                        }
+//                        radioGroup1.setTag(tagElemento+1+"_"+idLinear);
+//                        radioGroup2.setTag(tagElemento+2+"_"+idLinear);
+//
+//                        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//                            public void onCheckedChanged(RadioGroup group, int checkedId)
+//                            {
+//                                // This will get the radiobutton that has changed in its check state
+//                                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+//                                // This puts the value (true/false) into the variable
+//                                boolean isChecked = checkedRadioButton.isChecked();
+//                                // If the radiobutton that has changed in check state is now checked...
+//                                int aux = Integer.parseInt(group.getTag().toString().split("_")[1]);
+//                                if (checkedRadioButton.getText().equals("Finos (Limos-Arcillas Menores de 0,075 mm)"))
+//                                {
+//                                    for (int j = 0; j < ListaRadioBtn1Finos.get(aux).size() ; j++){
+//                                        ListaRadioBtn1Finos.get(aux).get(j).setEnabled(true);
+//                                        ListaRadioBtn1Finos.get(aux).get(j).setClickable(true);
+//                                    }
+//                                    for (int j = 0; j < ListaRadioBtn1Gruesos.get(aux).size() ; j++){
+//                                        ListaRadioBtn1Gruesos.get(aux).get(j).setEnabled(false);
+//                                        ListaRadioBtn1Gruesos.get(aux).get(j).setClickable(false);
+//                                    }
+//                                }
+//                                else {
+//                                    for (int j = 0; j < ListaRadioBtn1Finos.get(aux).size() ; j++){
+//                                        ListaRadioBtn1Finos.get(aux).get(j).setEnabled(false);
+//                                        ListaRadioBtn1Finos.get(aux).get(j).setClickable(false);
+//                                    }
+//                                    for (int j = 0; j < ListaRadioBtn1Gruesos.get(aux).size() ; j++){
+//                                        ListaRadioBtn1Gruesos.get(aux).get(j).setEnabled(true);
+//                                        ListaRadioBtn1Gruesos.get(aux).get(j).setClickable(true);
+//                                    }
+//                                }
+//                            }
+//                        });
+//                        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//                            public void onCheckedChanged(RadioGroup group, int checkedId)
+//                            {
+//                                // This will get the radiobutton that has changed in its check state
+//                                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+//                                // This puts the value (true/false) into the variable
+//                                boolean isChecked = checkedRadioButton.isChecked();
+//                                // If the radiobutton that has changed in check state is now checked...
+//
+//                                int aux = Integer.parseInt(group.getTag().toString().split("_")[1]);
+//
+//                                if (checkedId == 71)
+//                                {
+//                                    for (int j = 0; j < ListaRadioBtn2Finos.get(aux).size() ; j++){
+//                                        ListaRadioBtn2Finos.get(aux).get(j).setEnabled(true);
+//                                        ListaRadioBtn2Finos.get(aux).get(j).setClickable(true);
+//                                    }
+//                                    for (int j = 0; j < ListaRadioBtn2Gruesos.get(aux).size() ; j++){
+//                                        ListaRadioBtn2Gruesos.get(aux).get(j).setEnabled(false);
+//                                        ListaRadioBtn2Gruesos.get(aux).get(j).setClickable(false);
+//                                    }
+//                                }
+//                                else {
+//                                    for (int j = 0; j < ListaRadioBtn2Finos.get(aux).size() ; j++){
+//                                        ListaRadioBtn2Finos.get(aux).get(j).setEnabled(false);
+//                                        ListaRadioBtn2Finos.get(aux).get(j).setClickable(false);
+//                                    }
+//                                    for (int j = 0; j < ListaRadioBtn2Gruesos.get(aux).size() ; j++){
+//                                        ListaRadioBtn2Gruesos.get(aux).get(j).setEnabled(true);
+//                                        ListaRadioBtn2Gruesos.get(aux).get(j).setClickable(true);
+//                                    }
+//                                }
+//                            }
+//                        });
+//
+//                    }
 
-                        for (int j = 0; j < ListaRadioBtn1Gruesos.get(idLinear).size() ; j++){
-                            ListaRadioBtn1Gruesos.get(idLinear).get(j).setEnabled(false);
-                            ListaRadioBtn1Gruesos.get(idLinear).get(j).setClickable(false);
-                        }
-                        radioGroup1.setTag(tagElemento+1+"_"+idLinear);
-                        radioGroup2.setTag(tagElemento+2+"_"+idLinear);
+//                    if (nombreElemento.equals("Compacidad de la Matriz")) {
+//
+//                        for (int j = 0; j < ListaRadioBtn1Gruesos.get(idLinear).size(); j++) {
+//                            ListaRadioBtn1Gruesos.get(idLinear).get(j).setEnabled(false);
+//                            ListaRadioBtn1Gruesos.get(idLinear).get(j).setClickable(false);
+//                        }
+//                    }
 
-                        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                            public void onCheckedChanged(RadioGroup group, int checkedId)
-                            {
-                                // This will get the radiobutton that has changed in its check state
-                                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
-                                // This puts the value (true/false) into the variable
-                                boolean isChecked = checkedRadioButton.isChecked();
-                                // If the radiobutton that has changed in check state is now checked...
-                                int aux = Integer.parseInt(group.getTag().toString().split("_")[1]);
-                                if (checkedRadioButton.getText().equals("Finos (Limos-Arcillas Menores de 0,075 mm)"))
-                                {
-                                    for (int j = 0; j < ListaRadioBtn1Finos.get(aux).size() ; j++){
-                                        ListaRadioBtn1Finos.get(aux).get(j).setEnabled(true);
-                                        ListaRadioBtn1Finos.get(aux).get(j).setClickable(true);
-                                    }
-                                    for (int j = 0; j < ListaRadioBtn1Gruesos.get(aux).size() ; j++){
-                                        ListaRadioBtn1Gruesos.get(aux).get(j).setEnabled(false);
-                                        ListaRadioBtn1Gruesos.get(aux).get(j).setClickable(false);
-                                    }
-                                }
-                                else {
-                                    for (int j = 0; j < ListaRadioBtn1Finos.get(aux).size() ; j++){
-                                        ListaRadioBtn1Finos.get(aux).get(j).setEnabled(false);
-                                        ListaRadioBtn1Finos.get(aux).get(j).setClickable(false);
-                                    }
-                                    for (int j = 0; j < ListaRadioBtn1Gruesos.get(aux).size() ; j++){
-                                        ListaRadioBtn1Gruesos.get(aux).get(j).setEnabled(true);
-                                        ListaRadioBtn1Gruesos.get(aux).get(j).setClickable(true);
-                                    }
-                                }
-                            }
-                        });
-                        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                            public void onCheckedChanged(RadioGroup group, int checkedId)
-                            {
-                                // This will get the radiobutton that has changed in its check state
-                                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
-                                // This puts the value (true/false) into the variable
-                                boolean isChecked = checkedRadioButton.isChecked();
-                                // If the radiobutton that has changed in check state is now checked...
+                }
+                if (claseElemento.equals("multitext")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloFormato);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
 
-                                int aux = Integer.parseInt(group.getTag().toString().split("_")[1]);
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
 
-                                if (checkedId == 71)
-                                {
-                                    for (int j = 0; j < ListaRadioBtn2Finos.get(aux).size() ; j++){
-                                        ListaRadioBtn2Finos.get(aux).get(j).setEnabled(true);
-                                        ListaRadioBtn2Finos.get(aux).get(j).setClickable(true);
-                                    }
-                                    for (int j = 0; j < ListaRadioBtn2Gruesos.get(aux).size() ; j++){
-                                        ListaRadioBtn2Gruesos.get(aux).get(j).setEnabled(false);
-                                        ListaRadioBtn2Gruesos.get(aux).get(j).setClickable(false);
-                                    }
-                                }
-                                else {
-                                    for (int j = 0; j < ListaRadioBtn2Finos.get(aux).size() ; j++){
-                                        ListaRadioBtn2Finos.get(aux).get(j).setEnabled(false);
-                                        ListaRadioBtn2Finos.get(aux).get(j).setClickable(false);
-                                    }
-                                    for (int j = 0; j < ListaRadioBtn2Gruesos.get(aux).size() ; j++){
-                                        ListaRadioBtn2Gruesos.get(aux).get(j).setEnabled(true);
-                                        ListaRadioBtn2Gruesos.get(aux).get(j).setClickable(true);
-                                    }
-                                }
-                            }
-                        });
+                    TextView pruebatext = new TextView(mcont);
+                    pruebatext.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext.setText("2");
+                    pruebatext.setTextAppearance(R.style.TituloItem);
+                    pruebatext.setPadding(70, 10, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext);
+
+                    TextView pruebatext1 = new TextView(mcont);
+                    pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext1.setText("1");
+                    pruebatext1.setTextAppearance(R.style.TituloItem);
+                    pruebatext1.setPadding(50, 10, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext1);
+
+                    liForm.addView(liradiobtnTitulo);
+
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+                    int secuEstratiWidth = 420;
+                    int secuEstratiOrdenWidth = 150;
+                    int secuEstratiEspesorWidth = 150;
+
+                    for (int j = 0; j < opciones.length ; j++) {
+
+                        LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                        liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                        EditText etSecuenciaEstratiOpt = new EditText(mcont);
+                        etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etSecuenciaEstratiOpt.setHint("2");
+                        etSecuenciaEstratiOpt.setEms(10);
+                        etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etSecuenciaEstratiOpt.setTag(tagElemento+j+"_2");
+                        ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
+                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
+
+                        EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
+                        etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etSecuenciaEstratiOpt1Espesor.setHint("1");
+                        etSecuenciaEstratiOpt1Espesor.setEms(10);
+                        etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+j+"_1");
+                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
+                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
+
+                        TextView tvSecuenciaEstratiOpt = new TextView(mcont);
+                        tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvSecuenciaEstratiOpt.setText(opciones[j]);
+                        tvSecuenciaEstratiOpt.setEms(10);
+                        tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
+                        liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+                        liForm.addView(liFormSecuenciaEstrati);
 
                     }
-
-                    if (nombreElemento.equals("Compacidad de la Matriz")) {
-
-                        for (int j = 0; j < ListaRadioBtn1Gruesos.get(idLinear).size(); j++) {
-                            ListaRadioBtn1Gruesos.get(idLinear).get(j).setEnabled(false);
-                            ListaRadioBtn1Gruesos.get(idLinear).get(j).setClickable(false);
-                        }
-                    }
-
                 }
 
             }
@@ -3855,13 +3932,13 @@ public class SlideshowFragment extends Fragment {
         listaElementosUGSS.add(new ElementoFormato( "Color Litología 1",  "edittext",  "color1", 0));
         listaElementosUGSS.add(new ElementoFormato( "Color Litología 2",  "edittext",  "color2", 0));
         listaElementosUGSS.add(new ElementoFormato( "CARACTERÍSTICAS DE LOS CLASTOS",  "titulo",  "", 0));
-        listaElementosUGSS.add(new ElementoFormato( "Granulometria de los Clastos",  "radiobtn",  "granulometria", R.array.Granulometria1));
+        listaElementosUGSS.add(new ElementoFormato( "Granulometria de los Clastos",  "multitext",  "granulometria", R.array.Granulometria1));
         listaElementosUGSS.add(new ElementoFormato( "Forma de los Clastos",  "radiobtn",  "forma", R.array.Forma1));
         listaElementosUGSS.add(new ElementoFormato( "Redondez de los Clastos",  "radiobtn",  "redondez", R.array.Redondez1));
         listaElementosUGSS.add(new ElementoFormato( "Orientacion de los Clastos",  "radiobtn",  "orientacion", R.array.OrientacionClastos1));
         listaElementosUGSS.add(new ElementoFormato( "Meteorizacion de los Clastos",  "radiobtn",  "meteorizacionclastos", R.array.MeteorizacionClastos1));
         listaElementosUGSS.add(new ElementoFormato( "CARACTERÍSTICAS DE LA MATRIZ",  "titulo",  "", 0));
-        listaElementosUGSS.add(new ElementoFormato( "Granulometría de la Matriz",  "radiobtn",  "granulometriamatriz", R.array.GranulometriaMatriz1));
+        listaElementosUGSS.add(new ElementoFormato( "Granulometría de la Matriz",  "multitext",  "granulometriamatriz", R.array.GranulometriaMatriz1));
         listaElementosUGSS.add(new ElementoFormato( "Gradacion de la Matriz",  "radiobtn",  "gradacion", R.array.Gradacion1));
         listaElementosUGSS.add(new ElementoFormato( "Seleccion de la Matriz",  "radiobtn",  "seleccion", R.array.Seleccion1));
         listaElementosUGSS.add(new ElementoFormato( "Plasticidad de la Matriz",  "radiobtn",  "plasticidad", R.array.Plasticidad1));
