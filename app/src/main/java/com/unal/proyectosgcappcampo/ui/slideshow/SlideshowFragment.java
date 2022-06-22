@@ -99,12 +99,15 @@ public class SlideshowFragment extends Fragment {
     String userName;
     boolean login = false;
 
+    boolean manualLoc = false;
+
     private ActivityResultLauncher<Intent> intentLaucher;
 
     Button btnFormLoad;
     Button btnFormSync;
     Button btnAddForm;
     Button btnFoto;
+    Button btnLocalization;
     LinearLayout liFotosGeneral;
     EditText etEstacion;
     EditText etTipoEstacion;
@@ -250,7 +253,8 @@ public class SlideshowFragment extends Fragment {
 
         GenerarListas();
 
-        btnFoto = binding.btnFoto;
+//        btnFoto = binding.btnFoto;
+        btnLocalization = binding.btnLocalization;
         liFotosGeneral = binding.liFotos;
         btnFormLoad = binding.btnFormLoad;
         btnFormSync = binding.btnFormSync;
@@ -406,10 +410,24 @@ public class SlideshowFragment extends Fragment {
             formComplete = new JSONArray();
         }
 
-        btnFoto.setOnClickListener(new View.OnClickListener() {
+//        btnFoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                CargarImagen();
+//            }
+//        });
+
+        btnLocalization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CargarImagen();
+                if (manualLoc){
+                    manualLoc = false;
+                    btnLocalization.setText("Añadir Manualmente");
+                }
+                else{
+                    manualLoc = true;
+                    btnLocalization.setText("Usar GPS del Celular");
+                }
             }
         });
 
@@ -4331,13 +4349,15 @@ public class SlideshowFragment extends Fragment {
             loc.getLongitude();
             loc.getAltitude();
             loc.getAccuracy();
-            String sLatitud = String.valueOf(loc.getLatitude());
-            String sLongitud = String.valueOf(loc.getLongitude());
-            String sAltitud = String.valueOf(loc.getAltitude());
-            String sAccuracy = String.valueOf(loc.getAccuracy());
-            etNorte.setText(sLatitud);
-            etEste.setText(sLongitud);
-            etAltitud.setText(sAltitud);
+            if (!manualLoc){
+                String sLatitud = String.valueOf(loc.getLatitude());
+                String sLongitud = String.valueOf(loc.getLongitude());
+                String sAltitud = String.valueOf(loc.getAltitude());
+                String sAccuracy = String.valueOf(loc.getAccuracy());
+                etNorte.setText(sLatitud);
+                etEste.setText(sLongitud);
+                etAltitud.setText(sAltitud);
+            }
             //tvEstadoGPS.setText("Precisión: "+ sAccuracy);
             //this.mainActivity.setLocation(loc);
         }
