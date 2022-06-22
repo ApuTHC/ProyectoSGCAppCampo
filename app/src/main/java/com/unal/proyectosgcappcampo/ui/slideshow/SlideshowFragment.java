@@ -3743,7 +3743,7 @@ public class SlideshowFragment extends Fragment {
 
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_CATALOGO/Form_CATALOGO_"+j).setValue(nuevoFormatoCAT);
 
-                                        int contDANOSNew = Integer.parseInt(FromatoAux.getString("DAÑOS"));
+                                        int contDANOSNew = Integer.parseInt(FromatoAux.getString("DANOS"));
                                         databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_CATALOGO/Form_CATALOGO_"+j+"/DANOS/count").setValue(contDANOSNew);
                                         for (int k = 1; k <= contDANOSNew; k++) {
 
@@ -3963,7 +3963,7 @@ public class SlideshowFragment extends Fragment {
 
             if (listFormularios.get(i).equals("Catálogo MM")){
                 JSONObject FormatoTemp = new JSONObject()
-                        .put("DAÑOS", listContDAÑOS.get(i));
+                        .put("DANOS", listContDAÑOS.get(i));
 
                 JSONObject spinnerList = new JSONObject();
                 for (int j = 0; j < ListaSpinner.get(i).size(); j++) {
