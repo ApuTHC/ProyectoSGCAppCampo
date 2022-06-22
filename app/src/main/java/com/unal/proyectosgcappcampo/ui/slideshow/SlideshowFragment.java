@@ -2009,17 +2009,17 @@ public class SlideshowFragment extends Fragment {
                     liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
 
                     TextView pruebatext = new TextView(mcont);
-                    pruebatext.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
                     pruebatext.setText("2");
                     pruebatext.setTextAppearance(R.style.TituloItem);
-                    pruebatext.setPadding(70, 10, 0, 0);
+                    pruebatext.setPadding(30, 10, 0, 0);
                     liradiobtnTitulo.addView(pruebatext);
 
                     TextView pruebatext1 = new TextView(mcont);
                     pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     pruebatext1.setText("1");
                     pruebatext1.setTextAppearance(R.style.TituloItem);
-                    pruebatext1.setPadding(50, 10, 0, 0);
+                    pruebatext1.setPadding(30, 10, 0, 0);
                     liradiobtnTitulo.addView(pruebatext1);
 
                     liForm.addView(liradiobtnTitulo);
@@ -3443,41 +3443,41 @@ public class SlideshowFragment extends Fragment {
                                         String resiscorte1 = "";
                                         //String formasuelosgruesos1 = "";
                                         //String redondezsuelosgruesos1 = "";
-                                        String orientacionsuelosgruesos1 = "";
-                                        String dirimbricacionmatriz1 = "";
+                                        //String orientacionsuelosgruesos1 = "";
+                                        //String dirimbricacionmatriz1 = "";
                                         String compacidadsuelosgruesos1 = "";
 
                                         resiscorte1 = RadioGrpAux.getString("resiscorte1");
                                         //formasuelosgruesos1 = RadioGrpAux.getString("formasuelosgruesos1");
                                         //redondezsuelosgruesos1 = RadioGrpAux.getString("redondezsuelosgruesos1");
-                                        orientacionsuelosgruesos1 = RadioGrpAux.getString("orientacionsuelosgruesos1");
+                                        //orientacionsuelosgruesos1 = RadioGrpAux.getString("orientacionsuelosgruesos1");
                                         compacidadsuelosgruesos1 = RadioGrpAux.getString("compacidadsuelosgruesos1");
 
-                                        String elNuevoTexto2 = orientacionsuelosgruesos1;
-                                        elNuevoTexto2 = elNuevoTexto2.replace(" ","");
-                                        if (elNuevoTexto2.equals("Imbricado")){
-                                            dirimbricacionmatriz1 = EditTextsAux.getString("dirimbricacionmatriz1");
-                                        }
+//                                        String elNuevoTexto2 = orientacionsuelosgruesos1;
+//                                        elNuevoTexto2 = elNuevoTexto2.replace(" ","");
+//                                        if (elNuevoTexto2.equals("Imbricado")){
+//                                            dirimbricacionmatriz1 = EditTextsAux.getString("dirimbricacionmatriz1");
+//                                        }
 
 
                                         String resiscorte2 = "";
                                         //String formasuelosgruesos2 = "";
                                         //String redondezsuelosgruesos2 = "";
-                                        String orientacionsuelosgruesos2 = "";
-                                        String dirimbricacionmatriz2 = "";
+                                        //String orientacionsuelosgruesos2 = "";
+                                        //String dirimbricacionmatriz2 = "";
                                         String compacidadsuelosgruesos2 = "";
 
                                         resiscorte2 = RadioGrpAux.getString("resiscorte2");
                                         //formasuelosgruesos2 = RadioGrpAux.getString("formasuelosgruesos2");
                                         //redondezsuelosgruesos2 = RadioGrpAux.getString("redondezsuelosgruesos2");
-                                        orientacionsuelosgruesos2 = RadioGrpAux.getString("orientacionsuelosgruesos2");
+                                        //orientacionsuelosgruesos2 = RadioGrpAux.getString("orientacionsuelosgruesos2");
                                         compacidadsuelosgruesos2 = RadioGrpAux.getString("compacidadsuelosgruesos2");
 
-                                        String elNuevoTexto3 = orientacionsuelosgruesos2;
-                                        elNuevoTexto3 = elNuevoTexto3.replace(" ","");
-                                        if (elNuevoTexto3.equals("Imbricado")){
-                                            dirimbricacionmatriz2 = EditTextsAux.getString("dirimbricacionmatriz2");
-                                        }
+//                                        String elNuevoTexto3 = orientacionsuelosgruesos2;
+//                                        elNuevoTexto3 = elNuevoTexto3.replace(" ","");
+//                                        if (elNuevoTexto3.equals("Imbricado")){
+//                                            dirimbricacionmatriz2 = EditTextsAux.getString("dirimbricacionmatriz2");
+//                                        }
 
 
                                         String noformato = EditTextsAux.getString("noformato");
@@ -3522,57 +3522,33 @@ public class SlideshowFragment extends Fragment {
                                         String observacionessuelos = EditTextsAux.getString("observacionessuelos");
                                         String descripcionsuelos = EditTextsAux.getString("descripcionsuelos");
 
-                                        String forma0check_2 = CheckBoxAux.getString("forma0check");
-                                        String forma1check_2 = CheckBoxAux.getString("forma1check");
-                                        String forma2check_2 = CheckBoxAux.getString("forma2check");
-                                        String forma3check_2 = CheckBoxAux.getString("forma3check");
-                                        String forma4check_2 = CheckBoxAux.getString("forma4check");
+                                        String forma0check_2 = CheckBoxAux.getString("forma0check_2");
+                                        String forma1check_2 = CheckBoxAux.getString("forma1check_2");
+                                        String forma2check_2 = CheckBoxAux.getString("forma2check_2");
+                                        String forma3check_2 = CheckBoxAux.getString("forma3check_2");
+                                        String forma4check_2 = CheckBoxAux.getString("forma4check_2");
 
-                                        String forma0check_1 = CheckBoxAux.getString("forma0check");
-                                        String forma1check_1 = CheckBoxAux.getString("forma1check");
-                                        String forma2check_1 = CheckBoxAux.getString("forma2check");
-                                        String forma3check_1 = CheckBoxAux.getString("forma3check");
-                                        String forma4check_1 = CheckBoxAux.getString("forma4check");
+                                        String forma0check_1 = CheckBoxAux.getString("forma0check_1");
+                                        String forma1check_1 = CheckBoxAux.getString("forma1check_1");
+                                        String forma2check_1 = CheckBoxAux.getString("forma2check_1");
+                                        String forma3check_1 = CheckBoxAux.getString("forma3check_1");
+                                        String forma4check_1 = CheckBoxAux.getString("forma4check_1");
 
-                                        String redondez0check_2 = CheckBoxAux.getString("redondez0check");
-                                        String redondez1check_2 = CheckBoxAux.getString("redondez1check");
-                                        String redondez2check_2 = CheckBoxAux.getString("redondez2check");
-                                        String redondez3check_2 = CheckBoxAux.getString("redondez3check");
-                                        String redondez4check_2 = CheckBoxAux.getString("redondez4check");
-                                        String redondez5check_2 = CheckBoxAux.getString("redondez5check");
+                                        String redondez0check_2 = CheckBoxAux.getString("redondez0check_2");
+                                        String redondez1check_2 = CheckBoxAux.getString("redondez1check_2");
+                                        String redondez2check_2 = CheckBoxAux.getString("redondez2check_2");
+                                        String redondez3check_2 = CheckBoxAux.getString("redondez3check_2");
+                                        String redondez4check_2 = CheckBoxAux.getString("redondez4check_2");
+                                        String redondez5check_2 = CheckBoxAux.getString("redondez5check_2");
 
-                                        String redondez0check_1 = CheckBoxAux.getString("redondez0check");
-                                        String redondez1check_1 = CheckBoxAux.getString("redondez1check");
-                                        String redondez2check_1 = CheckBoxAux.getString("redondez2check");
-                                        String redondez3check_1 = CheckBoxAux.getString("redondez3check");
-                                        String redondez4check_1 = CheckBoxAux.getString("redondez4check");
-                                        String redondez5check_1 = CheckBoxAux.getString("redondez5check");
+                                        String redondez0check_1 = CheckBoxAux.getString("redondez0check_1");
+                                        String redondez1check_1 = CheckBoxAux.getString("redondez1check_1");
+                                        String redondez2check_1 = CheckBoxAux.getString("redondez2check_1");
+                                        String redondez3check_1 = CheckBoxAux.getString("redondez3check_1");
+                                        String redondez4check_1 = CheckBoxAux.getString("redondez4check_1");
+                                        String redondez5check_1 = CheckBoxAux.getString("redondez5check_1");
 
-                                        String formasuelosgruesos0check_2 = CheckBoxAux.getString("formasuelosgruesos0check");
-                                        String formasuelosgruesos1check_2 = CheckBoxAux.getString("formasuelosgruesos1check");
-                                        String formasuelosgruesos2check_2 = CheckBoxAux.getString("formasuelosgruesos2check");
-                                        String formasuelosgruesos3check_2 = CheckBoxAux.getString("formasuelosgruesos3check");
-                                        String formasuelosgruesos4check_2 = CheckBoxAux.getString("formasuelosgruesos4check");
 
-                                        String formasuelosgruesos0check_1 = CheckBoxAux.getString("formasuelosgruesos0check");
-                                        String formasuelosgruesos1check_1 = CheckBoxAux.getString("formasuelosgruesos1check");
-                                        String formasuelosgruesos2check_1 = CheckBoxAux.getString("formasuelosgruesos2check");
-                                        String formasuelosgruesos3check_1 = CheckBoxAux.getString("formasuelosgruesos3check");
-                                        String formasuelosgruesos4check_1 = CheckBoxAux.getString("formasuelosgruesos4check");
-
-                                        String redondezsuelosgruesos0check_2 = CheckBoxAux.getString("redondezsuelosgruesos0check");
-                                        String redondezsuelosgruesos1check_2 = CheckBoxAux.getString("redondezsuelosgruesos1check");
-                                        String redondezsuelosgruesos2check_2 = CheckBoxAux.getString("redondezsuelosgruesos2check");
-                                        String redondezsuelosgruesos3check_2 = CheckBoxAux.getString("redondezsuelosgruesos3check");
-                                        String redondezsuelosgruesos4check_2 = CheckBoxAux.getString("redondezsuelosgruesos4check");
-                                        String redondezsuelosgruesos5check_2 = CheckBoxAux.getString("redondezsuelosgruesos5check");
-
-                                        String redondezsuelosgruesos0check_1 = CheckBoxAux.getString("redondezsuelosgruesos0check");
-                                        String redondezsuelosgruesos1check_1 = CheckBoxAux.getString("redondezsuelosgruesos1check");
-                                        String redondezsuelosgruesos2check_1 = CheckBoxAux.getString("redondezsuelosgruesos2check");
-                                        String redondezsuelosgruesos3check_1 = CheckBoxAux.getString("redondezsuelosgruesos3check");
-                                        String redondezsuelosgruesos4check_1 = CheckBoxAux.getString("redondezsuelosgruesos4check");
-                                        String redondezsuelosgruesos5check_1 = CheckBoxAux.getString("redondezsuelosgruesos5check");
 
                                         String granulometria0_2 = EditTextsAux.getString("granulometria0_2");
                                         String granulometria1_2 = EditTextsAux.getString("granulometria1_2");
@@ -3605,7 +3581,7 @@ public class SlideshowFragment extends Fragment {
 
 
 
-                                        FormatUGSSuelos NuevoFormatoUGSSuelos = new FormatUGSSuelos(true, municipios, claseaflor, estructurasoporte1, estructurasoporte2, condicionhumedad1, condicionhumedad2, estructurasrelictas1, estructurasrelictas2, orientacion1, orientacion2, dirimbricacion1, dirimbricacion2, meteorizacionclastos1, meteorizacionclastos2, gradacion1, gradacion2, seleccion1, seleccion2, plasticidad1, plasticidad2, resiscorte1, resiscorte2, orientacionsuelosgruesos1, orientacionsuelosgruesos2, compacidadsuelosgruesos1, compacidadsuelosgruesos2, dirimbricacionmatriz1, dirimbricacionmatriz2, noformato, vereda, noestacion, secuenciaestratiopt1orden, secuenciaestratiopt1espesor, secuenciaestratiopt2orden, secuenciaestratiopt2espesor, secuenciaestratiopt3orden, secuenciaestratiopt3espesor, secuenciaestratisuelor1orden, secuenciaestratisuelor1espesor, secuenciaestratisuelor2orden, secuenciaestratisuelor2espesor, secuenciaestratisuelor3orden, secuenciaestratisuelor3espesor, litologiasasociadasopt1exist, litologiasasociadasopt1espesor, litologiasasociadasopt2exist, litologiasasociadasopt2espesor, nombreugs, porcentajematriz1, porcentajematriz2, porcentajeclastos1, porcentajeclastos2, color1, color2, observacionessuelos, descripcionsuelos, forma0check_2, forma1check_2, forma2check_2, forma3check_2, forma4check_2, forma0check_1, forma1check_1, forma2check_1, forma3check_1, forma4check_1, redondez0check_2, redondez1check_2, redondez2check_2, redondez3check_2, redondez4check_2, redondez5check_2, redondez0check_1, redondez1check_1, redondez2check_1, redondez3check_1, redondez4check_1, redondez5check_1, formasuelosgruesos0check_2, formasuelosgruesos1check_2, formasuelosgruesos2check_2, formasuelosgruesos3check_2, formasuelosgruesos4check_2, formasuelosgruesos0check_1, formasuelosgruesos1check_1, formasuelosgruesos2check_1, formasuelosgruesos3check_1, formasuelosgruesos4check_1, redondezsuelosgruesos0check_2, redondezsuelosgruesos1check_2, redondezsuelosgruesos2check_2, redondezsuelosgruesos3check_2, redondezsuelosgruesos4check_2, redondezsuelosgruesos5check_2, redondezsuelosgruesos0check_1, redondezsuelosgruesos1check_1, redondezsuelosgruesos2check_1, redondezsuelosgruesos3check_1, redondezsuelosgruesos4check_1, redondezsuelosgruesos5check_1, granulometria0_2, granulometria1_2, granulometria2_2, granulometria3_2, granulometria4_2, granulometria5_2, granulometria0_1, granulometria1_1, granulometria2_1, granulometria3_1, granulometria4_1, granulometria5_1, granulometriamatriz0_2, granulometriamatriz1_2, granulometriamatriz2_2, granulometriamatriz3_2, granulometriamatriz4_2, granulometriamatriz5_2, granulometriamatriz0_1, granulometriamatriz1_1, granulometriamatriz2_1, granulometriamatriz3_1, granulometriamatriz4_1, granulometriamatriz5_1);
+                                        FormatUGSSuelos NuevoFormatoUGSSuelos = new FormatUGSSuelos(true, municipios, claseaflor, estructurasoporte1, estructurasoporte2, condicionhumedad1, condicionhumedad2, estructurasrelictas1, estructurasrelictas2, orientacion1, orientacion2, dirimbricacion1, dirimbricacion2, meteorizacionclastos1, meteorizacionclastos2, gradacion1, gradacion2, seleccion1, seleccion2, plasticidad1, plasticidad2, resiscorte1, resiscorte2, compacidadsuelosgruesos1, compacidadsuelosgruesos2, noformato, vereda, noestacion, secuenciaestratiopt1orden, secuenciaestratiopt1espesor, secuenciaestratiopt2orden, secuenciaestratiopt2espesor, secuenciaestratiopt3orden, secuenciaestratiopt3espesor, secuenciaestratisuelor1orden, secuenciaestratisuelor1espesor, secuenciaestratisuelor2orden, secuenciaestratisuelor2espesor, secuenciaestratisuelor3orden, secuenciaestratisuelor3espesor, litologiasasociadasopt1exist, litologiasasociadasopt1espesor, litologiasasociadasopt2exist, litologiasasociadasopt2espesor, nombreugs, porcentajematriz1, porcentajematriz2, porcentajeclastos1, porcentajeclastos2, color1, color2, observacionessuelos, descripcionsuelos, forma0check_2, forma1check_2, forma2check_2, forma3check_2, forma4check_2, forma0check_1, forma1check_1, forma2check_1, forma3check_1, forma4check_1, redondez0check_2, redondez1check_2, redondez2check_2, redondez3check_2, redondez4check_2, redondez5check_2, redondez0check_1, redondez1check_1, redondez2check_1, redondez3check_1, redondez4check_1, redondez5check_1, granulometria0_2, granulometria1_2, granulometria2_2, granulometria3_2, granulometria4_2, granulometria5_2, granulometria0_1, granulometria1_1, granulometria2_1, granulometria3_1, granulometria4_1, granulometria5_1, granulometriamatriz0_2, granulometriamatriz1_2, granulometriamatriz2_2, granulometriamatriz3_2, granulometriamatriz4_2, granulometriamatriz5_2, granulometriamatriz0_1, granulometriamatriz1_1, granulometriamatriz2_1, granulometriamatriz3_1, granulometriamatriz4_1, granulometriamatriz5_1);
 
 
                                         databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+j).setValue(NuevoFormatoUGSSuelos);
@@ -3920,7 +3896,13 @@ public class SlideshowFragment extends Fragment {
 
                 JSONObject checkBox = new JSONObject();
                 for (int k = 0; k < ListaCheckBox.get(i).size(); k++) {
-                    checkBox.put(ListaCheckBox.get(i).get(k).getTag().toString().split("_")[0], ListaCheckBox.get(i).get(k).isChecked());
+                    if (ListaCheckBox.get(i).get(k).getTag().toString().contains("litologias")){
+                        checkBox.put(ListaCheckBox.get(i).get(k).getTag().toString().split("_")[0], ListaCheckBox.get(i).get(k).isChecked());
+                    }
+                    else{
+                        checkBox.put(ListaCheckBox.get(i).get(k).getTag().toString(), ListaCheckBox.get(i).get(k).isChecked());
+                    }
+
                 }
                 FormatoTemp.put("CheckBox", checkBox);
 
@@ -4149,9 +4131,9 @@ public class SlideshowFragment extends Fragment {
         listaElementosUGSS.add(new ElementoFormato( "SUELOS FINOS",  "titulo",  "", 0));
         listaElementosUGSS.add(new ElementoFormato( "RESISTENCIA AL CORTE NO DRENADO kN/m2 (CONSISTENCIA)",  "radiobtn",  "resiscorte", R.array.ResistenciaAlCorte1));
         listaElementosUGSS.add(new ElementoFormato( "SUELOS GRUESOS",  "titulo",  "", 0));
-        listaElementosUGSS.add(new ElementoFormato( "Forma de la Matriz",  "radiocheck",  "formasuelosgruesos", R.array.FormaSuelos1));
-        listaElementosUGSS.add(new ElementoFormato( "Redondez de la Matriz",  "radiocheck",  "redondezsuelosgruesos", R.array.RedondezSuelos1));
-        listaElementosUGSS.add(new ElementoFormato( "Orientación de la Matriz",  "radiobtn",  "orientacionsuelosgruesos", R.array.OrientacionSuelos1));
+//        listaElementosUGSS.add(new ElementoFormato( "Forma de la Matriz",  "radiocheck",  "formasuelosgruesos", R.array.FormaSuelos1));
+//        listaElementosUGSS.add(new ElementoFormato( "Redondez de la Matriz",  "radiocheck",  "redondezsuelosgruesos", R.array.RedondezSuelos1));
+//        listaElementosUGSS.add(new ElementoFormato( "Orientación de la Matriz",  "radiobtn",  "orientacionsuelosgruesos", R.array.OrientacionSuelos1));
         listaElementosUGSS.add(new ElementoFormato( "Compacidad de la Matriz",  "radiobtn",  "compacidadsuelosgruesos", R.array.Compacidad1));
         listaElementosUGSS.add(new ElementoFormato( "Observaciones",  "edittext",  "observacionessuelos", 0));
         listaElementosUGSS.add(new ElementoFormato( "Descripción Composición Partículas del Suelo",  "edittext",  "descripcionsuelos", 0));
