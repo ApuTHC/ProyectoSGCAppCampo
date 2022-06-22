@@ -10,20 +10,20 @@ public class FormatUGSSuelos {
     public String condicionhumedad2;
     public String estructurasrelictas1;
     public String estructurasrelictas2;
-    public String granulometria1;
-    public String granulometria2;
-    public String forma1;
-    public String forma2;
-    public String redondez1;
-    public String redondez2;
+//    public String granulometria1;
+//    public String granulometria2;
+//    public String forma1;
+//    public String forma2;
+//    public String redondez1;
+//    public String redondez2;
     public String orientacion1;
     public String orientacion2;
     public String dirimbricacion1;
     public String dirimbricacion2;
     public String meteorizacionclastos1;
     public String meteorizacionclastos2;
-    public String granulometriamatriz1;
-    public String granulometriamatriz2;
+//    public String granulometriamatriz1;
+//    public String granulometriamatriz2;
     public String gradacion1;
     public String gradacion2;
     public String seleccion1;
@@ -32,10 +32,10 @@ public class FormatUGSSuelos {
     public String plasticidad2;
     public String resiscorte1;
     public String resiscorte2;
-    public String formasuelosgruesos1;
-    public String formasuelosgruesos2;
-    public String redondezsuelosgruesos1;
-    public String redondezsuelosgruesos2;
+//    public String formasuelosgruesos1;
+//    public String formasuelosgruesos2;
+//    public String redondezsuelosgruesos1;
+//    public String redondezsuelosgruesos2;
     public String orientacionsuelosgruesos1;
     public String orientacionsuelosgruesos2;
     public String compacidadsuelosgruesos1;
@@ -71,7 +71,87 @@ public class FormatUGSSuelos {
     public String observacionessuelos;
     public String descripcionsuelos;
 
-    public FormatUGSSuelos(boolean activo, String municipios, String claseaflor, String estructurasoporte1, String estructurasoporte2, String condicionhumedad1, String condicionhumedad2, String estructurasrelictas1, String estructurasrelictas2, String granulometria1, String granulometria2, String forma1, String forma2, String redondez1, String redondez2, String orientacion1, String orientacion2, String dirimbricacion1, String dirimbricacion2, String meteorizacionclastos1, String meteorizacionclastos2, String granulometriamatriz1, String granulometriamatriz2, String gradacion1, String gradacion2, String seleccion1, String seleccion2, String plasticidad1, String plasticidad2, String resiscorte1, String resiscorte2, String formasuelosgruesos1, String formasuelosgruesos2, String redondezsuelosgruesos1, String redondezsuelosgruesos2, String orientacionsuelosgruesos1, String orientacionsuelosgruesos2, String dirimbricacionmatriz1, String dirimbricacionmatriz2, String noformato, String vereda, String noestacion, String secuenciaestratiopt1orden, String secuenciaestratiopt1espesor, String secuenciaestratiopt2orden, String secuenciaestratiopt2espesor, String secuenciaestratiopt3orden, String secuenciaestratiopt3espesor, String secuenciaestratisuelor1orden, String secuenciaestratisuelor1espesor, String secuenciaestratisuelor2orden, String secuenciaestratisuelor2espesor, String secuenciaestratisuelor3orden, String secuenciaestratisuelor3espesor, String litologiasasociadasopt1exist, String litologiasasociadasopt1espesor, String litologiasasociadasopt2exist, String litologiasasociadasopt2espesor, String nombreugs, String porcentajematriz1, String porcentajematriz2, String porcentajeclastos1, String porcentajeclastos2, String color1, String color2, String observacionessuelos, String descripcionsuelos, String compacidadsuelosgruesos1, String compacidadsuelosgruesos2) {
+    public String forma0check_2;
+    public String forma1check_2;
+    public String forma2check_2;
+    public String forma3check_2;
+    public String forma4check_2;
+
+    public String forma0check_1;
+    public String forma1check_1;
+    public String forma2check_1;
+    public String forma3check_1;
+    public String forma4check_1;
+
+    public String redondez0check_2;
+    public String redondez1check_2;
+    public String redondez2check_2;
+    public String redondez3check_2;
+    public String redondez4check_2;
+    public String redondez5check_2;
+
+    public String redondez0check_1;
+    public String redondez1check_1;
+    public String redondez2check_1;
+    public String redondez3check_1;
+    public String redondez4check_1;
+    public String redondez5check_1;
+
+    public String formasuelosgruesos0check_2;
+    public String formasuelosgruesos1check_2;
+    public String formasuelosgruesos2check_2;
+    public String formasuelosgruesos3check_2;
+    public String formasuelosgruesos4check_2;
+
+    public String formasuelosgruesos0check_1;
+    public String formasuelosgruesos1check_1;
+    public String formasuelosgruesos2check_1;
+    public String formasuelosgruesos3check_1;
+    public String formasuelosgruesos4check_1;
+
+    public String redondezsuelosgruesos0check_2;
+    public String redondezsuelosgruesos1check_2;
+    public String redondezsuelosgruesos2check_2;
+    public String redondezsuelosgruesos3check_2;
+    public String redondezsuelosgruesos4check_2;
+    public String redondezsuelosgruesos5check_2;
+
+    public String redondezsuelosgruesos0check_1;
+    public String redondezsuelosgruesos1check_1;
+    public String redondezsuelosgruesos2check_1;
+    public String redondezsuelosgruesos3check_1;
+    public String redondezsuelosgruesos4check_1;
+    public String redondezsuelosgruesos5check_1;
+
+    public String granulometria0_2;
+    public String granulometria1_2;
+    public String granulometria2_2;
+    public String granulometria3_2;
+    public String granulometria4_2;
+    public String granulometria5_2;
+
+    public String granulometria0_1;
+    public String granulometria1_1;
+    public String granulometria2_1;
+    public String granulometria3_1;
+    public String granulometria4_1;
+    public String granulometria5_1;
+
+    public String granulometriamatriz0_2;
+    public String granulometriamatriz1_2;
+    public String granulometriamatriz2_2;
+    public String granulometriamatriz3_2;
+    public String granulometriamatriz4_2;
+    public String granulometriamatriz5_2;
+
+    public String granulometriamatriz0_1;
+    public String granulometriamatriz1_1;
+    public String granulometriamatriz2_1;
+    public String granulometriamatriz3_1;
+    public String granulometriamatriz4_1;
+    public String granulometriamatriz5_1;
+
+    public FormatUGSSuelos(boolean activo, String municipios, String claseaflor, String estructurasoporte1, String estructurasoporte2, String condicionhumedad1, String condicionhumedad2, String estructurasrelictas1, String estructurasrelictas2, String orientacion1, String orientacion2, String dirimbricacion1, String dirimbricacion2, String meteorizacionclastos1, String meteorizacionclastos2, String gradacion1, String gradacion2, String seleccion1, String seleccion2, String plasticidad1, String plasticidad2, String resiscorte1, String resiscorte2, String orientacionsuelosgruesos1, String orientacionsuelosgruesos2, String compacidadsuelosgruesos1, String compacidadsuelosgruesos2, String dirimbricacionmatriz1, String dirimbricacionmatriz2, String noformato, String vereda, String noestacion, String secuenciaestratiopt1orden, String secuenciaestratiopt1espesor, String secuenciaestratiopt2orden, String secuenciaestratiopt2espesor, String secuenciaestratiopt3orden, String secuenciaestratiopt3espesor, String secuenciaestratisuelor1orden, String secuenciaestratisuelor1espesor, String secuenciaestratisuelor2orden, String secuenciaestratisuelor2espesor, String secuenciaestratisuelor3orden, String secuenciaestratisuelor3espesor, String litologiasasociadasopt1exist, String litologiasasociadasopt1espesor, String litologiasasociadasopt2exist, String litologiasasociadasopt2espesor, String nombreugs, String porcentajematriz1, String porcentajematriz2, String porcentajeclastos1, String porcentajeclastos2, String color1, String color2, String observacionessuelos, String descripcionsuelos, String forma0check_2, String forma1check_2, String forma2check_2, String forma3check_2, String forma4check_2, String forma0check_1, String forma1check_1, String forma2check_1, String forma3check_1, String forma4check_1, String redondez0check_2, String redondez1check_2, String redondez2check_2, String redondez3check_2, String redondez4check_2, String redondez5check_2, String redondez0check_1, String redondez1check_1, String redondez2check_1, String redondez3check_1, String redondez4check_1, String redondez5check_1, String formasuelosgruesos0check_2, String formasuelosgruesos1check_2, String formasuelosgruesos2check_2, String formasuelosgruesos3check_2, String formasuelosgruesos4check_2, String formasuelosgruesos0check_1, String formasuelosgruesos1check_1, String formasuelosgruesos2check_1, String formasuelosgruesos3check_1, String formasuelosgruesos4check_1, String redondezsuelosgruesos0check_2, String redondezsuelosgruesos1check_2, String redondezsuelosgruesos2check_2, String redondezsuelosgruesos3check_2, String redondezsuelosgruesos4check_2, String redondezsuelosgruesos5check_2, String redondezsuelosgruesos0check_1, String redondezsuelosgruesos1check_1, String redondezsuelosgruesos2check_1, String redondezsuelosgruesos3check_1, String redondezsuelosgruesos4check_1, String redondezsuelosgruesos5check_1, String granulometria0_2, String granulometria1_2, String granulometria2_2, String granulometria3_2, String granulometria4_2, String granulometria5_2, String granulometria0_1, String granulometria1_1, String granulometria2_1, String granulometria3_1, String granulometria4_1, String granulometria5_1, String granulometriamatriz0_2, String granulometriamatriz1_2, String granulometriamatriz2_2, String granulometriamatriz3_2, String granulometriamatriz4_2, String granulometriamatriz5_2, String granulometriamatriz0_1, String granulometriamatriz1_1, String granulometriamatriz2_1, String granulometriamatriz3_1, String granulometriamatriz4_1, String granulometriamatriz5_1) {
         this.activo = activo;
         this.municipios = municipios;
         this.claseaflor = claseaflor;
@@ -81,20 +161,12 @@ public class FormatUGSSuelos {
         this.condicionhumedad2 = condicionhumedad2;
         this.estructurasrelictas1 = estructurasrelictas1;
         this.estructurasrelictas2 = estructurasrelictas2;
-        this.granulometria1 = granulometria1;
-        this.granulometria2 = granulometria2;
-        this.forma1 = forma1;
-        this.forma2 = forma2;
-        this.redondez1 = redondez1;
-        this.redondez2 = redondez2;
         this.orientacion1 = orientacion1;
         this.orientacion2 = orientacion2;
         this.dirimbricacion1 = dirimbricacion1;
         this.dirimbricacion2 = dirimbricacion2;
         this.meteorizacionclastos1 = meteorizacionclastos1;
         this.meteorizacionclastos2 = meteorizacionclastos2;
-        this.granulometriamatriz1 = granulometriamatriz1;
-        this.granulometriamatriz2 = granulometriamatriz2;
         this.gradacion1 = gradacion1;
         this.gradacion2 = gradacion2;
         this.seleccion1 = seleccion1;
@@ -103,10 +175,6 @@ public class FormatUGSSuelos {
         this.plasticidad2 = plasticidad2;
         this.resiscorte1 = resiscorte1;
         this.resiscorte2 = resiscorte2;
-        this.formasuelosgruesos1 = formasuelosgruesos1;
-        this.formasuelosgruesos2 = formasuelosgruesos2;
-        this.redondezsuelosgruesos1 = redondezsuelosgruesos1;
-        this.redondezsuelosgruesos2 = redondezsuelosgruesos2;
         this.orientacionsuelosgruesos1 = orientacionsuelosgruesos1;
         this.orientacionsuelosgruesos2 = orientacionsuelosgruesos2;
         this.compacidadsuelosgruesos1 = compacidadsuelosgruesos1;
@@ -141,5 +209,73 @@ public class FormatUGSSuelos {
         this.color2 = color2;
         this.observacionessuelos = observacionessuelos;
         this.descripcionsuelos = descripcionsuelos;
+        this.forma0check_2 = forma0check_2;
+        this.forma1check_2 = forma1check_2;
+        this.forma2check_2 = forma2check_2;
+        this.forma3check_2 = forma3check_2;
+        this.forma4check_2 = forma4check_2;
+        this.forma0check_1 = forma0check_1;
+        this.forma1check_1 = forma1check_1;
+        this.forma2check_1 = forma2check_1;
+        this.forma3check_1 = forma3check_1;
+        this.forma4check_1 = forma4check_1;
+        this.redondez0check_2 = redondez0check_2;
+        this.redondez1check_2 = redondez1check_2;
+        this.redondez2check_2 = redondez2check_2;
+        this.redondez3check_2 = redondez3check_2;
+        this.redondez4check_2 = redondez4check_2;
+        this.redondez5check_2 = redondez5check_2;
+        this.redondez0check_1 = redondez0check_1;
+        this.redondez1check_1 = redondez1check_1;
+        this.redondez2check_1 = redondez2check_1;
+        this.redondez3check_1 = redondez3check_1;
+        this.redondez4check_1 = redondez4check_1;
+        this.redondez5check_1 = redondez5check_1;
+        this.formasuelosgruesos0check_2 = formasuelosgruesos0check_2;
+        this.formasuelosgruesos1check_2 = formasuelosgruesos1check_2;
+        this.formasuelosgruesos2check_2 = formasuelosgruesos2check_2;
+        this.formasuelosgruesos3check_2 = formasuelosgruesos3check_2;
+        this.formasuelosgruesos4check_2 = formasuelosgruesos4check_2;
+        this.formasuelosgruesos0check_1 = formasuelosgruesos0check_1;
+        this.formasuelosgruesos1check_1 = formasuelosgruesos1check_1;
+        this.formasuelosgruesos2check_1 = formasuelosgruesos2check_1;
+        this.formasuelosgruesos3check_1 = formasuelosgruesos3check_1;
+        this.formasuelosgruesos4check_1 = formasuelosgruesos4check_1;
+        this.redondezsuelosgruesos0check_2 = redondezsuelosgruesos0check_2;
+        this.redondezsuelosgruesos1check_2 = redondezsuelosgruesos1check_2;
+        this.redondezsuelosgruesos2check_2 = redondezsuelosgruesos2check_2;
+        this.redondezsuelosgruesos3check_2 = redondezsuelosgruesos3check_2;
+        this.redondezsuelosgruesos4check_2 = redondezsuelosgruesos4check_2;
+        this.redondezsuelosgruesos5check_2 = redondezsuelosgruesos5check_2;
+        this.redondezsuelosgruesos0check_1 = redondezsuelosgruesos0check_1;
+        this.redondezsuelosgruesos1check_1 = redondezsuelosgruesos1check_1;
+        this.redondezsuelosgruesos2check_1 = redondezsuelosgruesos2check_1;
+        this.redondezsuelosgruesos3check_1 = redondezsuelosgruesos3check_1;
+        this.redondezsuelosgruesos4check_1 = redondezsuelosgruesos4check_1;
+        this.redondezsuelosgruesos5check_1 = redondezsuelosgruesos5check_1;
+        this.granulometria0_2 = granulometria0_2;
+        this.granulometria1_2 = granulometria1_2;
+        this.granulometria2_2 = granulometria2_2;
+        this.granulometria3_2 = granulometria3_2;
+        this.granulometria4_2 = granulometria4_2;
+        this.granulometria5_2 = granulometria5_2;
+        this.granulometria0_1 = granulometria0_1;
+        this.granulometria1_1 = granulometria1_1;
+        this.granulometria2_1 = granulometria2_1;
+        this.granulometria3_1 = granulometria3_1;
+        this.granulometria4_1 = granulometria4_1;
+        this.granulometria5_1 = granulometria5_1;
+        this.granulometriamatriz0_2 = granulometriamatriz0_2;
+        this.granulometriamatriz1_2 = granulometriamatriz1_2;
+        this.granulometriamatriz2_2 = granulometriamatriz2_2;
+        this.granulometriamatriz3_2 = granulometriamatriz3_2;
+        this.granulometriamatriz4_2 = granulometriamatriz4_2;
+        this.granulometriamatriz5_2 = granulometriamatriz5_2;
+        this.granulometriamatriz0_1 = granulometriamatriz0_1;
+        this.granulometriamatriz1_1 = granulometriamatriz1_1;
+        this.granulometriamatriz2_1 = granulometriamatriz2_1;
+        this.granulometriamatriz3_1 = granulometriamatriz3_1;
+        this.granulometriamatriz4_1 = granulometriamatriz4_1;
+        this.granulometriamatriz5_1 = granulometriamatriz5_1;
     }
 }
