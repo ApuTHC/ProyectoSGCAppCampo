@@ -1,6 +1,7 @@
 package com.unal.proyectosgcappcampo;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unal.proyectosgcappcampo.databinding.FragmentGuardadasBinding;
 import com.unal.proyectosgcappcampo.ui.slideshow.ElementoFormato;
@@ -33,6 +35,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +55,7 @@ public class GuardadasFragment extends Fragment {
 
     List<LinearLayout> listLiForm = new ArrayList<LinearLayout>();
     List<Button> listBtnAcordion = new ArrayList<Button>();
+    List<Button> listBtnSubido = new ArrayList<Button>();
 
     List<String[]> ListaRocas = new ArrayList<String[]>();
     List<String[]> ListaRocasDiscont = new ArrayList<String[]>();
@@ -193,10 +197,10 @@ public class GuardadasFragment extends Fragment {
                     String estado;
                     String btnestado;
                     if (!Subido){
-                        estado = "Pendiente por subir";
+                        estado = "Pendiente";
                         btnestado = "No Subir";
                     }else{
-                        estado = "Subido a la base de dtos";
+                        estado = "Subido";
                         btnestado = "Subir de Nuevo";
                     }
 
@@ -207,22 +211,58 @@ public class GuardadasFragment extends Fragment {
                     tvOpt.setPadding(0, 20, 0, 0);
                     liHori1.addView(tvOpt);
 
-                    TextView tvOpt1 = new TextView(mcont);
-                    tvOpt1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tvOpt1.setText(estado);
-                    tvOpt1.setTextAppearance(R.style.TituloItem);
-                    tvOpt1.setPadding(0, 20, 0, 0);
-                    liHori1.addView(tvOpt1);
+//                    TextView tvOpt1 = new TextView(mcont);
+//                    tvOpt1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                    tvOpt1.setText(estado);
+//                    tvOpt1.setTextAppearance(R.style.TituloItem);
+//                    tvOpt1.setPadding(0, 20, 0, 0);
+//                    liHori1.addView(tvOpt1);
 
                     Button bSubido = new Button(mcont);
-                    bSubido.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    bSubido.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
-                    bSubido.setText(btnestado);
+                    bSubido.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                    bSubido.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                    bSubido.setText(estado+": "+btnestado);
                     bSubido.setTag(i);
-                    listBtnAcordion.add(bSubido);
-                    contenedorEstaciones.addView(bSubido);
+                    listBtnSubido.add(bSubido);
+                    liHori1.addView(bSubido);
 
                     liForm.addView(liHori1);
+
+
+                    bSubido.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            JSONObject form1 = null;
+                            int idBtn = Integer.parseInt(v.getTag().toString());
+                            try {
+                                form1 = formComplete.getJSONObject(idBtn);
+                                boolean Subido1 = Boolean.parseBoolean(form1.getString("Subido"));
+                                if (Subido1){
+                                    form1.put("Subido", false);
+                                    listBtnSubido.get(idBtn).setText("Pendiente: No subir");
+                                }else{
+                                    form1.put("Subido", true);
+                                    listBtnSubido.get(idBtn).setText("Subido: Subir de Nuevo");
+                                }
+                                try {
+                                    OutputStreamWriter file = new OutputStreamWriter(mcont.openFileOutput("listaForm.txt", Activity.MODE_PRIVATE));
+                                    file.write(String.valueOf(formComplete));
+                                    file.flush();
+                                    file.close();
+                                    Toast.makeText(mcont, "Cambio realizado\n", Toast.LENGTH_LONG).show();
+                                }catch (Exception ex) {
+                                    Toast.makeText(mcont, "Ocurrió un error y no se pudo realizar el cambio de estado\n", Toast.LENGTH_LONG).show();
+                                    Log.e("Error12", "ex: " + ex);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(mcont, "Ocurrió un error y no se pudo realizar el cambio\n", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    });
+
+
 
                     Resources res = getResources();
                     String[] opciones = res.getStringArray(R.array.OpcionesEstacion);

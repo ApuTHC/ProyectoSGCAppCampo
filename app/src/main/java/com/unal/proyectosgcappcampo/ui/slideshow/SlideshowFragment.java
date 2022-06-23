@@ -5313,7 +5313,7 @@ public class SlideshowFragment extends Fragment {
                                             String obsFotosAnexas = EditTextsAux.getString("obsFotosAnexas"+k);
 
                                             FormatFotosAnexasINV nuevoFormatoFotosAnexasINV = new FormatFotosAnexasINV(true, fechaFotosAnexas, nombreFotosAnexasINV, autorFotosAnexas, obsFotosAnexas);
-                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_SGMF/Form_SGMF_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexasINV);
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_INVENTARIO/Form_INVENTARIO_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexasINV);
 
                                         }
 
