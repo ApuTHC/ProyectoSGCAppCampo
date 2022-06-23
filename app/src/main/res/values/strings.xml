@@ -1128,27 +1128,27 @@
     </string-array>
 
     <string-array name="CoberturaSueloMM">
-        <item>Veg. Herbácea</item>
-        <item>Bosque/Selva</item>
-        <item>Matorrales</item>
-        <item>Cuerpo de agua</item>
-        <item>Cultivos</item>
-        <item>Construcciones</item>
-        <item>Pastos</item>
-        <item>Sin cobertura</item>
+        <item>Veg. Herbácea (%)</item>
+        <item>Bosque/Selva (%)</item>
+        <item>Matorrales (%)</item>
+        <item>Cuerpo de agua (%)</item>
+        <item>Cultivos (%)</item>
+        <item>Construcciones (%)</item>
+        <item>Pastos (%)</item>
+        <item>Sin cobertura (%)</item>
     </string-array>
 
     <string-array name="UsoSueloMM">
-        <item>Ganaderia</item>
-        <item>Agrícola</item>
-        <item>Recreación</item>
-        <item>Vivienda</item>
-        <item>Mineria</item>
-        <item>Área protegida</item>
-        <item>Vias</item>
-        <item>Zona arqueológica</item>
-        <item>Zona Industrial</item>
-        <item>Sin uso</item>
+        <item>Ganaderia (%)</item>
+        <item>Agrícola (%)</item>
+        <item>Recreación (%)</item>
+        <item>Vivienda (%)</item>
+        <item>Mineria (%)</item>
+        <item>Área protegida (%)</item>
+        <item>Vias (%)</item>
+        <item>Zona arqueológica (%)</item>
+        <item>Zona Industrial (%)</item>
+        <item>Sin uso (%)</item>
     </string-array>
 
     <string-array name="TipoEfectoSecMM">

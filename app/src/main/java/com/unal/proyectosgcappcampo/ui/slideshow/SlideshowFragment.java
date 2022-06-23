@@ -3839,7 +3839,7 @@ public class SlideshowFragment extends Fragment {
 
                         liForm.addView(liFormSecuenciaEstrati);
 
-                        if (j == 1){
+                        if (j == 1 && nombreElemento.equals("CONTRIBUYENTES - DETONANTES")){
                             checkbox1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -3928,7 +3928,7 @@ public class SlideshowFragment extends Fragment {
                                 }
                             });
                         }
-                        if (j == 3){
+                        if (j == 3 && nombreElemento.equals("CONTRIBUYENTES - DETONANTES")){
                             checkbox1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -4301,6 +4301,8 @@ public class SlideshowFragment extends Fragment {
 
 //------------> Fotografías Anexas INV
 
+            //------------> Fotografías Anexas
+
             TextView tvFotosAnexas = new TextView(mcont);
             tvFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             tvFotosAnexas.setText("Fotografías Anexas");
@@ -4392,7 +4394,7 @@ public class SlideshowFragment extends Fragment {
                         String claseElemento = elementoActual.getClaseelemento();
                         String tagElemento = elementoActual.getTagelemento();
                         int idStringArrayElemento = elementoActual.getIdStringArray();
-                        int aux = ListaFotosAnexasINV.get(Integer.parseInt(v.getTag().toString())).size();
+                        int aux = ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).size();
 
                         if (claseElemento.equals("edittext")){
                             TextView tvGenerico = new TextView(mcont);
@@ -4520,11 +4522,13 @@ public class SlideshowFragment extends Fragment {
                                     int contUGS_Suelos = Integer.parseInt(counts.getString("UGS_Suelos"));
                                     int contSGMF = Integer.parseInt(counts.getString("SGMF"));
                                     int contCAT = Integer.parseInt(counts.getString("CATALOGO"));
+                                    int contINV = Integer.parseInt(counts.getString("INVENTARIO"));
 
                                     databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_UGS_Rocas").setValue(contUGS_Rocas);
                                     databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_UGS_Suelos").setValue(contUGS_Suelos);
                                     databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_SGMF").setValue(contSGMF);
                                     databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_CATALOGO").setValue(contCAT);
+                                    databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/count_INVENTARIO").setValue(contINV);
 
 
                                     for (int j = 0; j < contUGS_Rocas; j++) {
@@ -5001,6 +5005,320 @@ public class SlideshowFragment extends Fragment {
 
                                     }
 
+                                    for (int j = 0; j < contINV; j++) {
+                                        JSONObject FromatoAux = Formularios.getJSONObject("Form_INVENTARIO_"+j);
+                                        JSONObject SpinnersAux = FromatoAux.getJSONObject("Spinners");
+                                        JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
+                                        JSONObject RadioGrpAux = FromatoAux.getJSONObject("RadioGrp");
+                                        JSONObject CheckBoxAux = FromatoAux.getJSONObject("CheckBox");
+
+                                        boolean activo = true;
+                                        String IMPORTANC = SpinnersAux.getString("IMPORTANC");
+                                        String FECHA_FUENTE = SpinnersAux.getString("FECHA_FUENTE");
+                                        String confiFechaMM = SpinnersAux.getString("ConfiFechaMM");
+                                        String NOM_MUN = SpinnersAux.getString("NOM_MUN");
+
+                                        String edadmm = SpinnersAux.getString("edadmm");
+                                        String ESTADO_ACT = SpinnersAux.getString("ESTADO_ACT");
+                                        String ESTILO = SpinnersAux.getString("ESTILO");
+                                        String DISTRIBUC = SpinnersAux.getString("DISTRIBUC");
+                                        String estructura0espaciamiento = SpinnersAux.getString("estructura0espaciamiento");
+                                        String estructura1espaciamiento = SpinnersAux.getString("estructura1espaciamiento");
+                                        String estructura2espaciamiento = SpinnersAux.getString("estructura2espaciamiento");
+                                        String estructura3espaciamiento = SpinnersAux.getString("estructura3espaciamiento");
+                                        String estructura4espaciamiento = SpinnersAux.getString("estructura4espaciamiento");
+                                        String estructura5espaciamiento = SpinnersAux.getString("estructura5espaciamiento");
+
+                                        String SUBTIPO_1 = SpinnersAux.getString("SUBTIPO_1");
+                                        String SUBTIPO_2 = SpinnersAux.getString("SUBTIPO_2");
+
+                                        String velocidad = SpinnersAux.getString("velocidad");
+                                        String sisclasificacion = SpinnersAux.getString("sisclasificacion");
+                                        String morfomodo = SpinnersAux.getString("morfomodo");
+                                        String morfoseveridad = SpinnersAux.getString("morfoseveridad");
+                                        String erosionedad = SpinnersAux.getString("erosionedad");
+                                        String erosionestado = SpinnersAux.getString("erosionestado");
+                                        String erosionfluvial = SpinnersAux.getString("erosionfluvial");
+                                        String erosioneolica = SpinnersAux.getString("erosioneolica");
+                                        String represamientotipo = SpinnersAux.getString("represamientotipo");
+
+
+                                        String ID_PARTE = EditTextsAux.getString("ID_PARTE");
+                                        String ENCUESTAD = EditTextsAux.getString("ENCUESTAD");
+                                        String FECHA_MOV = EditTextsAux.getString("FECHA_MOV");
+                                        String FECHA_REP = EditTextsAux.getString("FECHA_REP");
+                                        String COD_SIMMA = EditTextsAux.getString("COD_SIMMA");
+                                        String VEREDA = EditTextsAux.getString("VEREDA");
+                                        String SITIO = EditTextsAux.getString("SITIO");
+                                        String REF_GEOGRF = EditTextsAux.getString("REF_GEOGRF");
+
+                                        String planchas = EditTextsAux.getString("planchas");
+
+                                        String sensoresremotos = EditTextsAux.getString("sensoresremotos");
+                                        String FTE_INFSEC = EditTextsAux.getString("FTE_INFSEC");
+
+                                        String LITOLOGIA = EditTextsAux.getString("LITOLOGIA");
+
+                                        String estructura0dirbuz = EditTextsAux.getString("estructura0dirbuz");
+                                        String estructura0buz = EditTextsAux.getString("estructura0buz");
+                                        String estructura1dirbuz = EditTextsAux.getString("estructura1dirbuz");
+                                        String estructura1buz = EditTextsAux.getString("estructura1buz");
+                                        String estructura2dirbuz = EditTextsAux.getString("estructura2dirbuz");
+                                        String estructura2buz = EditTextsAux.getString("estructura2buz");
+                                        String estructura3dirbuz = EditTextsAux.getString("estructura3dirbuz");
+                                        String estructura3buz = EditTextsAux.getString("estructura3buz");
+                                        String estructura4dirbuz = EditTextsAux.getString("estructura4dirbuz");
+                                        String estructura4buz = EditTextsAux.getString("estructura4buz");
+                                        String estructura5dirbuz = EditTextsAux.getString("estructura5dirbuz");
+                                        String estructura5buz = EditTextsAux.getString("estructura5buz");
+                                        String velocidadmax = EditTextsAux.getString("velocidadmax");
+                                        String velocidadmin = EditTextsAux.getString("velocidadmin");
+                                        String morfogeneral0 = EditTextsAux.getString("morfogeneral0");
+                                        String morfogeneral1 = EditTextsAux.getString("morfogeneral1");
+                                        String morfogeneral2 = EditTextsAux.getString("morfogeneral2");
+                                        String morfogeneral3 = EditTextsAux.getString("morfogeneral3");
+                                        String morfogeneral4 = EditTextsAux.getString("morfogeneral4");
+                                        String morfogeneral5 = EditTextsAux.getString("morfogeneral5");
+                                        String morfogeneral6 = EditTextsAux.getString("morfogeneral6");
+                                        String morfodimensiones0 = EditTextsAux.getString("morfodimensiones0");
+                                        String morfodimensiones1 = EditTextsAux.getString("morfodimensiones1");
+                                        String morfodimensiones2 = EditTextsAux.getString("morfodimensiones2");
+                                        String morfodimensiones3 = EditTextsAux.getString("morfodimensiones3");
+                                        String morfodimensiones4 = EditTextsAux.getString("morfodimensiones4");
+                                        String morfodimensiones5 = EditTextsAux.getString("morfodimensiones5");
+                                        String morfodimensiones6 = EditTextsAux.getString("morfodimensiones6");
+                                        String morfodimensiones7 = EditTextsAux.getString("morfodimensiones7");
+                                        String morfodimensiones8 = EditTextsAux.getString("morfodimensiones8");
+                                        String morfodimensiones9 = EditTextsAux.getString("morfodimensiones9");
+                                        String morfodimensiones10 = EditTextsAux.getString("morfodimensiones10");
+                                        String morfodimensiones11 = EditTextsAux.getString("morfodimensiones11");
+                                        String morfodimensiones12 = EditTextsAux.getString("morfodimensiones12");
+                                        String AN_GMF = EditTextsAux.getString("AN_GMF");
+                                        String cobertura0 = EditTextsAux.getString("cobertura0");
+                                        String cobertura1 = EditTextsAux.getString("cobertura1");
+                                        String cobertura2 = EditTextsAux.getString("cobertura2");
+                                        String cobertura3 = EditTextsAux.getString("cobertura3");
+                                        String cobertura4 = EditTextsAux.getString("cobertura4");
+                                        String cobertura5 = EditTextsAux.getString("cobertura5");
+                                        String cobertura6 = EditTextsAux.getString("cobertura6");
+                                        String cobertura7 = EditTextsAux.getString("cobertura7");
+                                        String usosuelo0 = EditTextsAux.getString("usosuelo0");
+                                        String usosuelo1 = EditTextsAux.getString("usosuelo1");
+                                        String usosuelo2 = EditTextsAux.getString("usosuelo2");
+                                        String usosuelo3 = EditTextsAux.getString("usosuelo3");
+                                        String usosuelo4 = EditTextsAux.getString("usosuelo4");
+                                        String usosuelo5 = EditTextsAux.getString("usosuelo5");
+                                        String usosuelo6 = EditTextsAux.getString("usosuelo6");
+                                        String usosuelo7 = EditTextsAux.getString("usosuelo7");
+                                        String usosuelo8 = EditTextsAux.getString("usosuelo8");
+                                        String usosuelo9 = EditTextsAux.getString("usosuelo9");
+                                        String referenciasautor = EditTextsAux.getString("referenciasautor");
+                                        String referenciasaño = EditTextsAux.getString("referenciasaño");
+                                        String referenciastitulo = EditTextsAux.getString("referenciastitulo");
+                                        String referenciaseditor = EditTextsAux.getString("referenciaseditor");
+                                        String referenciasciudad = EditTextsAux.getString("referenciasciudad");
+                                        String referenciaspaginas = EditTextsAux.getString("referenciaspaginas");
+                                        String represamientomorfometria0 = EditTextsAux.getString("represamientomorfometria0");
+                                        String represamientomorfometria1 = EditTextsAux.getString("represamientomorfometria1");
+                                        String represamientomorfometria2 = EditTextsAux.getString("represamientomorfometria2");
+                                        String represamientomorfometria3 = EditTextsAux.getString("represamientomorfometria3");
+                                        String represamientomorfometria4 = EditTextsAux.getString("represamientomorfometria4");
+                                        String represamientomorfometria5 = EditTextsAux.getString("represamientomorfometria5");
+
+                                        String HERIDOS = EditTextsAux.getString("heridos");
+                                        String VIDAS = EditTextsAux.getString("vidas");
+                                        String DESAPARECIDOS = EditTextsAux.getString("desaparecidos");
+                                        String PERSONAS = EditTextsAux.getString("personas");
+                                        String FAMILIAS = EditTextsAux.getString("familias");
+                                        String notas = EditTextsAux.getString("notas");
+
+                                        String apreciacionriesgo = EditTextsAux.getString("apreciacionriesgo");
+
+                                        String TIPO_MOV2 = RadioGrpAux.getString("TIPO_MOV2");
+                                        String TIPO_MOV1 = RadioGrpAux.getString("TIPO_MOV1");
+
+                                        String humedad2 = RadioGrpAux.getString("humedad2");
+                                        String humedad1 = RadioGrpAux.getString("humedad1");
+                                        String plasticidad2 = RadioGrpAux.getString("plasticidad2");
+                                        String plasticidad1 = RadioGrpAux.getString("plasticidad1");
+
+                                        String estructura0check = CheckBoxAux.getString("estructura0check");
+                                        String estructura1check = CheckBoxAux.getString("estructura1check");
+                                        String estructura2check = CheckBoxAux.getString("estructura2check");
+                                        String estructura3check = CheckBoxAux.getString("estructura3check");
+                                        String estructura4check = CheckBoxAux.getString("estructura4check");
+                                        String estructura5check = CheckBoxAux.getString("estructura5check");
+                                        String tipomaterial0check_2 = CheckBoxAux.getString("tipomaterial0check_2");
+                                        String tipomaterial0check_1 = CheckBoxAux.getString("tipomaterial0check_1");
+                                        String tipomaterial1check_2 = CheckBoxAux.getString("tipomaterial1check_2");
+                                        String tipomaterial1check_1 = CheckBoxAux.getString("tipomaterial1check_1");
+                                        String tipomaterial2check_2 = CheckBoxAux.getString("tipomaterial2check_2");
+                                        String tipomaterial2check_1 = CheckBoxAux.getString("tipomaterial2check_1");
+                                        String tipomaterial3check_2 = CheckBoxAux.getString("tipomaterial3check_2");
+                                        String tipomaterial3check_1 = CheckBoxAux.getString("tipomaterial3check_1");
+                                        String tipomaterial4check_2 = CheckBoxAux.getString("tipomaterial4check_2");
+                                        String tipomaterial4check_1 = CheckBoxAux.getString("tipomaterial4check_1");
+                                        String origensuelo0check = CheckBoxAux.getString("origensuelo0check");
+                                        String origensuelo1check = CheckBoxAux.getString("origensuelo1check");
+                                        String origensuelo2check = CheckBoxAux.getString("origensuelo2check");
+                                        String origensuelo3check = CheckBoxAux.getString("origensuelo3check");
+                                        String causasinherentes0check = CheckBoxAux.getString("causasinherentes0check");
+                                        String causasinherentes1check = CheckBoxAux.getString("causasinherentes1check");
+                                        String causasinherentes2check = CheckBoxAux.getString("causasinherentes2check");
+                                        String causasinherentes3check = CheckBoxAux.getString("causasinherentes3check");
+                                        String causasinherentes4check = CheckBoxAux.getString("causasinherentes4check");
+                                        String causasinherentes5check = CheckBoxAux.getString("causasinherentes5check");
+                                        String causasinherentes6check = CheckBoxAux.getString("causasinherentes6check");
+                                        String causasinherentes7check = CheckBoxAux.getString("causasinherentes7check");
+                                        String causasinherentes8check = CheckBoxAux.getString("causasinherentes8check");
+                                        String causasinherentes9check = CheckBoxAux.getString("causasinherentes9check");
+                                        String causasinherentes10check = CheckBoxAux.getString("causasinherentes10check");
+                                        String causasinherentes11check = CheckBoxAux.getString("causasinherentes11check");
+                                        String causascontrideto0check_2 = CheckBoxAux.getString("causascontrideto0check_2");
+                                        String causascontrideto0check_1 = CheckBoxAux.getString("causascontrideto0check_1");
+                                        String causascontrideto1check_2 = CheckBoxAux.getString("causascontrideto1check_2");
+                                        String causascontrideto1check_1 = CheckBoxAux.getString("causascontrideto1check_1");
+                                        String causascontrideto2check_2 = CheckBoxAux.getString("causascontrideto2check_2");
+                                        String causascontrideto2check_1 = CheckBoxAux.getString("causascontrideto2check_1");
+                                        String causascontrideto3check_2 = CheckBoxAux.getString("causascontrideto3check_2");
+                                        String causascontrideto3check_1 = CheckBoxAux.getString("causascontrideto3check_1");
+                                        String causascontrideto4check_2 = CheckBoxAux.getString("causascontrideto4check_2");
+                                        String causascontrideto4check_1 = CheckBoxAux.getString("causascontrideto4check_1");
+                                        String causascontrideto5check_2 = CheckBoxAux.getString("causascontrideto5check_2");
+                                        String causascontrideto5check_1 = CheckBoxAux.getString("causascontrideto5check_1");
+                                        String causascontrideto6check_2 = CheckBoxAux.getString("causascontrideto6check_2");
+                                        String causascontrideto6check_1 = CheckBoxAux.getString("causascontrideto6check_1");
+                                        String causascontrideto7check_2 = CheckBoxAux.getString("causascontrideto7check_2");
+                                        String causascontrideto7check_1 = CheckBoxAux.getString("causascontrideto7check_1");
+                                        String causascontrideto8check_2 = CheckBoxAux.getString("causascontrideto8check_2");
+                                        String causascontrideto8check_1 = CheckBoxAux.getString("causascontrideto8check_1");
+                                        String causascontrideto9check_2 = CheckBoxAux.getString("causascontrideto9check_2");
+                                        String causascontrideto9check_1 = CheckBoxAux.getString("causascontrideto9check_1");
+                                        String causascontrideto10check_2 = CheckBoxAux.getString("causascontrideto10check_2");
+                                        String causascontrideto10check_1 = CheckBoxAux.getString("causascontrideto10check_1");
+                                        String causascontrideto11check_2 = CheckBoxAux.getString("causascontrideto11check_2");
+                                        String causascontrideto11check_1 = CheckBoxAux.getString("causascontrideto11check_1");
+                                        String causascontrideto12check_2 = CheckBoxAux.getString("causascontrideto12check_2");
+                                        String causascontrideto12check_1 = CheckBoxAux.getString("causascontrideto12check_1");
+                                        String causascontrideto13check_2 = CheckBoxAux.getString("causascontrideto13check_2");
+                                        String causascontrideto13check_1 = CheckBoxAux.getString("causascontrideto13check_1");
+                                        String causascontrideto14check_2 = CheckBoxAux.getString("causascontrideto14check_2");
+                                        String causascontrideto14check_1 = CheckBoxAux.getString("causascontrideto14check_1");
+                                        String causascontrideto15check_2 = CheckBoxAux.getString("causascontrideto15check_2");
+                                        String causascontrideto15check_1 = CheckBoxAux.getString("causascontrideto15check_1");
+                                        String causascontrideto16check_2 = CheckBoxAux.getString("causascontrideto16check_2");
+                                        String causascontrideto16check_1 = CheckBoxAux.getString("causascontrideto16check_1");
+                                        String causascontrideto17check_2 = CheckBoxAux.getString("causascontrideto17check_2");
+                                        String causascontrideto17check_1 = CheckBoxAux.getString("causascontrideto17check_1");
+                                        String causascontrideto18check_2 = CheckBoxAux.getString("causascontrideto18check_2");
+                                        String causascontrideto18check_1 = CheckBoxAux.getString("causascontrideto18check_1");
+                                        String causascontrideto19check_2 = CheckBoxAux.getString("causascontrideto19check_2");
+                                        String causascontrideto19check_1 = CheckBoxAux.getString("causascontrideto19check_1");
+                                        String causascontrideto20check_2 = CheckBoxAux.getString("causascontrideto20check_2");
+                                        String causascontrideto20check_1 = CheckBoxAux.getString("causascontrideto20check_1");
+                                        String causascontrideto21check_2 = CheckBoxAux.getString("causascontrideto21check_2");
+                                        String causascontrideto21check_1 = CheckBoxAux.getString("causascontrideto21check_1");
+                                        String causascontrideto22check_2 = CheckBoxAux.getString("causascontrideto22check_2");
+                                        String causascontrideto22check_1 = CheckBoxAux.getString("causascontrideto22check_1");
+                                        String causascontrideto23check_2 = CheckBoxAux.getString("causascontrideto23check_2");
+                                        String causascontrideto23check_1 = CheckBoxAux.getString("causascontrideto23check_1");
+                                        String causascontrideto24check_2 = CheckBoxAux.getString("causascontrideto24check_2");
+                                        String causascontrideto24check_1 = CheckBoxAux.getString("causascontrideto24check_1");
+                                        String erosionsuperficial0check = CheckBoxAux.getString("erosionsuperficial0check");
+                                        String erosionsuperficial1check = CheckBoxAux.getString("erosionsuperficial1check");
+                                        String erosionsuperficial2check = CheckBoxAux.getString("erosionsuperficial2check");
+                                        String erosionsuperficial3check = CheckBoxAux.getString("erosionsuperficial3check");
+                                        String erosionsuperficial4check = CheckBoxAux.getString("erosionsuperficial4check");
+                                        String erosionsubsuperficial0check = CheckBoxAux.getString("erosionsubsuperficial0check");
+                                        String erosionsubsuperficial1check = CheckBoxAux.getString("erosionsubsuperficial1check");
+                                        String represamientocondiciones0check = CheckBoxAux.getString("represamientocondiciones0check");
+                                        String represamientocondiciones1check = CheckBoxAux.getString("represamientocondiciones1check");
+                                        String represamientocondiciones2check = CheckBoxAux.getString("represamientocondiciones2check");
+                                        String represamientocondiciones3check = CheckBoxAux.getString("represamientocondiciones3check");
+                                        String represamientocondiciones4check = CheckBoxAux.getString("represamientocondiciones4check");
+                                        String represamientocondiciones5check = CheckBoxAux.getString("represamientocondiciones5check");
+                                        String represamientocondiciones6check = CheckBoxAux.getString("represamientocondiciones6check");
+                                        String represamientocondiciones7check = CheckBoxAux.getString("represamientocondiciones7check");
+                                        String represamientoefectos0check = CheckBoxAux.getString("represamientoefectos0check");
+                                        String represamientoefectos1check = CheckBoxAux.getString("represamientoefectos1check");
+                                        String represamientoefectos2check = CheckBoxAux.getString("represamientoefectos2check");
+                                        String represamientoefectos3check = CheckBoxAux.getString("represamientoefectos3check");
+                                        String represamientoefectos4check = CheckBoxAux.getString("represamientoefectos4check");
+
+                                        String tipodeposito0check = "";
+                                        String tipodeposito1check = "";
+                                        String tipodeposito2check = "";
+                                        String tipodeposito3check = "";
+                                        String tipodeposito4check = "";
+
+                                        String sismoMM0 = "";
+                                        String sismoMM1 = "";
+                                        String sismoMM2 = "";
+                                        String sismoMM3 = "";
+                                        String lluviasMM0 = "";
+                                        String lluviasMM1 = "";
+                                        String lluviasMM2 = "";
+                                        String lluviasMM3 = "";
+
+
+                                        if (origensuelo3check.equals("true")){
+                                            tipodeposito0check = CheckBoxAux.getString("tipodeposito0check");
+                                            tipodeposito1check = CheckBoxAux.getString("tipodeposito1check");
+                                            tipodeposito2check = CheckBoxAux.getString("tipodeposito2check");
+                                            tipodeposito3check = CheckBoxAux.getString("tipodeposito3check");
+                                            tipodeposito4check = CheckBoxAux.getString("tipodeposito4check");
+                                        }
+                                        if (causascontrideto1check_2.equals("true") || causascontrideto1check_1.equals("true")){
+                                            sismoMM0 = EditTextsAux.getString("sismoMM0");
+                                            sismoMM1 = EditTextsAux.getString("sismoMM1");
+                                            sismoMM2 = EditTextsAux.getString("sismoMM2");
+                                            sismoMM3 = EditTextsAux.getString("sismoMM3");
+                                        }
+                                        if (causascontrideto3check_2.equals("true") || causascontrideto3check_1.equals("true")){
+                                            lluviasMM0 = EditTextsAux.getString("llueviasMM0");
+                                            lluviasMM1 = EditTextsAux.getString("llueviasMM1");
+                                            lluviasMM2 = EditTextsAux.getString("llueviasMM2");
+                                            lluviasMM3 = EditTextsAux.getString("llueviasMM3");
+                                        }
+
+
+                                        FormatINV nuevoFormatoINV = new FormatINV(activo, IMPORTANC, FECHA_FUENTE, confiFechaMM, NOM_MUN, edadmm, ESTADO_ACT, ESTILO, DISTRIBUC, estructura0espaciamiento, estructura1espaciamiento, estructura2espaciamiento, estructura3espaciamiento, estructura4espaciamiento, estructura5espaciamiento, SUBTIPO_1, SUBTIPO_2, velocidad, sisclasificacion, morfomodo, morfoseveridad, erosionedad, erosionestado, erosionfluvial, erosioneolica, represamientotipo, ID_PARTE, ENCUESTAD, FECHA_MOV, FECHA_REP, COD_SIMMA, VEREDA, SITIO, REF_GEOGRF, planchas, sensoresremotos, FTE_INFSEC, LITOLOGIA, estructura0dirbuz, estructura0buz, estructura1dirbuz, estructura1buz, estructura2dirbuz, estructura2buz, estructura3dirbuz, estructura3buz, estructura4dirbuz, estructura4buz, estructura5dirbuz, estructura5buz, velocidadmax, velocidadmin, morfogeneral0, morfogeneral1, morfogeneral2, morfogeneral3, morfogeneral4, morfogeneral5, morfogeneral6, morfodimensiones0, morfodimensiones1, morfodimensiones2, morfodimensiones3, morfodimensiones4, morfodimensiones5, morfodimensiones6, morfodimensiones7, morfodimensiones8, morfodimensiones9, morfodimensiones10, morfodimensiones11, morfodimensiones12, AN_GMF, cobertura0, cobertura1, cobertura2, cobertura3, cobertura4, cobertura5, cobertura6, cobertura7, usosuelo0, usosuelo1, usosuelo2, usosuelo3, usosuelo4, usosuelo5, usosuelo6, usosuelo7, usosuelo8, usosuelo9, referenciasautor, referenciasaño, referenciastitulo, referenciaseditor, referenciasciudad, referenciaspaginas, represamientomorfometria0, represamientomorfometria1, represamientomorfometria2, represamientomorfometria3, represamientomorfometria4, represamientomorfometria5, HERIDOS, VIDAS, DESAPARECIDOS, PERSONAS, FAMILIAS, notas, apreciacionriesgo, TIPO_MOV2, TIPO_MOV1, humedad2, humedad1, plasticidad2, plasticidad1, estructura0check, estructura1check, estructura2check, estructura3check, estructura4check, estructura5check, tipomaterial0check_2, tipomaterial0check_1, tipomaterial1check_2, tipomaterial1check_1, tipomaterial2check_2, tipomaterial2check_1, tipomaterial3check_2, tipomaterial3check_1, tipomaterial4check_2, tipomaterial4check_1, origensuelo0check, origensuelo1check, origensuelo2check, origensuelo3check, causasinherentes0check, causasinherentes1check, causasinherentes2check, causasinherentes3check, causasinherentes4check, causasinherentes5check, causasinherentes6check, causasinherentes7check, causasinherentes8check, causasinherentes9check, causasinherentes10check, causasinherentes11check, causascontrideto0check_2, causascontrideto0check_1, causascontrideto1check_2, causascontrideto1check_1, causascontrideto2check_2, causascontrideto2check_1, causascontrideto3check_2, causascontrideto3check_1, causascontrideto4check_2, causascontrideto4check_1, causascontrideto5check_2, causascontrideto5check_1, causascontrideto6check_2, causascontrideto6check_1, causascontrideto7check_2, causascontrideto7check_1, causascontrideto8check_2, causascontrideto8check_1, causascontrideto9check_2, causascontrideto9check_1, causascontrideto10check_2, causascontrideto10check_1, causascontrideto11check_2, causascontrideto11check_1, causascontrideto12check_2, causascontrideto12check_1, causascontrideto13check_2, causascontrideto13check_1, causascontrideto14check_2, causascontrideto14check_1, causascontrideto15check_2, causascontrideto15check_1, causascontrideto16check_2, causascontrideto16check_1, causascontrideto17check_2, causascontrideto17check_1, causascontrideto18check_2, causascontrideto18check_1, causascontrideto19check_2, causascontrideto19check_1, causascontrideto20check_2, causascontrideto20check_1, causascontrideto21check_2, causascontrideto21check_1, causascontrideto22check_2, causascontrideto22check_1, causascontrideto23check_2, causascontrideto23check_1, causascontrideto24check_2, causascontrideto24check_1, erosionsuperficial0check, erosionsuperficial1check, erosionsuperficial2check, erosionsuperficial3check, erosionsuperficial4check, erosionsubsuperficial0check, erosionsubsuperficial1check, represamientocondiciones0check, represamientocondiciones1check, represamientocondiciones2check, represamientocondiciones3check, represamientocondiciones4check, represamientocondiciones5check, represamientocondiciones6check, represamientocondiciones7check, represamientoefectos0check, represamientoefectos1check, represamientoefectos2check, represamientoefectos3check, represamientoefectos4check, tipodeposito0check, tipodeposito1check, tipodeposito2check, tipodeposito3check, tipodeposito4check, sismoMM0, sismoMM1, sismoMM2, sismoMM3, lluviasMM0, lluviasMM1, lluviasMM2, lluviasMM3);
+
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_INVENTARIO/Form_INVENTARIO_"+j).setValue(nuevoFormatoINV);
+
+                                        int contDANOSNew = Integer.parseInt(FromatoAux.getString("DANOS"));
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_INVENTARIO/Form_INVENTARIO_"+j+"/DANOS/count").setValue(contDANOSNew);
+                                        for (int k = 1; k <= contDANOSNew; k++) {
+
+                                            String tiposdano = SpinnersAux.getString("tiposdaño"+k);
+                                            String clasedano = SpinnersAux.getString("clasedaño"+k);
+                                            String tipodano = EditTextsAux.getString("tipodaño"+k);
+                                            String cantidaddano = EditTextsAux.getString("cantidaddaño"+k);
+                                            String unidaddano = EditTextsAux.getString("unidaddaño"+k);
+                                            String valordano = EditTextsAux.getString("valordaño"+k);
+
+
+                                            FormatNewDANO nuevoFormatoNewDANO = new FormatNewDANO(tiposdano, clasedano, tipodano, cantidaddano, unidaddano, valordano);
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_INVENTARIO/Form_INVENTARIO_"+j+"/DANOS/DANOS_"+k).setValue(nuevoFormatoNewDANO);
+
+                                        }
+
+                                        int contFotosAnexas = Integer.parseInt(FromatoAux.getString("FotosAnexas"));
+                                        databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_INVENTARIO/Form_INVENTARIO_"+j+"/FotosAnexas/count").setValue(contFotosAnexas);
+                                        for (int k = 1; k <= contFotosAnexas; k++) {
+
+                                            String fechaFotosAnexas = EditTextsAux.getString("fechaFotosAnexas"+k);
+                                            String nombreFotosAnexasINV = EditTextsAux.getString("nombreFotosAnexasINV"+k);
+                                            String autorFotosAnexas = EditTextsAux.getString("autorFotosAnexas"+k);
+                                            String obsFotosAnexas = EditTextsAux.getString("obsFotosAnexas"+k);
+
+                                            FormatFotosAnexasINV nuevoFormatoFotosAnexasINV = new FormatFotosAnexasINV(true, fechaFotosAnexas, nombreFotosAnexasINV, autorFotosAnexas, obsFotosAnexas);
+                                            databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_SGMF/Form_SGMF_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexasINV);
+
+                                        }
+
+                                    }
+
                                     form.put("Subido", true);
                                     Log.d("jaaja", "GuardarForm10: "+formComplete);
                                     OutputStreamWriter file = new OutputStreamWriter(mcont.openFileOutput("listaForm.txt", Activity.MODE_PRIVATE));
@@ -5013,8 +5331,10 @@ public class SlideshowFragment extends Fragment {
                             } catch (JSONException | FileNotFoundException e) {
                                 e.printStackTrace();
                                 Log.d("jaaja", "AlgunError: "+e);
+                                Toast.makeText(mcont, "Ocurrió un error a la hora de subir los datos.\n", Toast.LENGTH_LONG).show();
                             } catch (IOException e) {
                                 e.printStackTrace();
+                                Toast.makeText(mcont, "Ocurrió un error a la hora de subir los datos.\n", Toast.LENGTH_LONG).show();
                             }
 
                         }
@@ -5075,6 +5395,7 @@ public class SlideshowFragment extends Fragment {
         int countFormatosUGSSuelos = 0;
         int countFormatosSGMF = 0;
         int countFormatosCAT = 0;
+        int countFormatosINV = 0;
         for (int i = 0; i < listFormularios.size(); i++) {
 
             //-------------> Rocas
@@ -5230,12 +5551,51 @@ public class SlideshowFragment extends Fragment {
                 countFormatosCAT++;
             }
 
+            //-------------> Inventario
+
+            if (listFormularios.get(i).equals("Inventario MM")){
+                JSONObject FormatoTemp = new JSONObject()
+                        .put("DANOS", listContDANOS.get(i))
+                        .put("FotosAnexas", listContFotosAnexas.get(i));
+
+                JSONObject spinnerList = new JSONObject();
+                for (int j = 0; j < ListaSpinner.get(i).size(); j++) {
+                    spinnerList.put(ListaSpinner.get(i).get(j).getTag().toString(), ListaSpinner.get(i).get(j).getSelectedItem().toString());
+                }
+                FormatoTemp.put("Spinners", spinnerList);
+
+                JSONObject editTextList = new JSONObject();
+                for (int k = 0; k < ListaEditText.get(i).size(); k++) {
+                    editTextList.put(ListaEditText.get(i).get(k).getTag().toString(), ListaEditText.get(i).get(k).getText().toString());
+                }
+                FormatoTemp.put("EditText", editTextList);
+
+                JSONObject radioGrp = new JSONObject();
+                for (int k = 0; k < ListaRadioGrp.get(i).size(); k++) {
+                    RadioButton checkedRadioButton = (RadioButton)ListaRadioGrp.get(i).get(k).findViewById(ListaRadioGrp.get(i).get(k).getCheckedRadioButtonId());
+//                    Log.d("jaaja", "onCheckedChanged: "+checkedRadioButton.getTag());
+//                    Log.d("jaaja", "onCheckedChanged: "+ListaRadioGrp.get(i).get(k).getTag());
+                    radioGrp.put(ListaRadioGrp.get(i).get(k).getTag().toString(), checkedRadioButton.getTag());
+                }
+                FormatoTemp.put("RadioGrp", radioGrp);
+
+                JSONObject checkBox = new JSONObject();
+                for (int k = 0; k < ListaCheckBox.get(i).size(); k++) {
+                    checkBox.put(ListaCheckBox.get(i).get(k).getTag().toString(), ListaCheckBox.get(i).get(k).isChecked());
+                }
+                FormatoTemp.put("CheckBox", checkBox);
+
+
+                FormatosList.put("Form_INVENTARIO_"+countFormatosINV, FormatoTemp);
+                countFormatosINV++;
+            }
 
         }
         countFormatos.put("UGS_Rocas", countFormatosUGSRocas);
         countFormatos.put("UGS_Suelos", countFormatosUGSSuelos);
         countFormatos.put("SGMF", countFormatosSGMF);
         countFormatos.put("CATALOGO", countFormatosCAT);
+        countFormatos.put("INVENTARIO", countFormatosINV);
 
         FormatosList.put("counts", countFormatos);
         attrForm.put("Formularios", FormatosList);

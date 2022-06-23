@@ -106,7 +106,8 @@ public class GuardadasFragment extends Fragment {
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-        } else {
+        }
+        else {
             formComplete = new JSONArray();
         }
 
@@ -190,10 +191,13 @@ public class GuardadasFragment extends Fragment {
                     liHori1.setPadding(20, 0, 0, 20);
 
                     String estado;
+                    String btnestado;
                     if (!Subido){
                         estado = "Pendiente por subir";
+                        btnestado = "No Subir";
                     }else{
                         estado = "Subido a la base de dtos";
+                        btnestado = "Subir de Nuevo";
                     }
 
                     TextView tvOpt = new TextView(mcont);
@@ -209,6 +213,14 @@ public class GuardadasFragment extends Fragment {
                     tvOpt1.setTextAppearance(R.style.TituloItem);
                     tvOpt1.setPadding(0, 20, 0, 0);
                     liHori1.addView(tvOpt1);
+
+                    Button bSubido = new Button(mcont);
+                    bSubido.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    bSubido.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                    bSubido.setText(btnestado);
+                    bSubido.setTag(i);
+                    listBtnAcordion.add(bSubido);
+                    contenedorEstaciones.addView(bSubido);
 
                     liForm.addView(liHori1);
 
