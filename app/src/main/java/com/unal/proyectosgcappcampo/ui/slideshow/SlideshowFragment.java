@@ -9,14 +9,13 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -30,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -48,12 +46,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.common.util.NumberUtils;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,14 +56,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 import com.unal.proyectosgcappcampo.R;
 import com.unal.proyectosgcappcampo.databinding.FragmentSlideshowBinding;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.unal.proyectosgcappcampo.ui.gallery.Feature;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONArray;
@@ -76,19 +67,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
-import javax.xml.transform.Result;
 
 public class SlideshowFragment extends Fragment {
 
@@ -100,6 +90,11 @@ public class SlideshowFragment extends Fragment {
     boolean login = false;
 
     boolean manualLoc = false;
+
+    boolean lluvias1 = false;
+    boolean lluvias2 = false;
+    boolean sismo1 = false;
+    boolean sismo2 = false;
 
     private ActivityResultLauncher<Intent> intentLaucher;
 
@@ -148,6 +143,7 @@ public class SlideshowFragment extends Fragment {
     List<ElementoFormato> listaElementosCAT = new ArrayList<ElementoFormato>();
     List<ElementoFormato> listaElementosCATDANOS = new ArrayList<ElementoFormato>();
     List<ElementoFormato> listaElementosINV = new ArrayList<ElementoFormato>();
+    List<ElementoFormato> listaElementosINVFotosAnexas = new ArrayList<ElementoFormato>();
 
     ElementoFormato ElementoSueloResidualUGSR = new ElementoFormato( "Horizonte",  "secuenciaestrati",  "secuenciaestratisuelor", R.array.SecuenciaEstratiRocasSueloRes);
     ElementoFormato ElementoSueloResidualUGSS = new ElementoFormato( "Horizonte",  "secuenciaestrati",  "secuenciaestratisuelor", R.array.SecuenciaEstratiSuelosSueloRes);
@@ -195,13 +191,20 @@ public class SlideshowFragment extends Fragment {
     //Daños
 
     int daños = 0;
-    List<Integer> listContDAÑOS = new ArrayList<Integer>();
+    List<Integer> listContDANOS = new ArrayList<Integer>();
     List<List<LinearLayout>> ListaDAÑOS = new ArrayList<List<LinearLayout>>();
     List<LinearLayout> listDAÑOS = new ArrayList<LinearLayout>();
     LinearLayout liFormDAÑOS;
 
-
     //Format UGS
+
+
+    int fotosAnexas = 0;
+    List<List<LinearLayout>> ListaFotosAnexas = new ArrayList<List<LinearLayout>>();
+    List<LinearLayout> listFotosAnexas = new ArrayList<LinearLayout>();
+    LinearLayout liFormFotosAnexas;
+
+
     List<Integer> listContDiscontinuidades = new ArrayList<Integer>();
     List<Integer> listContFotosAnexas = new ArrayList<Integer>();
 
@@ -210,10 +213,13 @@ public class SlideshowFragment extends Fragment {
     List<LinearLayout> listDiscontinuidades = new ArrayList<LinearLayout>();
     LinearLayout liFormDiscontinuidades;
 
-    int fotosAnexas = 0;
-    List<List<LinearLayout>> ListaFotosAnexas = new ArrayList<List<LinearLayout>>();
-    List<LinearLayout> listFotosAnexas = new ArrayList<LinearLayout>();
-    LinearLayout liFormFotosAnexas;
+    //FotosInventarios
+
+    List<Integer> listContFotosAnexasINV = new ArrayList<Integer>();
+    int fotosAnexasINV = 0;
+    List<List<LinearLayout>> ListaFotosAnexasINV = new ArrayList<List<LinearLayout>>();
+    List<LinearLayout> listFotosAnexasINV = new ArrayList<LinearLayout>();
+    LinearLayout liFormFotosAnexasINV;
 
     private DatabaseReference databaseReference;
 
@@ -248,6 +254,8 @@ public class SlideshowFragment extends Fragment {
         listaElementosNuevoSGMF = new ArrayList<ElementoFormato>();
         listaElementosCAT = new ArrayList<ElementoFormato>();
         listaElementosCATDANOS = new ArrayList<ElementoFormato>();
+        listaElementosINV = new ArrayList<ElementoFormato>();
+        listaElementosINVFotosAnexas = new ArrayList<ElementoFormato>();
         listFormularios = new ArrayList<String>();
         listLiForm = new ArrayList<LinearLayout>();
 
@@ -474,6 +482,12 @@ public class SlideshowFragment extends Fragment {
             locationStart();
         }
 
+        if (ActivityCompat.checkSelfPermission(mcont, Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mcont, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE,}, 1000);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,}, 1000);
+        }
+
+
     }
 
     private void ActivityResult() {
@@ -557,6 +571,7 @@ public class SlideshowFragment extends Fragment {
 
 
         listFotosAnexas = new ArrayList<LinearLayout>();
+        listFotosAnexasINV = new ArrayList<LinearLayout>();
         listDiscontinuidades = new ArrayList<LinearLayout>();
         listSGMF = new ArrayList<LinearLayout>();
         listDAÑOS = new ArrayList<LinearLayout>();
@@ -571,6 +586,7 @@ public class SlideshowFragment extends Fragment {
         listRadioGrp = new ArrayList<RadioGroup>();
 
 
+        ListaFotosAnexasINV.add(listFotosAnexasINV);
         ListaFotosAnexas.add(listFotosAnexas);
         ListaDiscontinuidades.add(listDiscontinuidades);
         ListaSGMF.add(listSGMF);
@@ -589,11 +605,13 @@ public class SlideshowFragment extends Fragment {
         discontinuidades = 0;
         sgmf = 0;
         daños = 0;
+        fotosAnexasINV = 0;
 
+        listContFotosAnexasINV.add(fotosAnexasINV);
         listContFotosAnexas.add(fotosAnexas);
         listContDiscontinuidades.add(discontinuidades);
         listContSGMF.add(sgmf);
-        listContDAÑOS.add(daños);
+        listContDANOS.add(daños);
 
         if (formType.equals("UGS Rocas")) {
             Button bAcordion = new Button(mcont);
@@ -3050,12 +3068,12 @@ public class SlideshowFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    listContDAÑOS.set(Integer.parseInt(v.getTag().toString()), listContDAÑOS.get(Integer.parseInt(v.getTag().toString())) + 1);
+                    listContDANOS.set(Integer.parseInt(v.getTag().toString()), listContDANOS.get(Integer.parseInt(v.getTag().toString())) + 1);
 
                     Button bDiscont = new Button(mcont);
                     bDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     bDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
-                    bDiscont.setText("DAÑOS "+ listContDAÑOS.get(Integer.parseInt(v.getTag().toString())));
+                    bDiscont.setText("DAÑOS "+ listContDANOS.get(Integer.parseInt(v.getTag().toString())));
                     bDiscont.setTag(Integer.parseInt(v.getTag().toString()));
                     liFormDiscontinuidades.addView(bDiscont);
 
@@ -3107,7 +3125,7 @@ public class SlideshowFragment extends Fragment {
 
                     TextView tvNameDiscont = new TextView(mcont);
                     tvNameDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    String nuevo = "DAÑOS "+ listContDAÑOS.get(Integer.parseInt(v.getTag().toString()));
+                    String nuevo = "DAÑOS "+ listContDANOS.get(Integer.parseInt(v.getTag().toString()));
                     tvNameDiscont.setText(nuevo);
                     tvNameDiscont.setTextAppearance(R.style.TituloFormato);
                     tvNameDiscont.setPadding(0, 100, 0, 50);
@@ -3182,6 +3200,1227 @@ public class SlideshowFragment extends Fragment {
             listLiForm.add(liForm);
             liFormularios.addView(liForm);
         }
+
+        if (formType.equals("Inventario MM")) {
+            Button bAcordion = new Button(mcont);
+            bAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+            bAcordion.setText("Formato Inventario de Movimiento en Masa: "+idparte);
+            bAcordion.setTag(idLinear);
+            listBtnAcordion.add(bAcordion);
+            liFormularios.addView(bAcordion);
+
+            LinearLayout liForm = new LinearLayout(mcont);
+            liForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liForm.setOrientation(LinearLayout.VERTICAL);
+            liForm.setBackgroundColor(0x33333300);
+            //liForm.setVisibility(View.GONE);
+
+            bAcordion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (listLiForm.get(Integer.parseInt(v.getTag().toString())).getVisibility() == View.VISIBLE) {
+                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                        animation.setDuration(220);
+                        animation.setFillAfter(false);
+                        animation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                            }
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.GONE);
+                                listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                            }
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                            }
+                        });
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
+
+                    }
+                    else {
+                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                        animation.setDuration(220);
+                        animation.setFillAfter(false);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).startAnimation(animation);
+                        listLiForm.get(Integer.parseInt(v.getTag().toString())).setVisibility(View.VISIBLE);
+                        listBtnAcordion.get(Integer.parseInt(v.getTag().toString())).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                    }
+                }
+            });
+
+            //------------> Titulo del Formato
+
+            TextView tvTitulo = new TextView(mcont);
+            tvTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvTitulo.setText("Formato Inventario de Movimiento en Masa: "+idparte);
+            tvTitulo.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            tvTitulo.setTextAppearance(R.style.TituloFormato);
+            tvTitulo.setPadding(0, 70, 0, 70);
+            liForm.addView(tvTitulo);
+
+
+            Button bBorrarForm = new Button(mcont);
+            bBorrarForm.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bBorrarForm.setText("Borrar Este Formulario");
+            bBorrarForm.setTag(idLinear);
+            bBorrarForm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("jaaj", "BOrrarRocas: "+listFormularios);
+                    listLiForm.get(Integer.parseInt(v.getTag().toString())).removeAllViews();
+                    liFormularios.removeView(listBtnAcordion.get(Integer.parseInt(v.getTag().toString())));
+                    listFormularios.set(Integer.parseInt(v.getTag().toString()), "Ninguno");
+
+                }
+            });
+            liForm.addView(bBorrarForm);
+
+            for (int i = 0; i < listaElementosINV.size(); i++) {
+                ElementoFormato elementoActual = listaElementosINV.get(i);
+                String nombreElemento = elementoActual.getNombreelemento();
+                String hintElemento = elementoActual.getNombreelemento();
+                String claseElemento = elementoActual.getClaseelemento();
+                String tagElemento = elementoActual.getTagelemento();
+                int idStringArrayElemento = elementoActual.getIdStringArray();
+
+                if (claseElemento.equals("edittext")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    EditText etGenerico = new EditText(mcont);
+                    etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    etGenerico.setHint(hintElemento);
+                    etGenerico.setEms(10);
+                    etGenerico.setTag(tagElemento);
+                    ListaEditText.get(idLinear).add(etGenerico);
+                    liForm.addView(etGenerico);
+                }
+                if (claseElemento.equals("edittextMM")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    EditText etGenerico = new EditText(mcont);
+                    etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    etGenerico.setHint(hintElemento);
+                    etGenerico.setEms(10);
+                    etGenerico.setTag(tagElemento);
+                    try {
+                        etGenerico.setText(properties.getString(tagElemento));
+                        Log.d("pruebis", "EditTextOPT: "+properties.getString(tagElemento));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ListaEditText.get(idLinear).add(etGenerico);
+                    liForm.addView(etGenerico);
+                }
+                if (claseElemento.equals("spinner")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    Spinner sGenerico = new Spinner(mcont);
+                    sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, idStringArrayElemento, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    sGenerico.setAdapter(adapter);
+                    sGenerico.setTag(tagElemento);
+                    ListaSpinner.get(idLinear).add(sGenerico);
+                    liForm.addView(sGenerico);
+                }
+                if (claseElemento.equals("spinnerMM")){
+
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+                    int indexSpinner = 120;
+                    String opc = "1";
+                    try {
+                        opc = properties.getString(tagElemento).toString();
+                        Log.d("pruebis", "SpinnerOPT: "+opc);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (opc.equals("Rotacional")){
+                        opc = "Deslizamiento rotacional";
+                    }
+                    if (opc.equals("Traslacional")){
+                        opc = "Deslizamiento traslacional";
+                    }
+                    if (opc.equals("Flujo de Lodo")){
+                        opc = "Flujo de lodo";
+                    }
+                    if (opc.equals("Flujo de tierra")){
+                        opc = "Flujo de Tierra";
+                    }
+                    if (opc.split("").length == 0){
+                        opc = "1";
+                    }
+                    if (opc.split(" ").length == 3){
+                        if (opc.split(" ")[2].equals("Roca")) {
+                            opc = "Caída de Roca";
+                        }
+                        if (opc.split(" ")[2].equals("Suelo")) {
+                            opc = "Caída de Suelo";
+                        }
+                    }
+                    for (int j = 0; j < opciones.length; j++) {
+                        if (opciones[j].equals(opc)){
+                            indexSpinner = j;
+                        }
+                    }
+                    if (!tagElemento.equals("SUBTIPO_1") && !tagElemento.equals("SUBTIPO_2")){
+                        if (indexSpinner == 120){
+                            indexSpinner = Integer.parseInt(opc) - 1;
+                        }
+                    }
+                    if (indexSpinner == 120){
+                        indexSpinner = 0;
+                    }
+
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    Spinner sGenerico = new Spinner(mcont);
+                    sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, idStringArrayElemento, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    sGenerico.setAdapter(adapter);
+                    sGenerico.setTag(tagElemento);
+                    sGenerico.setSelection(indexSpinner);
+                    ListaSpinner.get(idLinear).add(sGenerico);
+                    liForm.addView(sGenerico);
+
+                }
+                if (claseElemento.equals("titulo")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloFormato);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+                }
+                if (claseElemento.equals("radiobtnMM")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView pruebatext = new TextView(mcont);
+                    pruebatext.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext.setText("2");
+                    pruebatext.setTextAppearance(R.style.TituloItem);
+                    pruebatext.setPadding(30, 20, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext);
+
+                    TextView pruebatext1 = new TextView(mcont);
+                    pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext1.setText("1");
+                    pruebatext1.setTextAppearance(R.style.TituloItem);
+                    pruebatext1.setPadding(30, 20, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext1);
+
+                    liForm.addView(liradiobtnTitulo);
+
+                    LinearLayout liradiobtn = new LinearLayout(mcont);
+                    liradiobtn.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtn.setOrientation(LinearLayout.HORIZONTAL);
+
+                    Resources res = getResources();
+                    String[] opciones2 = res.getStringArray(idStringArrayElemento);
+
+                    RadioGroup radioGroup2 = new RadioGroup(mcont);
+                    radioGroup2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    radioGroup2.setTag(tagElemento+2);
+                    for(String opt : opciones2) {
+                        RadioButton nuevoRadio = new RadioButton(mcont);
+                        LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
+                                100,
+                                RadioGroup.LayoutParams.WRAP_CONTENT);
+                        nuevoRadio.setLayoutParams(params);
+                        //nuevoRadio.setText(opt);
+                        nuevoRadio.setTag(opt);
+                        nuevoRadio.setClickable(true);
+                        nuevoRadio.setEnabled(true);
+                        ListaRadioBtn.get(idLinear).add(nuevoRadio);
+                        radioGroup2.addView(nuevoRadio);
+                    }
+
+                    Resources res2 = getResources();
+                    String[] opciones = res2.getStringArray(idStringArrayElemento);
+                    int indexSpinner2 = 0;
+                    String opc = "0";
+                    try {
+                        opc = properties.getString(tagElemento+2).toString();
+                        Log.d("pruebis", "SpinnerOPT: "+opc);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (opc.split("")[0].equals("C")) {
+                        opc = "Caída";
+                    }
+
+                    for (int j = 0; j < opciones.length; j++) {
+                        if (opciones[j].equals(opc)){
+                            indexSpinner2 = j;
+                        }
+                    }
+
+
+                    RadioButton primerRadio2 = (RadioButton) radioGroup2.getChildAt(indexSpinner2);
+                    primerRadio2.setChecked(true);
+                    liradiobtn.addView(radioGroup2);
+                    ListaRadioGrp.get(idLinear).add(radioGroup2);
+
+                    Resources res1 = getResources();
+                    String[] opciones1 = res.getStringArray(idStringArrayElemento);
+
+                    RadioGroup radioGroup1 = new RadioGroup(mcont);
+                    radioGroup1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    radioGroup1.setTag(tagElemento+1);
+                    for(String opt : opciones1) {
+                        RadioButton nuevoRadio = new RadioButton(mcont);
+                        LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
+                                RadioGroup.LayoutParams.WRAP_CONTENT,
+                                RadioGroup.LayoutParams.WRAP_CONTENT);
+                        nuevoRadio.setLayoutParams(params);
+                        nuevoRadio.setText(opt);
+                        nuevoRadio.setTag(opt);
+                        radioGroup1.addView(nuevoRadio);
+                    }
+
+                    int indexSpinner1=0;
+                    String opc1 = "1";
+                    try {
+                        opc1 = properties.getString(tagElemento+1);
+                        indexSpinner1 = Integer.parseInt(opc1);
+                        Log.d("pruebis", "RadioBtnOPT: "+opc1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    RadioButton primerRadio1 = (RadioButton) radioGroup1.getChildAt(indexSpinner1);
+                    primerRadio1.setChecked(true);
+                    liradiobtn.addView(radioGroup1);
+                    ListaRadioGrp.get(idLinear).add(radioGroup1);
+
+                    liForm.addView(liradiobtn);
+                }
+                if (claseElemento.equals("textview")){
+
+                    Resources res = getResources();
+                    String opciones = res.getString(idStringArrayElemento);
+
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(opciones);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                }
+                if (claseElemento.equals("estructuras")){
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView pruebatext = new TextView(mcont);
+                    pruebatext.setLayoutParams(new ActionBar.LayoutParams(370, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext.setText("Planos de");
+                    pruebatext.setTextAppearance(R.style.TituloItem);
+                    pruebatext.setPadding(30, 10, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext);
+
+                    TextView pruebatext1 = new TextView(mcont);
+                    pruebatext1.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext1.setText("DirBuz");
+                    pruebatext1.setTextAppearance(R.style.TituloItem);
+                    pruebatext1.setPadding(30, 10, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext1);
+
+                    TextView pruebatext2 = new TextView(mcont);
+                    pruebatext2.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext2.setText("Buz");
+                    pruebatext2.setTextAppearance(R.style.TituloItem);
+                    pruebatext2.setPadding(30, 10, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext2);
+
+                    TextView pruebatext3 = new TextView(mcont);
+                    pruebatext3.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext3.setText("Espaciamiento (m)");
+                    pruebatext3.setTextAppearance(R.style.TituloItem);
+                    pruebatext3.setPadding(30, 10, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext3);
+
+                    liForm.addView(liradiobtnTitulo);
+
+                    for (int j = 0; j < opciones.length ; j++) {
+                        String aux = opciones[j];
+
+                        LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                        liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                        TextView pruebatext4 = new TextView(mcont);
+                        pruebatext4.setLayoutParams(new ActionBar.LayoutParams(300, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        pruebatext4.setText(aux);
+                        pruebatext4.setTextAppearance(R.style.TituloItem);
+                        pruebatext4.setPadding(0, 10, 0, 0);
+                        liFormSecuenciaEstrati.addView(pruebatext4);
+
+                        CheckBox checkbox = new CheckBox(mcont);
+                        checkbox.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                        checkbox.setText(aux);
+                        checkbox.setTag(tagElemento+j+"check");
+                        ListaCheckBox.get(idLinear).add(checkbox);
+                        liFormSecuenciaEstrati.addView(checkbox);
+
+                        EditText etSecuenciaEstratiOpt = new EditText(mcont);
+                        etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etSecuenciaEstratiOpt.setHint("DB");
+                        etSecuenciaEstratiOpt.setEms(10);
+                        etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etSecuenciaEstratiOpt.setTag(tagElemento+j+"dirbuz");
+                        ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
+                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
+
+                        EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
+                        etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        etSecuenciaEstratiOpt1Espesor.setHint("BZ");
+                        etSecuenciaEstratiOpt1Espesor.setEms(10);
+                        etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+j+"buz");
+                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
+                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
+
+                        Spinner sGenerico = new Spinner(mcont);
+                        sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, R.array.EstructurasEspaciamientoMM, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        sGenerico.setAdapter(adapter);
+                        sGenerico.setTag(tagElemento+j+"espaciamiento");
+                        ListaSpinner.get(idLinear).add(sGenerico);
+                        liFormSecuenciaEstrati.addView(sGenerico);
+
+
+                        liForm.addView(liFormSecuenciaEstrati);
+
+                    }
+
+
+                }
+                if (claseElemento.equals("radiobtn")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView pruebatext = new TextView(mcont);
+                    pruebatext.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext.setText("2");
+                    pruebatext.setTextAppearance(R.style.TituloItem);
+                    pruebatext.setPadding(30, 20, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext);
+
+                    TextView pruebatext1 = new TextView(mcont);
+                    pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext1.setText("1");
+                    pruebatext1.setTextAppearance(R.style.TituloItem);
+                    pruebatext1.setPadding(30, 20, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext1);
+
+                    liForm.addView(liradiobtnTitulo);
+
+                    LinearLayout liradiobtn = new LinearLayout(mcont);
+                    liradiobtn.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtn.setOrientation(LinearLayout.HORIZONTAL);
+
+                    Resources res = getResources();
+                    String[] opciones2 = res.getStringArray(idStringArrayElemento);
+
+                    RadioGroup radioGroup2 = new RadioGroup(mcont);
+                    radioGroup2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    radioGroup2.setTag(tagElemento+2);
+                    for(String opt : opciones2) {
+                        RadioButton nuevoRadio = new RadioButton(mcont);
+                        LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
+                                100,
+                                RadioGroup.LayoutParams.WRAP_CONTENT);
+                        nuevoRadio.setLayoutParams(params);
+                        //nuevoRadio.setText(marca);
+                        nuevoRadio.setTag(opt);
+//                        nuevoRadio.setClickable(false);
+//                        nuevoRadio.setEnabled(false);
+                        radioGroup2.addView(nuevoRadio);
+                    }
+
+
+
+                    String[] opciones1 = res.getStringArray(idStringArrayElemento);
+
+                    RadioGroup radioGroup1 = new RadioGroup(mcont);
+                    radioGroup1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    radioGroup1.setTag(tagElemento+1);
+                    for(String opt : opciones1) {
+                        RadioButton nuevoRadio = new RadioButton(mcont);
+                        LinearLayout.LayoutParams params = new RadioGroup.LayoutParams(
+                                RadioGroup.LayoutParams.WRAP_CONTENT,
+                                RadioGroup.LayoutParams.WRAP_CONTENT);
+                        nuevoRadio.setLayoutParams(params);
+                        nuevoRadio.setText(opt);
+                        nuevoRadio.setTag(opt);
+                        radioGroup1.addView(nuevoRadio);
+                    }
+
+                    RadioButton primerRadio2 = (RadioButton) radioGroup2.getChildAt(0);
+                    primerRadio2.setChecked(true);
+                    liradiobtn.addView(radioGroup2);
+                    ListaRadioGrp.get(idLinear).add(radioGroup2);
+
+                    RadioButton primerRadio1 = (RadioButton) radioGroup1.getChildAt(0);
+                    primerRadio1.setChecked(true);
+                    liradiobtn.addView(radioGroup1);
+                    ListaRadioGrp.get(idLinear).add(radioGroup1);
+
+                    liForm.addView(liradiobtn);
+
+                }
+                if (claseElemento.equals("radiocheck")){
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+
+                    liForm.addView(liradiobtnTitulo);
+
+                    for (int j = 0; j < opciones.length ; j++) {
+
+                        LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                        liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                        String aux = opciones[j];
+
+                        CheckBox checkbox1 = new CheckBox(mcont);
+                        checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                        String aux = opciones[j];
+                        checkbox1.setText(aux);
+                        checkbox1.setTag(tagElemento+j+"check");
+                        ListaCheckBox.get(idLinear).add(checkbox1);
+                        liFormSecuenciaEstrati.addView(checkbox1);
+
+                        liForm.addView(liFormSecuenciaEstrati);
+
+                    }
+
+
+                }
+                if (claseElemento.equals("radiocheckMM")){
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+                    LinearLayout liradiobtnTitulo3 = new LinearLayout(mcont);
+                    liradiobtnTitulo3.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo3.setOrientation(LinearLayout.VERTICAL);
+
+                    LinearLayout liradiobtnTitulo2 = new LinearLayout(mcont);
+                    liradiobtnTitulo2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo2.setOrientation(LinearLayout.VERTICAL);
+
+                    String text2 = "2";
+                    String text1 = "1";
+
+                    if (nombreElemento.equals("CONTRIBUYENTES - DETONANTES")){
+                        text2 = "C";
+                        text1 = "D";
+                    }
+
+
+                    TextView pruebatext = new TextView(mcont);
+                    pruebatext.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext.setText(text2);
+                    pruebatext.setTextAppearance(R.style.TituloItem);
+                    pruebatext.setPadding(30, 10, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext);
+
+                    TextView pruebatext1 = new TextView(mcont);
+                    pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    pruebatext1.setText(text1);
+                    pruebatext1.setTextAppearance(R.style.TituloItem);
+                    pruebatext1.setPadding(30, 10, 0, 0);
+                    liradiobtnTitulo.addView(pruebatext1);
+
+                    liForm.addView(liradiobtnTitulo);
+
+                    for (int j = 0; j < opciones.length ; j++) {
+
+                        LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                        liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                        String aux = opciones[j];
+
+                        CheckBox checkbox2 = new CheckBox(mcont);
+                        checkbox2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                        checkbox2.setText(aux);
+                        checkbox2.setTag(tagElemento+j+"check_2");
+                        ListaCheckBox.get(idLinear).add(checkbox2);
+                        liFormSecuenciaEstrati.addView(checkbox2);
+
+
+                        CheckBox checkbox1 = new CheckBox(mcont);
+                        checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        checkbox1.setText(aux);
+                        checkbox1.setTag(tagElemento+j+"check_1");
+                        ListaCheckBox.get(idLinear).add(checkbox1);
+                        liFormSecuenciaEstrati.addView(checkbox1);
+
+                        liForm.addView(liFormSecuenciaEstrati);
+
+                        if (j == 1){
+                            checkbox1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    if(((CheckBox) view).isChecked()){
+                                        sismo1 = true;
+                                        liradiobtnTitulo3.removeAllViews();
+                                        TextView tvGenerico = new TextView(mcont);
+                                        tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        tvGenerico.setText("Sismo");
+                                        tvGenerico.setTextAppearance(R.style.TituloItem);
+                                        tvGenerico.setPadding(0, mtop, 0, 0);
+                                        liradiobtnTitulo3.addView(tvGenerico);
+
+                                        String[] opciones4 = res.getStringArray(R.array.SismoMM);
+                                        for (int j1 = 0; j1 < opciones4.length ; j1++) {
+                                            String aux1 = opciones4[j1];
+
+                                            TextView tvGenerico1 = new TextView(mcont);
+                                            tvGenerico1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            tvGenerico1.setText(aux1);
+                                            tvGenerico1.setTextAppearance(R.style.TituloItem);
+                                            tvGenerico1.setPadding(0, mtop, 0, 0);
+                                            liradiobtnTitulo3.addView(tvGenerico1);
+
+                                            EditText etGenerico = new EditText(mcont);
+                                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            etGenerico.setHint(aux1);
+                                            etGenerico.setEms(10);
+                                            etGenerico.setTag("sismoMM"+j1);
+                                            ListaEditText.get(idLinear).add(etGenerico);
+                                            liradiobtnTitulo3.addView(etGenerico);
+                                        }
+
+                                    }
+                                    else {
+                                        sismo1 = false;
+                                        if(!sismo2){
+                                            liradiobtnTitulo3.removeAllViews();
+                                        }
+                                    }
+                                }
+                            });
+                            checkbox2.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    if(((CheckBox) view).isChecked()){
+                                        sismo2 = true;
+                                        liradiobtnTitulo3.removeAllViews();
+
+                                        TextView tvGenerico = new TextView(mcont);
+                                        tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        tvGenerico.setText("Sismo");
+                                        tvGenerico.setTextAppearance(R.style.TituloItem);
+                                        tvGenerico.setPadding(0, mtop, 0, 0);
+                                        liradiobtnTitulo3.addView(tvGenerico);
+
+                                        String[] opciones4 = res.getStringArray(R.array.SismoMM);
+                                        for (int j1 = 0; j1 < opciones4.length ; j1++) {
+                                            String aux1 = opciones4[j1];
+
+                                            TextView tvGenerico1 = new TextView(mcont);
+                                            tvGenerico1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            tvGenerico1.setText(aux1);
+                                            tvGenerico1.setTextAppearance(R.style.TituloItem);
+                                            tvGenerico1.setPadding(0, mtop, 0, 0);
+                                            liradiobtnTitulo3.addView(tvGenerico1);
+
+                                            EditText etGenerico = new EditText(mcont);
+                                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            etGenerico.setHint(aux1);
+                                            etGenerico.setEms(10);
+                                            etGenerico.setTag("sismoMM"+j1);
+                                            ListaEditText.get(idLinear).add(etGenerico);
+                                            liradiobtnTitulo3.addView(etGenerico);
+                                        }
+
+                                    }
+                                    else {
+                                        sismo2 = false;
+                                        if(!sismo1) {
+                                            liradiobtnTitulo3.removeAllViews();
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        if (j == 3){
+                            checkbox1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    if(((CheckBox) view).isChecked()){
+                                        lluvias1 = true;
+                                        liradiobtnTitulo2.removeAllViews();
+                                        TextView tvGenerico = new TextView(mcont);
+                                        tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        tvGenerico.setText("Lluvias");
+                                        tvGenerico.setTextAppearance(R.style.TituloItem);
+                                        tvGenerico.setPadding(0, mtop, 0, 0);
+                                        liradiobtnTitulo2.addView(tvGenerico);
+
+                                        String[] opciones4 = res.getStringArray(R.array.LluviasMM);
+                                        for (int j1 = 0; j1 < opciones4.length ; j1++) {
+                                            String aux1 = opciones4[j1];
+
+                                            TextView tvGenerico1 = new TextView(mcont);
+                                            tvGenerico1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            tvGenerico1.setText(aux1);
+                                            tvGenerico1.setTextAppearance(R.style.TituloItem);
+                                            tvGenerico1.setPadding(0, mtop, 0, 0);
+                                            liradiobtnTitulo2.addView(tvGenerico1);
+
+                                            EditText etGenerico = new EditText(mcont);
+                                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            etGenerico.setHint(aux1);
+                                            etGenerico.setEms(10);
+                                            etGenerico.setTag("lluviasMM"+j1);
+                                            ListaEditText.get(idLinear).add(etGenerico);
+                                            liradiobtnTitulo2.addView(etGenerico);
+                                        }
+
+                                    }
+                                    else {
+                                        lluvias1 = false;
+                                        if (!lluvias2){
+                                            liradiobtnTitulo2.removeAllViews();
+                                        }
+                                    }
+                                }
+                            });
+                            checkbox2.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    if(((CheckBox) view).isChecked()){
+                                        lluvias2 = true;
+                                        liradiobtnTitulo2.removeAllViews();
+
+                                        TextView tvGenerico = new TextView(mcont);
+                                        tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        tvGenerico.setText("Lluvias");
+                                        tvGenerico.setTextAppearance(R.style.TituloItem);
+                                        tvGenerico.setPadding(0, mtop, 0, 0);
+                                        liradiobtnTitulo2.addView(tvGenerico);
+
+                                        String[] opciones4 = res.getStringArray(R.array.LluviasMM);
+                                        for (int j1 = 0; j1 < opciones4.length ; j1++) {
+                                            String aux1 = opciones4[j1];
+
+                                            TextView tvGenerico1 = new TextView(mcont);
+                                            tvGenerico1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            tvGenerico1.setText(aux1);
+                                            tvGenerico1.setTextAppearance(R.style.TituloItem);
+                                            tvGenerico1.setPadding(0, mtop, 0, 0);
+                                            liradiobtnTitulo2.addView(tvGenerico1);
+
+                                            EditText etGenerico = new EditText(mcont);
+                                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                            etGenerico.setHint(aux1);
+                                            etGenerico.setEms(10);
+                                            etGenerico.setTag("llueviasMM"+j1);
+                                            ListaEditText.get(idLinear).add(etGenerico);
+                                            liradiobtnTitulo2.addView(etGenerico);
+                                        }
+
+                                    }
+                                    else {
+                                        lluvias2 = false;
+                                        if (!lluvias1){
+                                            liradiobtnTitulo2.removeAllViews();
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+
+                    }
+                        liForm.addView(liradiobtnTitulo3);
+                        liForm.addView(liradiobtnTitulo2);
+
+
+                }
+                if (claseElemento.equals("origensuelo")){
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloItem);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+                    LinearLayout liradiobtnTitulo1 = new LinearLayout(mcont);
+                    liradiobtnTitulo1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo1.setOrientation(LinearLayout.VERTICAL);
+
+
+                    liForm.addView(liradiobtnTitulo);
+
+
+                    for (int j = 0; j < opciones.length ; j++) {
+
+                        LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                        liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                        String aux = opciones[j];
+
+                        CheckBox checkbox1 = new CheckBox(mcont);
+                        checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                        String aux = opciones[j];
+                        checkbox1.setText(aux);
+                        checkbox1.setTag(tagElemento+j+"check");
+                        ListaCheckBox.get(idLinear).add(checkbox1);
+                        liFormSecuenciaEstrati.addView(checkbox1);
+
+                        liForm.addView(liFormSecuenciaEstrati);
+
+                        if (j == opciones.length-1){
+                            checkbox1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    if(((CheckBox) view).isChecked()){
+
+                                        TextView tvGenerico = new TextView(mcont);
+                                        tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        tvGenerico.setText("Tipo Depósito");
+                                        tvGenerico.setTextAppearance(R.style.TituloItem);
+                                        tvGenerico.setPadding(0, mtop, 0, 0);
+                                        liradiobtnTitulo1.addView(tvGenerico);
+
+                                        String[] opciones4 = res.getStringArray(R.array.OrigenSueloSedimentarioMM);
+                                        for (int j1 = 0; j1 < opciones4.length ; j1++) {
+                                            String aux1 = opciones4[j1];
+
+                                            CheckBox checkbox1 = new CheckBox(mcont);
+                                            checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                        String aux = opciones[j];
+                                            checkbox1.setText(aux1);
+                                            checkbox1.setTag("tipodeposito"+j1+"check");
+                                            ListaCheckBox.get(idLinear).add(checkbox1);
+                                            liradiobtnTitulo1.addView(checkbox1);
+                                        }
+
+                                    } else {
+                                        liradiobtnTitulo1.removeAllViews();
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+
+                    liForm.addView(liradiobtnTitulo1);
+
+                }
+                if (claseElemento.equals("multitext")){
+                    TextView tvGenerico = new TextView(mcont);
+                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    tvGenerico.setText(nombreElemento);
+                    tvGenerico.setTextAppearance(R.style.TituloFormato);
+                    tvGenerico.setPadding(0, mtop, 0, 0);
+                    liForm.addView(tvGenerico);
+
+                    LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                    liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+
+                    liForm.addView(liradiobtnTitulo);
+
+                    Resources res = getResources();
+                    String[] opciones = res.getStringArray(idStringArrayElemento);
+                    int secuEstratiWidth = 420;
+                    int secuEstratiOrdenWidth = 150;
+                    int secuEstratiEspesorWidth = 150;
+
+                    for (int j = 0; j < opciones.length ; j++) {
+
+                        LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                        liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                        TextView tvSecuenciaEstratiOpt = new TextView(mcont);
+                        tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(700, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvSecuenciaEstratiOpt.setText(opciones[j]);
+                        tvSecuenciaEstratiOpt.setEms(10);
+                        tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
+                        liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+                        EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
+                        etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                        etSecuenciaEstratiOpt1Espesor.setHint();
+                        etSecuenciaEstratiOpt1Espesor.setEms(10);
+                        etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+j);
+                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
+                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
+
+
+                        liForm.addView(liFormSecuenciaEstrati);
+
+                    }
+                }
+            }
+
+//            Levantamiento Daños
+
+            LinearLayout liFormDiscontinuidades = new LinearLayout(mcont);
+            liFormDiscontinuidades.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormDiscontinuidades.setOrientation(LinearLayout.VERTICAL);
+            liForm.addView(liFormDiscontinuidades);
+
+            Button bAnadirDiscont = new Button(mcont);
+            bAnadirDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bAnadirDiscont.setText("Añadir Daño");
+            bAnadirDiscont.setTag(idLinear);
+            bAnadirDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.plus_circle, 0);
+            bAnadirDiscont.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    listContDANOS.set(Integer.parseInt(v.getTag().toString()), listContDANOS.get(Integer.parseInt(v.getTag().toString())) + 1);
+
+                    Button bDiscont = new Button(mcont);
+                    bDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    bDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                    bDiscont.setText("DAÑOS "+ listContDANOS.get(Integer.parseInt(v.getTag().toString())));
+                    bDiscont.setTag(Integer.parseInt(v.getTag().toString()));
+                    liFormDiscontinuidades.addView(bDiscont);
+
+
+                    LinearLayout liDiscontinuidades = new LinearLayout(mcont);
+                    liDiscontinuidades.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liDiscontinuidades.setOrientation(LinearLayout.VERTICAL);
+                    liDiscontinuidades.setBackgroundColor(0x22222200);
+                    liDiscontinuidades.setVisibility(View.GONE);
+                    liFormDiscontinuidades.addView(liDiscontinuidades);
+                    ListaDAÑOS.get(Integer.parseInt(v.getTag().toString())).add(liDiscontinuidades);
+
+                    bDiscont.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View vi) {
+
+                            if (liDiscontinuidades.getVisibility() == View.VISIBLE) {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                animation.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                    }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        liDiscontinuidades.setVisibility(View.GONE);
+                                        bDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                    }
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+                                    }
+                                });
+                                liDiscontinuidades.startAnimation(animation);
+
+                            }
+                            else {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                liDiscontinuidades.startAnimation(animation);
+                                liDiscontinuidades.setVisibility(View.VISIBLE);
+                                bDiscont.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                            }
+
+                        }
+                    });
+
+
+                    TextView tvNameDiscont = new TextView(mcont);
+                    tvNameDiscont.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    String nuevo = "DAÑOS "+ listContDANOS.get(Integer.parseInt(v.getTag().toString()));
+                    tvNameDiscont.setText(nuevo);
+                    tvNameDiscont.setTextAppearance(R.style.TituloFormato);
+                    tvNameDiscont.setPadding(0, 100, 0, 50);
+                    liDiscontinuidades.addView(tvNameDiscont);
+
+                    for (int i = 0; i < listaElementosCATDANOS.size(); i++){
+                        ElementoFormato elementoActual = listaElementosCATDANOS.get(i);
+                        String nombreElemento = elementoActual.getNombreelemento();
+                        String hintElemento = elementoActual.getNombreelemento();
+                        String claseElemento = elementoActual.getClaseelemento();
+                        String tagElemento = elementoActual.getTagelemento();
+                        int idStringArrayElemento = elementoActual.getIdStringArray();
+                        int aux = ListaDAÑOS.get(Integer.parseInt(v.getTag().toString())).size();
+
+                        if (claseElemento.equals("edittext")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, mtop, 0, 0);
+                            liDiscontinuidades.addView(tvGenerico);
+
+                            EditText etGenerico = new EditText(mcont);
+                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            etGenerico.setHint(hintElemento);
+                            etGenerico.setEms(10);
+                            etGenerico.setTag(tagElemento+aux);
+                            ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
+                            liDiscontinuidades.addView(etGenerico);
+                        }
+                        if (claseElemento.equals("spinner")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, mtop, 0, 0);
+                            liDiscontinuidades.addView(tvGenerico);
+
+                            Spinner sGenerico = new Spinner(mcont);
+                            sGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mcont, idStringArrayElemento, android.R.layout.simple_spinner_item);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            sGenerico.setAdapter(adapter);
+                            sGenerico.setTag(tagElemento+aux);
+                            ListaSpinner.get(Integer.parseInt(v.getTag().toString())).add(sGenerico);
+                            liDiscontinuidades.addView(sGenerico);
+
+                            if (nombreElemento.equals("COBERTURA, C") || nombreElemento.equals("USO DEL TERRENO, U") || nombreElemento.equals("PATRÓN, PT")){
+                                TextView tvGenerico1 = new TextView(mcont);
+                                tvGenerico1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvGenerico1.setText("Otro:");
+                                tvGenerico1.setTextAppearance(R.style.TituloItem);
+                                tvGenerico1.setPadding(0, mtop, 0, 0);
+                                liDiscontinuidades.addView(tvGenerico1);
+
+                                EditText etGenerico = new EditText(mcont);
+                                etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                etGenerico.setHint(hintElemento);
+                                etGenerico.setEms(10);
+                                etGenerico.setTag(tagElemento+"otro"+aux);
+                                ListaEditText.get(idLinear).add(etGenerico);
+                                liDiscontinuidades.addView(etGenerico);
+                            }
+                        }
+                    }
+
+                }
+            });
+            liForm.addView(bAnadirDiscont);
+
+//------------> Fotografías Anexas INV
+
+            TextView tvFotosAnexas = new TextView(mcont);
+            tvFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvFotosAnexas.setText("Fotografías Anexas");
+            tvFotosAnexas.setTextAppearance(R.style.TituloFormato);
+            tvFotosAnexas.setPadding(0, mtop, 0, 20);
+            liForm.addView(tvFotosAnexas);
+
+            LinearLayout liFormFotosAnexasSuelos = new LinearLayout(mcont);
+            liFormFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            liFormFotosAnexasSuelos.setOrientation(LinearLayout.VERTICAL);
+            liForm.addView(liFormFotosAnexasSuelos);
+
+
+            Button bFotosAnexasSuelos = new Button(mcont);
+            bFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            bFotosAnexasSuelos.setText("Añadir Foto");
+            bFotosAnexasSuelos.setTag(idLinear);
+            bFotosAnexasSuelos.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.plus_circle, 0);
+            bFotosAnexasSuelos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
+
+                    Button bFotosAnexasAcordion = new Button(mcont);
+                    bFotosAnexasAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                    String foto = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
+                    bFotosAnexasAcordion.setText(foto);
+                    bFotosAnexasAcordion.setTag(Integer.parseInt(v.getTag().toString()));
+                    liFormFotosAnexasSuelos.addView(bFotosAnexasAcordion);
+
+                    LinearLayout liFotosAnexas = new LinearLayout(mcont);
+                    liFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    liFotosAnexas.setOrientation(LinearLayout.VERTICAL);
+                    liFotosAnexas.setBackgroundColor(0x22222200);
+                    liFotosAnexas.setVisibility(View.GONE);
+                    liFormFotosAnexasSuelos.addView(liFotosAnexas);
+                    ListaFotosAnexas.get(Integer.parseInt(v.getTag().toString())).add(liFotosAnexas);
+
+                    bFotosAnexasAcordion.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if (liFotosAnexas.getVisibility() == View.VISIBLE) {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                animation.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                    }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        liFotosAnexas.setVisibility(View.GONE);
+                                        bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                    }
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+                                    }
+                                });
+                                liFotosAnexas.startAnimation(animation);
+
+                            }
+                            else {
+                                ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                animation.setDuration(220);
+                                animation.setFillAfter(false);
+                                liFotosAnexas.startAnimation(animation);
+                                liFotosAnexas.setVisibility(View.VISIBLE);
+                                bFotosAnexasAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                            }
+
+                        }
+                    });
+
+                    TextView tvNameFotos = new TextView(mcont);
+                    tvNameFotos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    String foto1 = "Foto "+ listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()));
+                    tvNameFotos.setText(foto1);
+                    tvNameFotos.setTextAppearance(R.style.TituloFormato);
+                    tvNameFotos.setPadding(0, 100, 0, 50);
+                    liFotosAnexas.addView(tvNameFotos);
+
+
+                    for (int i = 0; i < listaElementosINVFotosAnexas.size(); i++){
+                        ElementoFormato elementoActual = listaElementosINVFotosAnexas.get(i);
+                        String nombreElemento = elementoActual.getNombreelemento();
+                        String hintElemento = elementoActual.getNombreelemento();
+                        String claseElemento = elementoActual.getClaseelemento();
+                        String tagElemento = elementoActual.getTagelemento();
+                        int idStringArrayElemento = elementoActual.getIdStringArray();
+                        int aux = ListaFotosAnexasINV.get(Integer.parseInt(v.getTag().toString())).size();
+
+                        if (claseElemento.equals("edittext")){
+                            TextView tvGenerico = new TextView(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            tvGenerico.setTextAppearance(R.style.TituloItem);
+                            tvGenerico.setPadding(0, 40, 0, 0);
+                            liFotosAnexas.addView(tvGenerico);
+
+                            EditText etGenerico = new EditText(mcont);
+                            etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            etGenerico.setHint(hintElemento);
+                            etGenerico.setEms(10);
+                            etGenerico.setTag(tagElemento+aux);
+                            ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
+                            liFotosAnexas.addView(etGenerico);
+                        }
+                    }
+
+                }
+            });
+            liForm.addView(bFotosAnexasSuelos);
+
+
+            listLiForm.add(liForm);
+            liFormularios.addView(liForm);
+        }
+
 
     }
 
@@ -3963,7 +5202,7 @@ public class SlideshowFragment extends Fragment {
 
             if (listFormularios.get(i).equals("Catálogo MM")){
                 JSONObject FormatoTemp = new JSONObject()
-                        .put("DANOS", listContDAÑOS.get(i));
+                        .put("DANOS", listContDANOS.get(i));
 
                 JSONObject spinnerList = new JSONObject();
                 for (int j = 0; j < ListaSpinner.get(i).size(); j++) {
@@ -4010,12 +5249,43 @@ public class SlideshowFragment extends Fragment {
         Log.d("jaaja", "GuardarForm1: "+listFormularios);
         Log.d("jaaja", "GuardarForm2: "+attrForm);
 
+        try {
+            OutputStreamWriter file = new OutputStreamWriter(mcont.openFileOutput("listaForm.txt", Activity.MODE_PRIVATE));
+            file.write(String.valueOf(formComplete));
+            file.flush();
+            file.close();
+            Toast.makeText(mcont, "Formulario Guardado\n", Toast.LENGTH_LONG).show();
+        }catch (Exception ex) {
+            Toast.makeText(mcont, "Ocurrió un error y no se pudo guardar el formulario\n", Toast.LENGTH_LONG).show();
+            Log.e("Error12", "ex: " + ex);
+        }
 
-        OutputStreamWriter file = new OutputStreamWriter(mcont.openFileOutput("listaForm.txt", Activity.MODE_PRIVATE));
-        file.write(String.valueOf(formComplete));
-        file.flush();
-        file.close();
-        Toast.makeText(mcont, "Formulario Guardado\n", Toast.LENGTH_LONG).show();
+        try {
+            File rutaArchivo = new File(Environment.getExternalStorageDirectory() + "/documents/Estaciones/");
+            if (!rutaArchivo.exists()) { //sino existe, se crea
+                rutaArchivo = new File(Environment.getExternalStorageDirectory() + "/documents/Estaciones/");
+                rutaArchivo.mkdirs();//creamos
+            }
+
+            try {
+                File files = new File(rutaArchivo, "estaciones" + ".txt");
+                if (files.exists()) {
+                    files.delete();//si este archivo existe, con ese nombre, lo reemplazará
+                }
+
+                FileOutputStream  out = new FileOutputStream(files);
+                PrintWriter pw = new PrintWriter(out);
+                pw.println(String.valueOf(formComplete));
+                pw.flush();
+                pw.close();
+                out.close();
+
+            } catch (Exception ex) {
+                Log.e("Error12", "ex: " + ex);
+            }
+        } catch (Exception e) {
+            Log.e("Error13", "e: " + e);
+        }
     }
 
     private void checkUser() {
@@ -4221,63 +5491,63 @@ public class SlideshowFragment extends Fragment {
 
         //--------------> INVENTARIO MM
 
-//        listaElementosINV.add(new ElementoFormato("ID PARTE del MM","edittext","ID_PARTE", 0));
-        listaElementosINV.add(new ElementoFormato("IMPORTANCIA","checkradio","IMPORTANC",R.array.Importancia));
-        listaElementosINV.add(new ElementoFormato("ENCUESTADOR","edittext","ENCUESTAD",0));
-        listaElementosINV.add(new ElementoFormato("FECHA EVENTO","fecha","FECHA_MOV",0));
-        listaElementosINV.add(new ElementoFormato("FUENTE FECHA EVENTO","spinner","FECHA_FUENTE",R.array.FuenteFechaEvento));
-        listaElementosINV.add(new ElementoFormato("CONFIABILIDAD FECHA EVENTO","spinner","ConfiFechaMM",R.array.ConfiFecha));
-        listaElementosINV.add(new ElementoFormato("FECHA REPORTE","fecha","FECHA_REP",0));
-        listaElementosINV.add(new ElementoFormato("INSTITUCIÓN","edittext","INSTITUC",0));
-        listaElementosINV.add(new ElementoFormato("SIMMA","edittext","COD_SIMMA",0));
-        listaElementosINV.add(new ElementoFormato("Municipio",  "spinner",  "NOM_MUN", R.array.Municipios));
-        listaElementosINV.add(new ElementoFormato("Vereda",  "edittext",  "VEREDA", 0));
+        listaElementosINV.add(new ElementoFormato("ID PARTE del MM","edittextMM","ID_PARTE", 0));
+        listaElementosINV.add(new ElementoFormato("IMPORTANCIA","spinnerMM","IMPORTANC",R.array.Importancia));
+        listaElementosINV.add(new ElementoFormato("ENCUESTADOR","edittextMM","ENCUESTAD",0));
+        listaElementosINV.add(new ElementoFormato("FECHA EVENTO","edittextMM","FECHA_MOV",0));
+        listaElementosINV.add(new ElementoFormato("FUENTE FECHA EVENTO","spinnerMM","FECHA_FUENTE",R.array.FuenteFechaEvento));
+        listaElementosINV.add(new ElementoFormato("CONFIABILIDAD FECHA EVENTO","spinnerMM","ConfiFechaMM",R.array.ConfiFecha));
+        listaElementosINV.add(new ElementoFormato("FECHA REPORTE","edittextMM","FECHA_REP",0));
+//        listaElementosINV.add(new ElementoFormato("INSTITUCIÓN","edittext","INSTITUC",0));
+        listaElementosINV.add(new ElementoFormato("SIMMA","edittextMM","COD_SIMMA",0));
+        listaElementosINV.add(new ElementoFormato("Municipio",  "spinnerMM",  "NOM_MUN", R.array.Municipios));
+        listaElementosINV.add(new ElementoFormato("Vereda",  "edittextMM",  "VEREDA", 0));
         listaElementosINV.add(new ElementoFormato("Sitio","edittext","SITIO",0));
-        listaElementosINV.add(new ElementoFormato("REFERENCIA GEOGRÁFICA","edittext","REF_GEOGRF",0));
+        listaElementosINV.add(new ElementoFormato("REFERENCIA GEOGRÁFICA","edittextMM","REF_GEOGRF",0));
         listaElementosINV.add(new ElementoFormato("DOCUMENTACIÓN",  "titulo",  "", 0));
         listaElementosINV.add(new ElementoFormato("PLANCHAS","edittext","planchas",0));
         listaElementosINV.add(new ElementoFormato("SENSORES REMOTOS","edittext","sensoresremotos",0));
-        listaElementosINV.add(new ElementoFormato("FOTOGRAFÍAS AÉREAS","edittext","FTE_INFSEC",0));
+        listaElementosINV.add(new ElementoFormato("FOTOGRAFÍAS AÉREAS","edittextMM","FTE_INFSEC",0));
         listaElementosINV.add(new ElementoFormato("ACTIVIDAD DEL MOVIMIENTO",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("EDAD","spinner","edadmm",R.array.FuenteFechaEvento));
-        listaElementosINV.add(new ElementoFormato("ESTADO","spinner","ESTADO_ACT",R.array.FuenteFechaEvento));
-        listaElementosINV.add(new ElementoFormato("ESTILO","spinner","ESTILO",R.array.FuenteFechaEvento));
-        listaElementosINV.add(new ElementoFormato("DISTRIBUCIÓN","spinner","DISTRIBUC",R.array.FuenteFechaEvento));
+        listaElementosINV.add(new ElementoFormato("EDAD","spinner","edadmm",R.array.EdadMM));
+        listaElementosINV.add(new ElementoFormato("ESTADO","spinnerMM","ESTADO_ACT",R.array.EstadoMM));
+        listaElementosINV.add(new ElementoFormato("ESTILO","spinnerMM","ESTILO",R.array.EstiloMM));
+        listaElementosINV.add(new ElementoFormato("DISTRIBUCIÓN","spinnerMM","DISTRIBUC",R.array.DistribucionMM));
         listaElementosINV.add(new ElementoFormato("LITOLOGIA Y ESTRUCTURA",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("DESCRIPCIÓN","edittext","DESCRIP",0));
-        listaElementosINV.add(new ElementoFormato("ESTRUCTURA","estructuras","estructura",R.array.FuenteFechaEvento));
+        listaElementosINV.add(new ElementoFormato("DESCRIPCIÓN (Incuir minimo origen de la roca,(I,M ó S) Edad, Fm, Litologia y estratigrafia, suelos)","edittextMM","LITOLOGIA",0));
+        listaElementosINV.add(new ElementoFormato("ESTRUCTURA","estructuras","estructura",R.array.EstructurasMM));
         listaElementosINV.add(new ElementoFormato("CLASIFICACIÓN DEL MOVIMIENTO",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("TIPO MOVIMIENTO",  "radiobtn",  "TIPO_MOV", R.array.TipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("SUBTIPO PRIMER MOVIMIENTO",  "spinner",  "SUBTIPO1", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("SUBTIPO SEGUNDO MOVIMIENTO",  "spinner",  "SUBTIPO2", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("TIPO MATERIAL",  "radiobtn",  "tipomaterial", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("HUMEDAD",  "radiobtn",  "humedad", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("PLASTICIDAD",  "radiobtn",  "plasticidad", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("ORIGEN SUELO",  "origensuelo",  "origensuelo", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("VELOCIDAD",  "spinner",  "velocidad", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("TIPO MOVIMIENTO",  "radiobtnMM",  "TIPO_MOV", R.array.TipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("SUBTIPO PRIMER MOVIMIENTO",  "spinnerMM",  "SUBTIPO_1", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("SUBTIPO SEGUNDO MOVIMIENTO",  "spinnerMM",  "SUBTIPO_2", R.array.SubtipoMovimiento1));
+        listaElementosINV.add(new ElementoFormato("TIPO MATERIAL",  "radiocheckMM",  "tipomaterial", R.array.TipoMaterialMM));
+        listaElementosINV.add(new ElementoFormato("HUMEDAD",  "radiobtn",  "humedad", R.array.HumedadMM));
+        listaElementosINV.add(new ElementoFormato("PLASTICIDAD",  "radiobtn",  "plasticidad", R.array.PlasticidadMM));
+        listaElementosINV.add(new ElementoFormato("ORIGEN SUELO",  "origensuelo",  "origensuelo", R.array.OrigenSueloMM));
+        listaElementosINV.add(new ElementoFormato("VELOCIDAD",  "spinner",  "velocidad", R.array.VelocidadMM));
         listaElementosINV.add(new ElementoFormato("VELOCIDAD MÁXIMA","edittext","velocidadmax",0));
         listaElementosINV.add(new ElementoFormato("VELOCIDAD MÍNIMA","edittext","velocidadmin",0));
-        listaElementosINV.add(new ElementoFormato("SISTEMA DE CLASIFICACIÓN",  "spinner",  "sisclasificacion", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("SISTEMA DE CLASIFICACIÓN",  "spinner",  "sisclasificacion", R.array.SisClasificacionMM));
         listaElementosINV.add(new ElementoFormato("MORFOMETRÍA",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("GENERAL",  "multitext",  "morfogeneral", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("DIMENSIONES DEL TERRENO",  "multitext",  "morfodimensiones", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("DEFORMACIÓN TERRENO",  "titulito",  "", 0));
-        listaElementosINV.add(new ElementoFormato("MODO",  "spinner",  "morfomodo", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("SEVERIDAD",  "spinner",  "morfoseveridad", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("GEOFORMA",  "edittext",  "morfogeoforma", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("GENERAL",  "multitext",  "morfogeneral", R.array.GeneralMM));
+        listaElementosINV.add(new ElementoFormato("DIMENSIONES DEL TERRENO",  "multitext",  "morfodimensiones", R.array.DimenTerrenoMM));
+        listaElementosINV.add(new ElementoFormato("DEFORMACIÓN TERRENO",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("MODO",  "spinner",  "morfomodo", R.array.ModoMM));
+        listaElementosINV.add(new ElementoFormato("SEVERIDAD",  "spinner",  "morfoseveridad", R.array.SeveridadMM));
+        listaElementosINV.add(new ElementoFormato("GEOFORMA",  "edittextMM",  "AN_GMF", 0));
         listaElementosINV.add(new ElementoFormato("CAUSAS DEL MOVIMIENTO",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("INHERENTES",  "spinner",  "causasinherentes", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("CONTRIBUYENTES - DETONANTES",  "radiobtn2",  "causascontrideto", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("INHERENTES",  "radiocheck",  "causasinherentes", R.array.InherentesMM));
+        listaElementosINV.add(new ElementoFormato("CONTRIBUYENTES - DETONANTES",  "radiocheckMM",  "causascontrideto", R.array.ContriDetonantesMM));
         listaElementosINV.add(new ElementoFormato("TIPO DE EROSIÓN",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("SUPERFICIAL",  "spinner",  "erosionsuperficial", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("SUBSUPERFICIAL",  "spinner",  "erosionsubsuperficial", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("EDAD",  "spinner",  "erosionedad", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("ESTADO",  "spinner",  "erosionestado", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("FLUVIAL",  "spinner",  "erosionfluvial", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("EOLICA",  "spinner",  "erosioneolica", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("SUPERFICIAL",  "radiocheck",  "erosionsuperficial", R.array.ErosionSuperficialMM));
+        listaElementosINV.add(new ElementoFormato("SUBSUPERFICIAL",  "radiocheck",  "erosionsubsuperficial", R.array.ErosionSubsuperficialMM));
+        listaElementosINV.add(new ElementoFormato("EDAD",  "spinner",  "erosionedad", R.array.ErosionEdadMM));
+        listaElementosINV.add(new ElementoFormato("ESTADO",  "spinner",  "erosionestado", R.array.ErosionEstadoMM));
+        listaElementosINV.add(new ElementoFormato("FLUVIAL",  "spinner",  "erosionfluvial", R.array.ErosionFluvialMM));
+        listaElementosINV.add(new ElementoFormato("EOLICA",  "spinner",  "erosioneolica", R.array.ErosionEolicaMM));
         listaElementosINV.add(new ElementoFormato("COBERTURA Y USO DEL SUELO",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("COBERTURA DEL SUELO",  "multitext",  "cobertura", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("USO DEL SUELO",  "multitext",  "usosuelo", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("COBERTURA DEL SUELO",  "multitext",  "cobertura", R.array.CoberturaSueloMM));
+        listaElementosINV.add(new ElementoFormato("USO DEL SUELO",  "multitext",  "usosuelo", R.array.UsoSueloMM));
         listaElementosINV.add(new ElementoFormato("REFERENCIAS",  "titulo",  "", 0));
         listaElementosINV.add(new ElementoFormato("AUTOR","edittext","referenciasautor",0));
         listaElementosINV.add(new ElementoFormato("AÑO","edittext","referenciasaño",0));
@@ -4285,27 +5555,31 @@ public class SlideshowFragment extends Fragment {
         listaElementosINV.add(new ElementoFormato("EDITOR","edittext","referenciaseditor",0));
         listaElementosINV.add(new ElementoFormato("CIUDAD","edittext","referenciasciudad",0));
         listaElementosINV.add(new ElementoFormato("PAGINAS","edittext","referenciaspaginas",0));
-        listaElementosINV.add(new ElementoFormato("EFECTOS SECUNDARIOS",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("REPRESAMIENTO",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("TIPO (Costa & Schuster, 1988)",  "spinner",  "represamientotipo", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("MORFOMETRÍA DE LA PRESA",  "multitext",  "represamientopresa", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("CONDICIONES DE LA PRESA",  "multicheck",  "represamientocondiciones", R.array.SubtipoMovimiento));
-        listaElementosINV.add(new ElementoFormato("EFECTOS",  "multicheck",  "represamientoefectos", R.array.SubtipoMovimiento));
+        listaElementosINV.add(new ElementoFormato("EFECTOS SECUNDARIOS: REPRESAMIENTO",  "titulo",  "", 0));
+        listaElementosINV.add(new ElementoFormato("TIPO (Costa & Schuster, 1988)",  "spinner",  "represamientotipo", R.array.TipoEfectoSecMM));
+        listaElementosINV.add(new ElementoFormato("MORFOMETRÍA DE LA PRESA",  "multitext",  "represamientomorfometria", R.array.MorfometriaPresaMM));
+        listaElementosINV.add(new ElementoFormato("CONDICIONES DE LA PRESA",  "radiocheck",  "represamientocondiciones", R.array.CondicionesPresa));
+        listaElementosINV.add(new ElementoFormato("EFECTOS",  "radiocheck",  "represamientoefectos", R.array.EfectosPresa));
         listaElementosINV.add(new ElementoFormato("POBLACION AFECTADA",  "titulo",  "", 0));
         listaElementosINV.add(new ElementoFormato("HERIDOS","edittext","heridos",0));
         listaElementosINV.add(new ElementoFormato("VIDAS","edittext","vidas",0));
         listaElementosINV.add(new ElementoFormato("DESAPARECIDOS","edittext","desaparecidos",0));
         listaElementosINV.add(new ElementoFormato("PERSONAS","edittext","personas",0));
         listaElementosINV.add(new ElementoFormato("FAMILIAS","edittext","familias",0));
-        listaElementosINV.add(new ElementoFormato("TIPO DE DAÑO:","textview","",0));
-        listaElementosINV.add(new ElementoFormato("DAÑOS A INFRASTRUCTURA, ACTIVIDADES ECONÓMICAS, DAÑOS AMBIENTALES:","linear","",0));
         listaElementosINV.add(new ElementoFormato("NOTAS","edittext","notas",0));
         listaElementosINV.add(new ElementoFormato("APRECIACIÓN DEL RIESGO","edittext","apreciacionriesgo",0));
-        listaElementosINV.add(new ElementoFormato("ESQUEMA DEL MOVIMIENTO",  "titulo",  "", 0));
-        listaElementosINV.add(new ElementoFormato("FOTO EN PLANTA",  "edittext",  "fotoplanta", 0));
-        listaElementosINV.add(new ElementoFormato("OBSERVACIONES",  "edittext",  "fotoplantaobs", 0));
-        listaElementosINV.add(new ElementoFormato("FOTO EN PERFIL",  "edittext",  "fotoperfil", 0));
-        listaElementosINV.add(new ElementoFormato("OBSERVACIONES",  "edittext",  "fotoperfilobs", 0));
+        listaElementosINV.add(new ElementoFormato("DAÑOS A INFRASTRUCTURA, ACTIVIDADES ECONÓMICAS, DAÑOS AMBIENTALES:","titulo","",0));
+        listaElementosINV.add(new ElementoFormato("TIPO DE DAÑO:","textview","",R.string.NotaDaños));
+//        listaElementosINV.add(new ElementoFormato("ESQUEMA DEL MOVIMIENTO",  "titulo",  "", 0));
+//        listaElementosINV.add(new ElementoFormato("FOTO EN PLANTA",  "edittext",  "fotoplanta", 0));
+//        listaElementosINV.add(new ElementoFormato("OBSERVACIONES",  "edittext",  "fotoplantaobs", 0));
+//        listaElementosINV.add(new ElementoFormato("FOTO EN PERFIL",  "edittext",  "fotoperfil", 0));
+//        listaElementosINV.add(new ElementoFormato("OBSERVACIONES",  "edittext",  "fotoperfilobs", 0));
+
+        listaElementosINVFotosAnexas.add(new ElementoFormato( "Fecha",  "edittext",  "fechaFotosAnexas", 0));
+        listaElementosINVFotosAnexas.add(new ElementoFormato( "Nombre de la Foto",  "edittext",  "nombreFotosAnexasINV", 0));
+        listaElementosINVFotosAnexas.add(new ElementoFormato( "Autor/Derechos",  "edittext",  "autorFotosAnexas", 0));
+        listaElementosINVFotosAnexas.add(new ElementoFormato( "Observaciones",  "edittext",  "obsFotosAnexas", 0));
 
     }
 

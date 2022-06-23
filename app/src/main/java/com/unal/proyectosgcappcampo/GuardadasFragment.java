@@ -2022,7 +2022,8 @@ public class GuardadasFragment extends Fragment {
                 }
             }
 
-        }else{
+        }
+        else{
             TextView tvTitulo = new TextView(mcont);
             tvTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             tvTitulo.setText("No hay estaciones guardadas");

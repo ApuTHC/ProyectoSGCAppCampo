@@ -26,7 +26,7 @@
     <string-array name="Formularios">
         <item>Ninguno</item>
         <item>Catálogo MM</item>
-        <!--<item>Inventario MM</item>-->
+        <item>Inventario MM</item>
         <item>UGS Rocas</item>
         <item>UGS Suelos</item>
         <item>SGMF</item>
@@ -869,7 +869,6 @@
     </string-array>
 
 
-
     <string-array name="ClaseDaño">
         <item>I: Infraestructura</item>
         <item>E: Económicos</item>
@@ -885,6 +884,326 @@
     </string-array>
 
     <string name="NotaDaños">Infraestructura: edificios, carreteras, inst. educativa, puentes, servicios publicos, vía ferrea, torre conducción eléctrica, obras lineales, planta eléctrica, torre de energía, capa asfaltica, galpones, tanque almacenamiento, espolones, distrito riego, puentes peatonales, puentes veredales, acueducto. Económicos: agricultura, ganadería, cultivos, semovientes, transporte pasajeros y carga. Ambientales: parques, bosques, planta tratamiento de agua.</string>
+
+
+    <string-array name="EdadMM">
+        <item>Menor a 1 año</item>
+        <item>1-5 años</item>
+        <item>6-10 años</item>
+        <item>11-15 años</item>
+        <item>16-20 años</item>
+        <item>21-30 años</item>
+        <item>31-40 años</item>
+        <item>41-60 años</item>
+        <item>61-80 años</item>
+        <item>> 80 años</item>
+    </string-array>
+
+    <string-array name="EstadoMM">
+        <item>Activo</item>
+        <item>Reactivado</item>
+        <item>Suspendido</item>
+        <item>Latente</item>
+        <item>Abandonado</item>
+        <item>Estabilizado</item>
+        <item>Relicto</item>
+    </string-array>
+
+    <string-array name="EstiloMM">
+        <item>Complejo</item>
+        <item>Compuesto</item>
+        <item>Múltiple</item>
+        <item>Sucesivo</item>
+        <item>Único</item>
+    </string-array>
+
+    <string-array name="DistribucionMM">
+        <item>Retrogresivo</item>
+        <item>Avanzado</item>
+        <item>Ensanchado</item>
+        <item>Confinado</item>
+        <item>Creciente</item>
+        <item>Decreciente</item>
+        <item>Movil</item>
+    </string-array>
+
+    <string-array name="EstructurasMM">
+        <item>Estratificación</item>
+        <item>Foliación</item>
+        <item>Diaclasas</item>
+        <item>Falla</item>
+        <item>Discordancia</item>
+        <item>Esquistosidad</item>
+    </string-array>
+
+    <string-array name="EstructurasEspaciamientoMM">
+        <item>>2</item>
+        <item>2-0.6</item>
+        <item>0.6-0.2</item>
+        <item>0.2-0.06</item>
+        <item>Menor a 0.06</item>
+    </string-array>
+
+    <string-array name="TipoMaterialMM">
+        <item>Roca</item>
+        <item>Detritos</item>
+        <item>Tierra</item>
+        <item>Lodos</item>
+        <item>Turba</item>
+    </string-array>
+
+    <string-array name="HumedadMM">
+        <item>Mojado</item>
+        <item>Muy Húmedo</item>
+        <item>Húmedo</item>
+        <item>Ligeramente húmedo</item>
+        <item>Seco</item>
+    </string-array>
+
+    <string-array name="PlasticidadMM">
+        <item>Alta</item>
+        <item>Media</item>
+        <item>Baja</item>
+        <item>No plástico</item>
+    </string-array>
+
+    <string-array name="OrigenSueloMM">
+        <item>Residual</item>
+        <item>Coluvial</item>
+        <item>Volcánico</item>
+        <item>Sedimetario</item>
+    </string-array>
+
+    <string-array name="OrigenSueloSedimentarioMM">
+        <item>Aluvial</item>
+        <item>Eolico</item>
+        <item>Glacial</item>
+        <item>Lacustre</item>
+        <item>Marino</item>
+    </string-array>
+
+    <string-array name="VelocidadMM">
+        <item>Extr. rápido (>5 m/s)</item>
+        <item>Muy rápido (>3 m/min)</item>
+        <item>Rápido (>1.8 m/hr)</item>
+        <item>Moderado (>13 m/mes)</item>
+        <item>Lento (>1.6 m/año)</item>
+        <item>Muy lento (>16 mm/año)</item>
+        <item>Extr. Lento (Menor a 16 mm/año)</item>
+    </string-array>
+
+    <string-array name="SisClasificacionMM">
+        <item>Hutchinson, 1988</item>
+        <item>Varnes, 1978</item>
+        <item>Cruden y Varnes, 1996</item>
+        <item>Hungr et al., 2001</item>
+    </string-array>
+
+    <string-array name="GeneralMM">
+        <item>Diferencia altura corona a punta(m)</item>
+        <item>Longitud horizontal corona a punta(m)</item>
+        <item>Fahrböschung (grados)</item>
+        <item>Pendiente ladera en Post-falla(grados)</item>
+        <item>Pendiente ladera en Pre-falla(grados)</item>
+        <item>Dirección del movimiento(grados)</item>
+        <item>Azimut del talud(grados)</item>
+    </string-array>
+
+    <string-array name="DimenTerrenoMM">
+        <item>Ancho masa desplazada Wd(m)</item>
+        <item>Ancho superficie de ruptura Wr(m)</item>
+        <item>Longitud masa desplazada Ld(m)</item>
+        <item>Longitud superficie de ruptura Lr(m)</item>
+        <item>Espesor masa desplazada Dd (m)</item>
+        <item>Profundidad superficie de ruptura Dr(m)</item>
+        <item>Longitud total L (m)</item>
+        <item>Volumen inicial (m3)</item>
+        <item>Volumen desplazado (m3)</item>
+        <item>Área inicial (Km2)</item>
+        <item>Área total afectada (Km2)</item>
+        <item>Run up (m)</item>
+        <item>Distancia de viaje (Km)</item>
+    </string-array>
+
+    <string-array name="ModoMM">
+        <item>Ondulación</item>
+        <item>Escalonamiento</item>
+    </string-array>
+
+    <string-array name="SeveridadMM">
+        <item>Leve</item>
+        <item>Media</item>
+        <item>Severa</item>
+    </string-array>
+
+    <string-array name="InherentesMM">
+        <item>Material plástico débil</item>
+        <item>Material sensible</item>
+        <item>Material colapsible</item>
+        <item>Material meteor. fisicamente</item>
+        <item>Material meteor. quimicamente</item>
+        <item>Material fallado por corte</item>
+        <item>Material fisurado y agrietado</item>
+        <item>Orientación desfav. de discontinuidades</item>
+        <item>Contraste de permeabilidad de materiales</item>
+        <item>Contraste de rígidez de materiales</item>
+        <item>Meteoriz. por descongelamiento/deshielo</item>
+        <item>Meteoriz. por expansión/contracción</item>
+    </string-array>
+
+    <string-array name="ContriDetonantesMM">
+        <item>Movimiento tectónico</item>
+        <item>Sismo</item>
+        <item>Erupción volcánica</item>
+        <item>Lluvias (mm)</item>
+        <item>Viento</item>
+        <item>Deshielo</item>
+        <item>Avance/Retroceso de glaciales</item>
+        <item>Rompimiento de lagos en crateres</item>
+        <item>Rompimiento de presas</item>
+        <item>Desembalse rápido de presas</item>
+        <item>Erosión pata del talud por glaciares</item>
+        <item>Socavación pata del talud por corriente agua</item>
+        <item>Socavación pata del talud por oleaje</item>
+        <item>Socavación de margenes de ríos</item>
+        <item>Erosión Pluvial</item>
+        <item>Carga en la corona del talud</item>
+        <item>Erosión subterranea (disolución, tubificación)</item>
+        <item>Irrigación</item>
+        <item>Mantenimiento deficiente sistema de drenaje</item>
+        <item>Escapes de agua de tuberias</item>
+        <item>Deforestación o ausencia de vegetación</item>
+        <item>Mineria</item>
+        <item>Disposición deficiente de estériles/escombros</item>
+        <item>Vibración artificial (trafico, explosiones, hincado pilotes)</item>
+        <item>Erosión Fluvial</item>
+    </string-array>
+
+    <string-array name="SismoMM">
+        <item>Magnitud</item>
+        <item>Escala (ML, Ms, mb, Mw)</item>
+        <item>Distancia al epicentro (Km)</item>
+        <item>Profundiad (Km)</item>
+    </string-array>
+
+    <string-array name="LluviasMM">
+        <item>24h</item>
+        <item>48h</item>
+        <item>72h</item>
+        <item>Mes</item>
+    </string-array>
+
+    <string-array name="ErosionSuperficialMM">
+        <item>Tierras malas</item>
+        <item>Carcavas</item>
+        <item>Surcos</item>
+        <item>Hondonadas</item>
+        <item>Laminar</item>
+    </string-array>
+
+    <string-array name="ErosionSubsuperficialMM">
+        <item>Cavernas</item>
+        <item>Tubificación</item>
+    </string-array>
+
+    <string-array name="ErosionEdadMM">
+        <item>Antigua</item>
+        <item>Reciente</item>
+    </string-array>
+
+    <string-array name="ErosionEstadoMM">
+        <item>Baja</item>
+        <item>Moderada</item>
+        <item>Severa</item>
+    </string-array>
+
+    <string-array name="ErosionFluvialMM">
+        <item>Socav. fondo</item>
+        <item>Socav. lateral</item>
+    </string-array>
+
+    <string-array name="ErosionEolicaMM">
+        <item>Si</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="CoberturaSueloMM">
+        <item>Veg. Herbácea</item>
+        <item>Bosque/Selva</item>
+        <item>Matorrales</item>
+        <item>Cuerpo de agua</item>
+        <item>Cultivos</item>
+        <item>Construcciones</item>
+        <item>Pastos</item>
+        <item>Sin cobertura</item>
+    </string-array>
+
+    <string-array name="UsoSueloMM">
+        <item>Ganaderia</item>
+        <item>Agrícola</item>
+        <item>Recreación</item>
+        <item>Vivienda</item>
+        <item>Mineria</item>
+        <item>Área protegida</item>
+        <item>Vias</item>
+        <item>Zona arqueológica</item>
+        <item>Zona Industrial</item>
+        <item>Sin uso</item>
+    </string-array>
+
+    <string-array name="TipoEfectoSecMM">
+        <item>I</item>
+        <item>II</item>
+        <item>III</item>
+        <item>IV</item>
+        <item>V</item>
+        <item>VI</item>
+    </string-array>
+
+    <string-array name="MorfometriaPresaMM">
+        <item>Longitud (m)</item>
+        <item>Altura (m)</item>
+        <item>Ancho (m)</item>
+        <item>Volúmen (m³)</item>
+        <item>Talud arriba (°)</item>
+        <item>Talud abajo (°)</item>
+    </string-array>
+
+    <string-array name="MorfometriaEmbalse">
+        <item>Longitud (m)</item>
+        <item>Área (m²)</item>
+        <item>Volúmen (m³)</item>
+        <item>Nivel agua bajo corona (m)</item>
+        <item>Area cuenca (m²)</item>
+        <item>Caudal entrada</item>
+        <item>Caudal salida</item>
+        <item>Tasa de llenado</item>
+    </string-array>
+
+    <string-array name="CondicionesPresa">
+        <item>Obstrucción parcial</item>
+        <item>Erosión de la pata</item>
+        <item>Estabilización artificial</item>
+        <item>Ligeramente socavada</item>
+        <item>Moderadamente socavda</item>
+        <item>Fuertemente socavda</item>
+        <item>Parcialmente fallada</item>
+        <item>Fallada</item>
+    </string-array>
+
+    <string-array name="EfectosPresa">
+        <item>Tsunami (alt. ola)</item>
+        <item>Empalizada</item>
+        <item>Sedimentación</item>
+        <item>Sismo</item>
+        <item>Inundacion</item>
+    </string-array>
+
+
+
+
+
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
