@@ -300,7 +300,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etMM = new EditText(mcont);
                         etMM.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etMM.setHint("ID_PARTE del MM");
-                        etMM.setEms(10);
                         etMM.setTag("editMM");
                         liFormularios.addView(etMM);
 
@@ -534,7 +533,6 @@ public class SlideshowFragment extends Fragment {
 
     }
 
-
     private void locationStart() {
         LocationManager mlocManager = (LocationManager) mcont.getSystemService(Context.LOCATION_SERVICE);
         Localizacion Local = new Localizacion();
@@ -561,7 +559,6 @@ public class SlideshowFragment extends Fragment {
             }
         }
     }
-
 
     private void AddFormulario(String formType, boolean auxMM){
 
@@ -721,7 +718,6 @@ public class SlideshowFragment extends Fragment {
                     EditText etGenerico = new EditText(mcont);
                     etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     etGenerico.setHint(hintElemento);
-                    etGenerico.setEms(10);
                     etGenerico.setTag(tagElemento);
                     ListaEditText.get(idLinear).add(etGenerico);
                     liForm.addView(etGenerico);
@@ -772,7 +768,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt = new EditText(mcont);
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt.setHint("Orden");
-                        etSecuenciaEstratiOpt.setEms(10);
                         etSecuenciaEstratiOpt.setTag(tagElemento+aux+"orden");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
@@ -780,7 +775,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setHint("Espesor (m)");
-                        etSecuenciaEstratiOpt1Espesor.setEms(10);
                         etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+aux+"espesor");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
@@ -841,7 +835,6 @@ public class SlideshowFragment extends Fragment {
                                             EditText etSecuenciaEstratiSueloROrden = new EditText(mcont);
                                             etSecuenciaEstratiSueloROrden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etSecuenciaEstratiSueloROrden.setHint("Orden");
-                                            etSecuenciaEstratiSueloROrden.setEms(10);
                                             etSecuenciaEstratiSueloROrden.setTag(tagElemento+ aux +"orden");
                                             ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloROrden);
                                             liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloROrden);
@@ -849,7 +842,6 @@ public class SlideshowFragment extends Fragment {
                                             EditText etSecuenciaEstratiSueloREspesor = new EditText(mcont);
                                             etSecuenciaEstratiSueloREspesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etSecuenciaEstratiSueloREspesor.setHint("Espesor (m)");
-                                            etSecuenciaEstratiSueloREspesor.setEms(10);
                                             etSecuenciaEstratiSueloREspesor.setTag(tagElemento+ aux +"espesor");
                                             ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloREspesor);
                                             liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloREspesor);
@@ -901,7 +893,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etLitologia = new EditText(mcont);
                         etLitologia.setLayoutParams(new ActionBar.LayoutParams(300, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etLitologia.setHint("Espesor (m)");
-                        etLitologia.setEms(10);
                         etLitologia.setTag(tagElemento+j+"espesor");
                         ListaEditText.get(idLinear).add(etLitologia);
                         liFormLitologias.addView(etLitologia);
@@ -1120,7 +1111,6 @@ public class SlideshowFragment extends Fragment {
                             EditText etGenerico = new EditText(mcont);
                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             etGenerico.setHint(hintElemento);
-                            etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liDiscontinuidades.addView(etGenerico);
@@ -1254,7 +1244,6 @@ public class SlideshowFragment extends Fragment {
                             EditText etGenerico = new EditText(mcont);
                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             etGenerico.setHint(hintElemento);
-                            etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liFotosAnexas.addView(etGenerico);
@@ -1372,7 +1361,6 @@ public class SlideshowFragment extends Fragment {
                     EditText etGenerico = new EditText(mcont);
                     etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     etGenerico.setHint(hintElemento);
-                    etGenerico.setEms(10);
                     etGenerico.setTag(tagElemento);
                     ListaEditText.get(idLinear).add(etGenerico);
                     liForm.addView(etGenerico);
@@ -1423,7 +1411,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt = new EditText(mcont);
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt.setHint("Orden");
-                        etSecuenciaEstratiOpt.setEms(10);
                         etSecuenciaEstratiOpt.setTag(tagElemento+aux+"orden");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
@@ -1431,7 +1418,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setHint("Espesor (m)");
-                        etSecuenciaEstratiOpt1Espesor.setEms(10);
                         etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
                         etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+aux+"espesor");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
@@ -1493,7 +1479,6 @@ public class SlideshowFragment extends Fragment {
                                             EditText etSecuenciaEstratiSueloROrden = new EditText(mcont);
                                             etSecuenciaEstratiSueloROrden.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etSecuenciaEstratiSueloROrden.setHint("Orden");
-                                            etSecuenciaEstratiSueloROrden.setEms(10);
                                             etSecuenciaEstratiSueloROrden.setTag(tagElemento+ aux +"orden");
                                             ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloROrden);
                                             liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloROrden);
@@ -1501,7 +1486,6 @@ public class SlideshowFragment extends Fragment {
                                             EditText etSecuenciaEstratiSueloREspesor = new EditText(mcont);
                                             etSecuenciaEstratiSueloREspesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etSecuenciaEstratiSueloREspesor.setHint("Espesor (m)");
-                                            etSecuenciaEstratiSueloREspesor.setEms(10);
                                             etSecuenciaEstratiSueloREspesor.setInputType(InputType.TYPE_CLASS_NUMBER);
                                             etSecuenciaEstratiSueloREspesor.setTag(tagElemento+ aux +"espesor");
                                             ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloREspesor);
@@ -1554,7 +1538,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etLitologia = new EditText(mcont);
                         etLitologia.setLayoutParams(new ActionBar.LayoutParams(300, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etLitologia.setHint("Espesor (m)");
-                        etLitologia.setEms(10);
                         etLitologia.setInputType(InputType.TYPE_CLASS_NUMBER);
                         etLitologia.setTag(tagElemento+j+"espesor");
                         ListaEditText.get(idLinear).add(etLitologia);
@@ -1634,7 +1617,6 @@ public class SlideshowFragment extends Fragment {
 
                         EditText etSecuenciaEstratiOpt = new EditText(mcont);
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        etSecuenciaEstratiOpt.setEms(10);
                         etSecuenciaEstratiOpt.setTag(tag+2);
                         etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
@@ -1642,7 +1624,6 @@ public class SlideshowFragment extends Fragment {
 
                         EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        etSecuenciaEstratiOpt1Espesor.setEms(10);
                         etSecuenciaEstratiOpt1Espesor.setTag(tag+1);
                         etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
@@ -1803,7 +1784,6 @@ public class SlideshowFragment extends Fragment {
                                     EditText etDirImbricacion1 = new EditText(mcont);
                                     etDirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     etDirImbricacion1.setHint("Dirección de la Imbricación Litología 1");
-                                    etDirImbricacion1.setEms(10);
                                     etDirImbricacion1.setTag(auxTag);
                                     ListaEditText.get(idLinear).add(etDirImbricacion1);
                                     liFormdirimbri1.addView(etDirImbricacion1);
@@ -1843,7 +1823,6 @@ public class SlideshowFragment extends Fragment {
                                     EditText etDirImbricacion1 = new EditText(mcont);
                                     etDirImbricacion1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     etDirImbricacion1.setHint("Dirección de la Imbricación Litología 2");
-                                    etDirImbricacion1.setEms(10);
                                     etDirImbricacion1.setTag(auxTag);
                                     ListaEditText.get(idLinear).add(etDirImbricacion1);
                                     liFormdirimbri.addView(etDirImbricacion1);
@@ -1958,14 +1937,14 @@ public class SlideshowFragment extends Fragment {
                     pruebatext.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
                     pruebatext.setText("2");
                     pruebatext.setTextAppearance(R.style.TituloItem);
-                    pruebatext.setPadding(70, 10, 0, 0);
+                    pruebatext.setPadding(70, 0, 0, 0);
                     liradiobtnTitulo.addView(pruebatext);
 
                     TextView pruebatext1 = new TextView(mcont);
                     pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     pruebatext1.setText("1");
                     pruebatext1.setTextAppearance(R.style.TituloItem);
-                    pruebatext1.setPadding(50, 10, 0, 0);
+                    pruebatext1.setPadding(50, 0, 0, 0);
                     liradiobtnTitulo.addView(pruebatext1);
 
                     liForm.addView(liradiobtnTitulo);
@@ -1985,7 +1964,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt = new EditText(mcont);
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt.setHint("2");
-                        etSecuenciaEstratiOpt.setEms(10);
                         etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER);
                         etSecuenciaEstratiOpt.setTag(tagElemento+j+"_2");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
@@ -1994,7 +1972,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setHint("1");
-                        etSecuenciaEstratiOpt1Espesor.setEms(10);
                         etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+j+"_1");
                         etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
@@ -2003,7 +1980,6 @@ public class SlideshowFragment extends Fragment {
                         TextView tvSecuenciaEstratiOpt = new TextView(mcont);
                         tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         tvSecuenciaEstratiOpt.setText(opciones[j]);
-                        tvSecuenciaEstratiOpt.setEms(10);
                         tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
                         liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
 
@@ -2183,7 +2159,6 @@ public class SlideshowFragment extends Fragment {
                             EditText etGenerico = new EditText(mcont);
                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             etGenerico.setHint(hintElemento);
-                            etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liFotosAnexas.addView(etGenerico);
@@ -2295,7 +2270,6 @@ public class SlideshowFragment extends Fragment {
                     EditText etGenerico = new EditText(mcont);
                     etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     etGenerico.setHint(hintElemento);
-                    etGenerico.setEms(10);
                     etGenerico.setTag(tagElemento);
                     ListaEditText.get(idLinear).add(etGenerico);
                     liForm.addView(etGenerico);
@@ -2328,7 +2302,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etGenerico = new EditText(mcont);
                         etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etGenerico.setHint(hintElemento);
-                        etGenerico.setEms(10);
                         etGenerico.setTag(tagElemento+"otro");
                         ListaEditText.get(idLinear).add(etGenerico);
                         liForm.addView(etGenerico);
@@ -2395,7 +2368,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt = new EditText(mcont);
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt.setHint(opciones[j]);
-                        etSecuenciaEstratiOpt.setEms(10);
                         etSecuenciaEstratiOpt.setTag(tagElemento+opciones[j]);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
@@ -2515,7 +2487,6 @@ public class SlideshowFragment extends Fragment {
                             EditText etGenerico = new EditText(mcont);
                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             etGenerico.setHint(hintElemento);
-                            etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liDiscontinuidades.addView(etGenerico);
@@ -2548,7 +2519,6 @@ public class SlideshowFragment extends Fragment {
                                 EditText etGenerico = new EditText(mcont);
                                 etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 etGenerico.setHint(hintElemento);
-                                etGenerico.setEms(10);
                                 etGenerico.setTag(tagElemento+"otro"+aux);
                                 ListaEditText.get(idLinear).add(etGenerico);
                                 liDiscontinuidades.addView(etGenerico);
@@ -2693,7 +2663,6 @@ public class SlideshowFragment extends Fragment {
                             EditText etGenerico = new EditText(mcont);
                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             etGenerico.setHint(hintElemento);
-                            etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liFotosAnexas.addView(etGenerico);
@@ -2804,7 +2773,6 @@ public class SlideshowFragment extends Fragment {
                     EditText etGenerico = new EditText(mcont);
                     etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     etGenerico.setHint(hintElemento);
-                    etGenerico.setEms(10);
                     etGenerico.setTag(tagElemento);
                     ListaEditText.get(idLinear).add(etGenerico);
                     liForm.addView(etGenerico);
@@ -2820,7 +2788,6 @@ public class SlideshowFragment extends Fragment {
                     EditText etGenerico = new EditText(mcont);
                     etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     etGenerico.setHint(hintElemento);
-                    etGenerico.setEms(10);
                     etGenerico.setTag(tagElemento);
                     try {
                         etGenerico.setText(properties.getString(tagElemento));
@@ -3151,7 +3118,6 @@ public class SlideshowFragment extends Fragment {
                             EditText etGenerico = new EditText(mcont);
                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             etGenerico.setHint(hintElemento);
-                            etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liDiscontinuidades.addView(etGenerico);
@@ -3184,7 +3150,6 @@ public class SlideshowFragment extends Fragment {
                                 EditText etGenerico = new EditText(mcont);
                                 etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 etGenerico.setHint(hintElemento);
-                                etGenerico.setEms(10);
                                 etGenerico.setTag(tagElemento+"otro"+aux);
                                 ListaEditText.get(idLinear).add(etGenerico);
                                 liDiscontinuidades.addView(etGenerico);
@@ -3297,7 +3262,6 @@ public class SlideshowFragment extends Fragment {
                     EditText etGenerico = new EditText(mcont);
                     etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     etGenerico.setHint(hintElemento);
-                    etGenerico.setEms(10);
                     etGenerico.setTag(tagElemento);
                     ListaEditText.get(idLinear).add(etGenerico);
                     liForm.addView(etGenerico);
@@ -3313,7 +3277,6 @@ public class SlideshowFragment extends Fragment {
                     EditText etGenerico = new EditText(mcont);
                     etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     etGenerico.setHint(hintElemento);
-                    etGenerico.setEms(10);
                     etGenerico.setTag(tagElemento);
                     try {
                         etGenerico.setText(properties.getString(tagElemento));
@@ -3612,7 +3575,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt = new EditText(mcont);
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt.setHint("DB");
-                        etSecuenciaEstratiOpt.setEms(10);
                         etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER);
                         etSecuenciaEstratiOpt.setTag(tagElemento+j+"dirbuz");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
@@ -3621,7 +3583,6 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setHint("BZ");
-                        etSecuenciaEstratiOpt1Espesor.setEms(10);
                         etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+j+"buz");
                         etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
@@ -3832,10 +3793,17 @@ public class SlideshowFragment extends Fragment {
 
                         CheckBox checkbox1 = new CheckBox(mcont);
                         checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        checkbox1.setText(aux);
+//                        checkbox1.setText(aux);
                         checkbox1.setTag(tagElemento+j+"check_1");
                         ListaCheckBox.get(idLinear).add(checkbox1);
                         liFormSecuenciaEstrati.addView(checkbox1);
+
+                        TextView tvSecuenciaEstratiOpt = new TextView(mcont);
+                        tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tvSecuenciaEstratiOpt.setText(aux);
+                        tvSecuenciaEstratiOpt.setPadding(5, 0, 0, 0);
+                        tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
+                        liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
 
                         liForm.addView(liFormSecuenciaEstrati);
 
@@ -3868,7 +3836,6 @@ public class SlideshowFragment extends Fragment {
                                             EditText etGenerico = new EditText(mcont);
                                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etGenerico.setHint(aux1);
-                                            etGenerico.setEms(10);
                                             etGenerico.setTag("sismoMM"+j1);
                                             ListaEditText.get(idLinear).add(etGenerico);
                                             liradiobtnTitulo3.addView(etGenerico);
@@ -3912,7 +3879,6 @@ public class SlideshowFragment extends Fragment {
                                             EditText etGenerico = new EditText(mcont);
                                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etGenerico.setHint(aux1);
-                                            etGenerico.setEms(10);
                                             etGenerico.setTag("sismoMM"+j1);
                                             ListaEditText.get(idLinear).add(etGenerico);
                                             liradiobtnTitulo3.addView(etGenerico);
@@ -3957,7 +3923,6 @@ public class SlideshowFragment extends Fragment {
                                             EditText etGenerico = new EditText(mcont);
                                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etGenerico.setHint(aux1);
-                                            etGenerico.setEms(10);
                                             etGenerico.setTag("lluviasMM"+j1);
                                             ListaEditText.get(idLinear).add(etGenerico);
                                             liradiobtnTitulo2.addView(etGenerico);
@@ -4001,8 +3966,7 @@ public class SlideshowFragment extends Fragment {
                                             EditText etGenerico = new EditText(mcont);
                                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etGenerico.setHint(aux1);
-                                            etGenerico.setEms(10);
-                                            etGenerico.setTag("llueviasMM"+j1);
+                                            etGenerico.setTag("lluviasMM"+j1);
                                             ListaEditText.get(idLinear).add(etGenerico);
                                             liradiobtnTitulo2.addView(etGenerico);
                                         }
@@ -4135,14 +4099,12 @@ public class SlideshowFragment extends Fragment {
                         TextView tvSecuenciaEstratiOpt = new TextView(mcont);
                         tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(700, ViewGroup.LayoutParams.WRAP_CONTENT));
                         tvSecuenciaEstratiOpt.setText(opciones[j]);
-                        tvSecuenciaEstratiOpt.setEms(10);
                         tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
                         liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
 
                         EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
 //                        etSecuenciaEstratiOpt1Espesor.setHint();
-                        etSecuenciaEstratiOpt1Espesor.setEms(10);
                         etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+j);
                         etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
@@ -4254,7 +4216,6 @@ public class SlideshowFragment extends Fragment {
                             EditText etGenerico = new EditText(mcont);
                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             etGenerico.setHint(hintElemento);
-                            etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liDiscontinuidades.addView(etGenerico);
@@ -4287,7 +4248,6 @@ public class SlideshowFragment extends Fragment {
                                 EditText etGenerico = new EditText(mcont);
                                 etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 etGenerico.setHint(hintElemento);
-                                etGenerico.setEms(10);
                                 etGenerico.setTag(tagElemento+"otro"+aux);
                                 ListaEditText.get(idLinear).add(etGenerico);
                                 liDiscontinuidades.addView(etGenerico);
@@ -4407,7 +4367,6 @@ public class SlideshowFragment extends Fragment {
                             EditText etGenerico = new EditText(mcont);
                             etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             etGenerico.setHint(hintElemento);
-                            etGenerico.setEms(10);
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liFotosAnexas.addView(etGenerico);
@@ -4998,7 +4957,7 @@ public class SlideshowFragment extends Fragment {
                                             String valordano = EditTextsAux.getString("valordaño"+k);
 
 
-                                            FormatNewDANO nuevoFormatoNewDANO = new FormatNewDANO(tiposdano, clasedano, tipodano, cantidaddano, unidaddano, valordano);
+                                            FormatNewDANO nuevoFormatoNewDANO = new FormatNewDANO(true, tiposdano, clasedano, tipodano, cantidaddano, unidaddano, valordano);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_CATALOGO/Form_CATALOGO_"+j+"/DANOS/DANOS_"+k).setValue(nuevoFormatoNewDANO);
 
                                         }
@@ -5275,10 +5234,10 @@ public class SlideshowFragment extends Fragment {
                                             sismoMM3 = EditTextsAux.getString("sismoMM3");
                                         }
                                         if (causascontrideto3check_2.equals("true") || causascontrideto3check_1.equals("true")){
-                                            lluviasMM0 = EditTextsAux.getString("llueviasMM0");
-                                            lluviasMM1 = EditTextsAux.getString("llueviasMM1");
-                                            lluviasMM2 = EditTextsAux.getString("llueviasMM2");
-                                            lluviasMM3 = EditTextsAux.getString("llueviasMM3");
+                                            lluviasMM0 = EditTextsAux.getString("lluviasMM0");
+                                            lluviasMM1 = EditTextsAux.getString("lluviasMM1");
+                                            lluviasMM2 = EditTextsAux.getString("lluviasMM2");
+                                            lluviasMM3 = EditTextsAux.getString("lluviasMM3");
                                         }
 
 
@@ -5298,7 +5257,7 @@ public class SlideshowFragment extends Fragment {
                                             String valordano = EditTextsAux.getString("valordaño"+k);
 
 
-                                            FormatNewDANO nuevoFormatoNewDANO = new FormatNewDANO(tiposdano, clasedano, tipodano, cantidaddano, unidaddano, valordano);
+                                            FormatNewDANO nuevoFormatoNewDANO = new FormatNewDANO(true, tiposdano, clasedano, tipodano, cantidaddano, unidaddano, valordano);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_INVENTARIO/Form_INVENTARIO_"+j+"/DANOS/DANOS_"+k).setValue(nuevoFormatoNewDANO);
 
                                         }
@@ -5375,6 +5334,7 @@ public class SlideshowFragment extends Fragment {
         CharSequence s = DateFormat.format("yyyy-MM-dd", d.getTime());
         attrForm = new JSONObject()
                 .put("Subido", false)
+                .put("activo", true)
                 .put("Estacion", etEstacion.getText().toString())
                 .put("TipoEstacion", etTipoEstacion.getText().toString())
                 .put("Este", etEste.getText().toString())
@@ -5568,6 +5528,7 @@ public class SlideshowFragment extends Fragment {
                 for (int k = 0; k < ListaEditText.get(i).size(); k++) {
                     editTextList.put(ListaEditText.get(i).get(k).getTag().toString(), ListaEditText.get(i).get(k).getText().toString());
                 }
+
                 FormatoTemp.put("EditText", editTextList);
 
                 JSONObject radioGrp = new JSONObject();

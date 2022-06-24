@@ -66,6 +66,7 @@ public class GuardadasFragment extends Fragment {
     List<String[]> ListaCATALOGO = new ArrayList<String[]>();
     List<String[]> ListaDANOS = new ArrayList<String[]>();
     List<String[]> ListaINVENTARIO = new ArrayList<String[]>();
+    List<String[]> ListaFotosAnexasINV = new ArrayList<String[]>();
 
     int colorPrimary = Color.parseColor("#f9ae00");
     int colorSecu = Color.parseColor("#666666");
@@ -198,10 +199,10 @@ public class GuardadasFragment extends Fragment {
                     String btnestado;
                     if (!Subido){
                         estado = "Pendiente";
-                        btnestado = "No Subir";
+                        btnestado = "Click para No Subir";
                     }else{
                         estado = "Subido";
-                        btnestado = "Subir de Nuevo";
+                        btnestado = "Click para Subir de Nuevo";
                     }
 
                     TextView tvOpt = new TextView(mcont);
@@ -221,7 +222,7 @@ public class GuardadasFragment extends Fragment {
                     Button bSubido = new Button(mcont);
                     bSubido.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 //                    bSubido.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
-                    bSubido.setText(estado+": "+btnestado);
+                    bSubido.setText(estado+", "+btnestado);
                     bSubido.setTag(i);
                     listBtnSubido.add(bSubido);
                     liHori1.addView(bSubido);
@@ -239,10 +240,10 @@ public class GuardadasFragment extends Fragment {
                                 boolean Subido1 = Boolean.parseBoolean(form1.getString("Subido"));
                                 if (Subido1){
                                     form1.put("Subido", false);
-                                    listBtnSubido.get(idBtn).setText("Pendiente: No subir");
+                                    listBtnSubido.get(idBtn).setText("Pendiente, Click para No subir");
                                 }else{
                                     form1.put("Subido", true);
-                                    listBtnSubido.get(idBtn).setText("Subido: Subir de Nuevo");
+                                    listBtnSubido.get(idBtn).setText("Subido, Click para Subir de Nuevo");
                                 }
                                 try {
                                     OutputStreamWriter file = new OutputStreamWriter(mcont.openFileOutput("listaForm.txt", Activity.MODE_PRIVATE));
@@ -271,7 +272,7 @@ public class GuardadasFragment extends Fragment {
                         LinearLayout liHori = new LinearLayout(mcont);
                         liHori.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         liHori.setOrientation(LinearLayout.HORIZONTAL);
-                        liHori.setPadding(20, 0, 0, 20);
+                        liHori.setPadding(0, 0, 0, 20);
 
                         String aux = form.getString(opciones[j]);
 
@@ -300,6 +301,7 @@ public class GuardadasFragment extends Fragment {
                     int contUGS_Suelos = Integer.parseInt(counts.getString("UGS_Suelos"));
                     int contSGMF = Integer.parseInt(counts.getString("SGMF"));
                     int contCATALOGO = Integer.parseInt(counts.getString("CATALOGO"));
+                    int contINVENTARIO = Integer.parseInt(counts.getString("INVENTARIO"));
 
                     for (int j = 0; j < contUGS_Rocas; j++) {
                         JSONObject FromatoAux = Formularios.getJSONObject("Form_UGS_Rocas_"+j);
@@ -364,12 +366,12 @@ public class GuardadasFragment extends Fragment {
                             LinearLayout liHori = new LinearLayout(mcont);
                             liHori.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             liHori.setOrientation(LinearLayout.HORIZONTAL);
-                            liHori.setPadding(20, 0, 0, 20);
+                            liHori.setPadding(0, 0, 0, 20);
 
                             LinearLayout liVert = new LinearLayout(mcont);
                             liVert.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             liVert.setOrientation(LinearLayout.VERTICAL);
-                            liVert.setPadding(20, 0, 0, 20);
+                            liVert.setPadding(0, 0, 0, 20);
 
                             String clase = ListaRocas.get(k)[2];
                             String titulo = ListaRocas.get(k)[1];
@@ -383,20 +385,39 @@ public class GuardadasFragment extends Fragment {
                                     valor = SpinnersAux.getString(tag);
                                 }
 
-                                TextView tvOpte = new TextView(mcont);
-                                tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                tvOpte.setText(titulo+": ");
-                                tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
-                                tvOpte.setPadding(0, 20, 0, 0);
-                                liHori.addView(tvOpte);
+                                if (tag.equals("nombreugs") || tag.equals("composicionmineral1") || tag.equals("composicionmineral2") ){
+                                    TextView tvOpte = new TextView(mcont);
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setText(titulo+": ");
+                                    tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
+                                    tvOpte.setPadding(0, 20, 0, 0);
+                                    liVert.addView(tvOpte);
 
-                                TextView tvOpts = new TextView(mcont);
-                                tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                tvOpts.setText(valor);
-                                tvOpts.setTextAppearance(R.style.TituloItem);
-                                tvOpts.setPadding(0, 20, 0, 0);
-                                liHori.addView(tvOpts);
-                                liVert.addView(liHori);
+                                    TextView tvOpts = new TextView(mcont);
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setText(valor);
+                                    tvOpts.setTextAppearance(R.style.TituloItem);
+                                    tvOpts.setPadding(0, 20, 0, 0);
+                                    liVert.addView(tvOpts);
+
+                                }
+                                else{
+                                    TextView tvOpte = new TextView(mcont);
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setText(titulo+": ");
+                                    tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
+                                    tvOpte.setPadding(0, 20, 0, 0);
+                                    liHori.addView(tvOpte);
+
+                                    TextView tvOpts = new TextView(mcont);
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setText(valor);
+                                    tvOpts.setTextAppearance(R.style.TituloItem);
+                                    tvOpts.setPadding(0, 20, 0, 0);
+                                    liHori.addView(tvOpts);
+
+                                    liVert.addView(liHori);
+                                }
                             }
                             if (clase.equals("titulito")){
                                 TextView tvGenerico = new TextView(mcont);
@@ -514,11 +535,11 @@ public class GuardadasFragment extends Fragment {
                             }
                             if (clase.equals("litologias")){
                                 TextView tvOpte = new TextView(mcont);
-                                tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 tvOpte.setText(titulo+": ");
                                 tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
                                 tvOpte.setPadding(0, 20, 0, 0);
-                                liHori.addView(tvOpte);
+                                liVert.addView(tvOpte);
 
                                 TextView tvOpts = new TextView(mcont);
                                 tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -527,20 +548,22 @@ public class GuardadasFragment extends Fragment {
                                 tvOpts.setPadding(0, 20, 0, 0);
                                 liHori.addView(tvOpts);
 
-                                String valor;
-                                if (CheckBoxAux.getString("litologiasasociadasopt1exist").equals("true")){
-                                    valor = "SI";
-                                }else{
-                                    valor = "NO";
-                                }
-                                TextView tvOpts1 = new TextView(mcont);
-                                tvOpts1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                tvOpts1.setText(valor);
-                                tvOpts1.setTextAppearance(R.style.TituloItem);
-                                tvOpts1.setPadding(20, 20,0 , 0);
-                                liHori.addView(tvOpts1);
+                                CheckBox checkbox1 = new CheckBox(mcont);
+                                checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox1.setText(aux);
+                                checkbox1.setClickable(false);
+                                checkbox1.setEnabled(false);
+                                liHori.addView(checkbox1);
 
-                               String espesor1 = EditTextsAux.getString("litologiasasociadasopt1espesor");
+                                String valorcito1 = CheckBoxAux.getString("litologiasasociadasopt1exist");
+                                if(valorcito1.equals("true")){
+                                    checkbox1.setChecked(true);
+                                }
+                                else{
+                                    checkbox1.setChecked(false);
+                                }
+
+                                String espesor1 = EditTextsAux.getString("litologiasasociadasopt1espesor");
                                 TextView tvOpts2 = new TextView(mcont);
                                 tvOpts2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 tvOpts2.setText(espesor1+"m");
@@ -555,17 +578,20 @@ public class GuardadasFragment extends Fragment {
                                 tvOptsx.setPadding(50, 20, 0, 0);
                                 liHori.addView(tvOptsx);
 
-                                if (CheckBoxAux.getString("litologiasasociadasopt2exist").equals("true")){
-                                    valor = "SI";
-                                }else{
-                                    valor = "NO";
+                                CheckBox checkbox2 = new CheckBox(mcont);
+                                checkbox2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox1.setText(aux);
+                                checkbox2.setClickable(false);
+                                checkbox2.setEnabled(false);
+                                liHori.addView(checkbox2);
+
+                                valorcito1 = CheckBoxAux.getString("litologiasasociadasopt2exist");
+                                if(valorcito1.equals("true")){
+                                    checkbox2.setChecked(true);
                                 }
-                                TextView tvOpts1x = new TextView(mcont);
-                                tvOpts1x.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                tvOpts1x.setText(valor);
-                                tvOpts1x.setTextAppearance(R.style.TituloItem);
-                                tvOpts1x.setPadding(20, 20, 0, 0);
-                                liHori.addView(tvOpts1x);
+                                else{
+                                    checkbox2.setChecked(false);
+                                }
 
                                 String espesor2 = EditTextsAux.getString("litologiasasociadasopt2espesor");
                                 TextView tvOpts2x = new TextView(mcont);
@@ -682,21 +708,28 @@ public class GuardadasFragment extends Fragment {
                                 if (clase1.equals("edittext")){
 
                                     LinearLayout liHori2 = new LinearLayout(mcont);
-                                    liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    liHori2.setOrientation(LinearLayout.HORIZONTAL);
-                                    liHori2.setPadding(20, 0, 0, 20);
+                                    if (tag1.equals("ObservacionesDiscont")){
+                                        liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        liHori2.setOrientation(LinearLayout.VERTICAL);
+                                        liHori2.setPadding(20, 0, 0, 20);
+                                    }
+                                    else{
+                                        liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        liHori2.setOrientation(LinearLayout.HORIZONTAL);
+                                        liHori2.setPadding(20, 0, 0, 20);
+                                    }
 
                                     String valor = EditTextsAux.getString(tag1+f);
 
                                     TextView tvOpte = new TextView(mcont);
-                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvOpte.setText(titulo1+": ");
                                     tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
                                     tvOpte.setPadding(0, 20, 0, 0);
                                     liHori2.addView(tvOpte);
 
                                     TextView tvOpts = new TextView(mcont);
-                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvOpts.setText(valor);
                                     tvOpts.setTextAppearance(R.style.TituloItem);
                                     tvOpts.setPadding(0, 20, 0, 0);
@@ -775,20 +808,20 @@ public class GuardadasFragment extends Fragment {
 
                                     LinearLayout liHori2 = new LinearLayout(mcont);
                                     liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    liHori2.setOrientation(LinearLayout.HORIZONTAL);
+                                    liHori2.setOrientation(LinearLayout.VERTICAL);
                                     liHori2.setPadding(20, 0, 0, 20);
 
                                     String valor = EditTextsAux.getString(tag1+f);
 
                                     TextView tvOpte = new TextView(mcont);
-                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvOpte.setText(titulo1+": ");
                                     tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
                                     tvOpte.setPadding(0, 20, 0, 0);
                                     liHori2.addView(tvOpte);
 
                                     TextView tvOpts = new TextView(mcont);
-                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvOpts.setText(valor);
                                     tvOpts.setTextAppearance(R.style.TituloItem);
                                     tvOpts.setPadding(0, 20, 0, 0);
@@ -861,12 +894,12 @@ public class GuardadasFragment extends Fragment {
                             LinearLayout liHori = new LinearLayout(mcont);
                             liHori.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             liHori.setOrientation(LinearLayout.HORIZONTAL);
-                            liHori.setPadding(20, 0, 0, 20);
+                            liHori.setPadding(0, 0, 0, 20);
 
                             LinearLayout liVert = new LinearLayout(mcont);
                             liVert.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             liVert.setOrientation(LinearLayout.VERTICAL);
-                            liVert.setPadding(20, 0, 0, 20);
+                            liVert.setPadding(0, 0, 0, 20);
 
                             String clase = ListaSuelos.get(k)[2];
                             String titulo = ListaSuelos.get(k)[1];
@@ -875,105 +908,55 @@ public class GuardadasFragment extends Fragment {
                             if (clase.equals("edittext") || clase.equals("spinner")){
                                 String valor;
 
-                                if(tag.equals("dirimbricacion1") || tag.equals("dirimbricacion2") ){
-                                   String Orien1= RadioGrpAux.getString("orientacion1");
-                                   String Orien2= RadioGrpAux.getString("orientacion2");
 
-                                   if (tag.equals("dirimbricacion1") && Orien1.equals("Imbricado")){
-                                       valor = EditTextsAux.getString(tag);
-                                       TextView tvOpte = new TextView(mcont);
-                                       tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                       tvOpte.setText(titulo+": ");
-                                       tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
-                                       tvOpte.setPadding(0, 20, 0, 0);
-                                       liHori.addView(tvOpte);
-
-                                       TextView tvOpts = new TextView(mcont);
-                                       tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                       tvOpts.setText(valor);
-                                       tvOpts.setTextAppearance(R.style.TituloItem);
-                                       tvOpts.setPadding(0, 20, 0, 0);
-                                       liHori.addView(tvOpts);
-                                       liVert.addView(liHori);
-                                   }
-                                   if (tag.equals("dirimbricacion2") && Orien2.equals("Imbricado")){
-                                       valor = EditTextsAux.getString(tag);
-                                       TextView tvOpte = new TextView(mcont);
-                                       tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                       tvOpte.setText(titulo+": ");
-                                       tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
-                                       tvOpte.setPadding(0, 20, 0, 0);
-                                       liHori.addView(tvOpte);
-
-                                       TextView tvOpts = new TextView(mcont);
-                                       tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                       tvOpts.setText(valor);
-                                       tvOpts.setTextAppearance(R.style.TituloItem);
-                                       tvOpts.setPadding(0, 20, 0, 0);
-                                       liHori.addView(tvOpts);
-                                       liVert.addView(liHori);
-                                   }
-                                }else if (tag.equals("dirimbricacionmatriz1") || tag.equals("dirimbricacionmatriz2")){
-                                    String Orien1= RadioGrpAux.getString("orientacionsuelosgruesos1");
-                                    String Orien2= RadioGrpAux.getString("orientacionsuelosgruesos2");
-
-                                    if (tag.equals("dirimbricacionmatriz1") && Orien1.equals("Imbricado")){
+                                if(clase.equals("edittext")){
+                                    try {
                                         valor = EditTextsAux.getString(tag);
-                                        TextView tvOpte = new TextView(mcont);
-                                        tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                        tvOpte.setText(titulo+": ");
-                                        tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
-                                        tvOpte.setPadding(0, 20, 0, 0);
-                                        liHori.addView(tvOpte);
-
-                                        TextView tvOpts = new TextView(mcont);
-                                        tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                        tvOpts.setText(valor);
-                                        tvOpts.setTextAppearance(R.style.TituloItem);
-                                        tvOpts.setPadding(0, 20, 0, 0);
-                                        liHori.addView(tvOpts);
-                                        liVert.addView(liHori);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        valor = "";
                                     }
-                                    if (tag.equals("dirimbricacionmatriz2") && Orien2.equals("Imbricado")){
-                                        valor = EditTextsAux.getString(tag);
-                                        TextView tvOpte = new TextView(mcont);
-                                        tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                        tvOpte.setText(titulo+": ");
-                                        tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
-                                        tvOpte.setPadding(0, 20, 0, 0);
-                                        liHori.addView(tvOpte);
-
-                                        TextView tvOpts = new TextView(mcont);
-                                        tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                        tvOpts.setText(valor);
-                                        tvOpts.setTextAppearance(R.style.TituloItem);
-                                        tvOpts.setPadding(0, 20, 0, 0);
-                                        liHori.addView(tvOpts);
-                                        liVert.addView(liHori);
+                                }else{
+                                    try {
+                                        valor = SpinnersAux.getString(tag);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        valor = "";
                                     }
                                 }
-                                else{
-
-                                    if(clase.equals("edittext")){
-                                        valor = EditTextsAux.getString(tag);
-                                    }else{
-                                        valor = SpinnersAux.getString(tag);
-                                    }
 
 
+                                if (tag.equals("nombreugs") || tag.equals("descripcionsuelos") || tag.equals("observacionessuelos") ){
                                     TextView tvOpte = new TextView(mcont);
-                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setText(titulo+": ");
+                                    tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
+                                    tvOpte.setPadding(0, 20, 0, 0);
+                                    liVert.addView(tvOpte);
+
+                                    TextView tvOpts = new TextView(mcont);
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setText(valor);
+                                    tvOpts.setTextAppearance(R.style.TituloItem);
+                                    tvOpts.setPadding(0, 20, 0, 0);
+                                    liVert.addView(tvOpts);
+
+                                }
+                                else{
+                                    TextView tvOpte = new TextView(mcont);
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvOpte.setText(titulo+": ");
                                     tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
                                     tvOpte.setPadding(0, 20, 0, 0);
                                     liHori.addView(tvOpte);
 
                                     TextView tvOpts = new TextView(mcont);
-                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvOpts.setText(valor);
                                     tvOpts.setTextAppearance(R.style.TituloItem);
                                     tvOpts.setPadding(0, 20, 0, 0);
                                     liHori.addView(tvOpts);
+
                                     liVert.addView(liHori);
                                 }
 
@@ -1094,11 +1077,11 @@ public class GuardadasFragment extends Fragment {
                             }
                             if (clase.equals("litologias")){
                                 TextView tvOpte = new TextView(mcont);
-                                tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 tvOpte.setText(titulo+": ");
                                 tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
                                 tvOpte.setPadding(0, 20, 0, 0);
-                                liHori.addView(tvOpte);
+                                liVert.addView(tvOpte);
 
                                 TextView tvOpts = new TextView(mcont);
                                 tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -1107,18 +1090,20 @@ public class GuardadasFragment extends Fragment {
                                 tvOpts.setPadding(0, 20, 0, 0);
                                 liHori.addView(tvOpts);
 
-                                String valor;
-                                if (CheckBoxAux.getString("litologiasasociadasopt1exist").equals("true")){
-                                    valor = "SI";
-                                }else{
-                                    valor = "NO";
+                                CheckBox checkbox1 = new CheckBox(mcont);
+                                checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox1.setText(aux);
+                                checkbox1.setClickable(false);
+                                checkbox1.setEnabled(false);
+                                liHori.addView(checkbox1);
+
+                                String valorcito1 = CheckBoxAux.getString("litologiasasociadasopt1exist");
+                                if(valorcito1.equals("true")){
+                                    checkbox1.setChecked(true);
                                 }
-                                TextView tvOpts1 = new TextView(mcont);
-                                tvOpts1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                tvOpts1.setText(valor);
-                                tvOpts1.setTextAppearance(R.style.TituloItem);
-                                tvOpts1.setPadding(20, 20,0 , 0);
-                                liHori.addView(tvOpts1);
+                                else{
+                                    checkbox1.setChecked(false);
+                                }
 
                                String espesor1 = EditTextsAux.getString("litologiasasociadasopt1espesor");
                                 TextView tvOpts2 = new TextView(mcont);
@@ -1135,17 +1120,20 @@ public class GuardadasFragment extends Fragment {
                                 tvOptsx.setPadding(50, 20, 0, 0);
                                 liHori.addView(tvOptsx);
 
-                                if (CheckBoxAux.getString("litologiasasociadasopt2exist").equals("true")){
-                                    valor = "SI";
-                                }else{
-                                    valor = "NO";
+                                CheckBox checkbox2 = new CheckBox(mcont);
+                                checkbox2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox1.setText(aux);
+                                checkbox2.setClickable(false);
+                                checkbox2.setEnabled(false);
+                                liHori.addView(checkbox2);
+
+                                valorcito1 = CheckBoxAux.getString("litologiasasociadasopt2exist");
+                                if(valorcito1.equals("true")){
+                                    checkbox2.setChecked(true);
                                 }
-                                TextView tvOpts1x = new TextView(mcont);
-                                tvOpts1x.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                tvOpts1x.setText(valor);
-                                tvOpts1x.setTextAppearance(R.style.TituloItem);
-                                tvOpts1x.setPadding(20, 20, 0, 0);
-                                liHori.addView(tvOpts1x);
+                                else{
+                                    checkbox2.setChecked(false);
+                                }
 
                                 String espesor2 = EditTextsAux.getString("litologiasasociadasopt2espesor");
                                 TextView tvOpts2x = new TextView(mcont);
@@ -1232,20 +1220,20 @@ public class GuardadasFragment extends Fragment {
 
                                     TextView etSecuenciaEstratiOpt = new TextView(mcont);
                                     etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    etSecuenciaEstratiOpt.setEms(10);
+
                                     etSecuenciaEstratiOpt.setText(valorcito2);
                                     liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
 
                                     TextView etSecuenciaEstratiOpt1Espesor = new TextView(mcont);
                                     etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    etSecuenciaEstratiOpt1Espesor.setEms(10);
+
                                     etSecuenciaEstratiOpt1Espesor.setText(valorcito1);
                                     liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
 
                                     TextView tvSecuenciaEstratiOpt = new TextView(mcont);
                                     tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvSecuenciaEstratiOpt.setText(opciones1[j1]);
-                                    tvSecuenciaEstratiOpt.setEms(10);
+
                                     tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
                                     liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
 
@@ -1298,43 +1286,47 @@ public class GuardadasFragment extends Fragment {
 
                                 for (int j1 = 0; j1 < opciones2.length ; j1++) {
 
-                                    String valorcito2 = CheckBoxAux.getString(tag+j1+"check_2");
-                                    if(valorcito2.equals("true")){
-                                        valorcito2 = "SI";
-                                    }
-                                    else{
-                                        valorcito2 = "NO";
-                                    }
-                                    String valorcito1 = CheckBoxAux.getString(tag+j1+"check_1");
-                                    if(valorcito1.equals("true")){
-                                        valorcito1 = "SI";
-                                    }
-                                    else{
-                                        valorcito1 = "NO";
-                                    }
-
                                     LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
                                     liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
 
-                                    TextView etSecuenciaEstratiOpt = new TextView(mcont);
-                                    etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    etSecuenciaEstratiOpt.setEms(10);
-                                    etSecuenciaEstratiOpt.setText(valorcito2);
-                                    liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
+                                    CheckBox checkbox2 = new CheckBox(mcont);
+                                    checkbox2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox2.setText(aux);
+                                    checkbox2.setClickable(false);
+                                    checkbox2.setEnabled(false);
+                                    liFormSecuenciaEstrati.addView(checkbox2);
 
-                                    TextView etSecuenciaEstratiOpt1Espesor = new TextView(mcont);
-                                    etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    etSecuenciaEstratiOpt1Espesor.setEms(10);
-                                    etSecuenciaEstratiOpt1Espesor.setText(valorcito1);
-                                    liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
+
+                                    CheckBox checkbox1 = new CheckBox(mcont);
+                                    checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox1.setText(aux);
+                                    checkbox1.setClickable(false);
+                                    checkbox1.setEnabled(false);
+                                    liFormSecuenciaEstrati.addView(checkbox1);
+
 
                                     TextView tvSecuenciaEstratiOpt = new TextView(mcont);
                                     tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvSecuenciaEstratiOpt.setText(opciones2[j1]);
-                                    tvSecuenciaEstratiOpt.setEms(10);
                                     tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
                                     liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+
+                                    String valorcito2 = CheckBoxAux.getString(tag+j1+"check_2");
+                                    if(valorcito2.equals("true")){
+                                        checkbox2.setChecked(true);
+                                    }
+                                    else{
+                                        checkbox2.setChecked(false);
+                                    }
+                                    String valorcito1 = CheckBoxAux.getString(tag+j1+"check_1");
+                                    if(valorcito1.equals("true")){
+                                        checkbox1.setChecked(true);
+                                    }
+                                    else{
+                                        checkbox1.setChecked(false);
+                                    }
 
                                     liVert.addView(liFormSecuenciaEstrati);
 
@@ -1407,20 +1399,20 @@ public class GuardadasFragment extends Fragment {
 
                                     LinearLayout liHori2 = new LinearLayout(mcont);
                                     liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    liHori2.setOrientation(LinearLayout.HORIZONTAL);
+                                    liHori2.setOrientation(LinearLayout.VERTICAL);
                                     liHori2.setPadding(20, 0, 0, 20);
 
                                     String valor = EditTextsAux.getString(tag1+f);
 
                                     TextView tvOpte = new TextView(mcont);
-                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvOpte.setText(titulo1+": ");
                                     tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
                                     tvOpte.setPadding(0, 20, 0, 0);
                                     liHori2.addView(tvOpte);
 
                                     TextView tvOpts = new TextView(mcont);
-                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvOpts.setText(valor);
                                     tvOpts.setTextAppearance(R.style.TituloItem);
                                     tvOpts.setPadding(0, 20, 0, 0);
@@ -1492,12 +1484,12 @@ public class GuardadasFragment extends Fragment {
                             LinearLayout liHori = new LinearLayout(mcont);
                             liHori.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             liHori.setOrientation(LinearLayout.HORIZONTAL);
-                            liHori.setPadding(20, 0, 0, 20);
+                            liHori.setPadding(0, 0, 0, 20);
 
                             LinearLayout liVert = new LinearLayout(mcont);
                             liVert.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             liVert.setOrientation(LinearLayout.VERTICAL);
-                            liVert.setPadding(20, 0, 0, 20);
+                            liVert.setPadding(0, 0, 0, 20);
 
                             String clase = ListaSGMF.get(k)[1];
                             String titulo = ListaSGMF.get(k)[0];
@@ -1514,14 +1506,14 @@ public class GuardadasFragment extends Fragment {
 
 
                                 TextView tvOpte = new TextView(mcont);
-                                tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 tvOpte.setText(titulo+": ");
                                 tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
                                 tvOpte.setPadding(0, 20, 0, 0);
                                 liHori.addView(tvOpte);
 
                                 TextView tvOpts = new TextView(mcont);
-                                tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                 tvOpts.setText(valor);
                                 tvOpts.setTextAppearance(R.style.TituloItem);
                                 tvOpts.setPadding(0, 20, 0, 0);
@@ -1552,31 +1544,32 @@ public class GuardadasFragment extends Fragment {
 
                                 for (int j2 = 0; j2 < opciones3.length ; j2++) {
 
-                                    String valorcito1 = CheckBoxAux.getString(tag+j2+"check");
-                                    if(valorcito1.equals("true")){
-                                        valorcito1 = "SI";
-                                    }
-                                    else{
-                                        valorcito1 = "NO";
-                                    }
-
                                     LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
                                     liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
 
-
-                                    TextView etSecuenciaEstratiOpt1Espesor = new TextView(mcont);
-                                    etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    etSecuenciaEstratiOpt1Espesor.setEms(10);
-                                    etSecuenciaEstratiOpt1Espesor.setText(valorcito1);
-                                    liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
+                                    CheckBox checkbox1 = new CheckBox(mcont);
+                                    checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox1.setText(aux);
+                                    checkbox1.setClickable(false);
+                                    checkbox1.setEnabled(false);
+                                    liFormSecuenciaEstrati.addView(checkbox1);
 
                                     TextView tvSecuenciaEstratiOpt = new TextView(mcont);
                                     tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                     tvSecuenciaEstratiOpt.setText(opciones3[j2]);
-                                    tvSecuenciaEstratiOpt.setEms(10);
+                                    tvSecuenciaEstratiOpt.setPadding(5, 0, 0, 0);
                                     tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
                                     liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+
+                                    String valorcito1 = CheckBoxAux.getString(tag+j2+"check");
+                                    if(valorcito1.equals("true")){
+                                        checkbox1.setChecked(true);
+                                    }
+                                    else{
+                                        checkbox1.setChecked(false);
+                                    }
 
                                     liVert.addView(liFormSecuenciaEstrati);
                                 }
@@ -1609,7 +1602,6 @@ public class GuardadasFragment extends Fragment {
 
                                     TextView etSecuenciaEstratiOpt = new TextView(mcont);
                                     etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    etSecuenciaEstratiOpt.setEms(10);
                                     etSecuenciaEstratiOpt.setText(valorcito1);
                                     liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
 
@@ -1725,31 +1717,32 @@ public class GuardadasFragment extends Fragment {
 
                                     for (int j2 = 0; j2 < opciones3.length ; j2++) {
 
-                                        String valorcito1 = CheckBoxAux.getString(tag1+j2+"check"+f);
-                                        if(valorcito1.equals("true")){
-                                            valorcito1 = "SI";
-                                        }
-                                        else{
-                                            valorcito1 = "NO";
-                                        }
-
                                         LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
                                         liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                         liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
 
-
-                                        TextView etSecuenciaEstratiOpt1Espesor = new TextView(mcont);
-                                        etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                        etSecuenciaEstratiOpt1Espesor.setEms(10);
-                                        etSecuenciaEstratiOpt1Espesor.setText(valorcito1);
-                                        liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
+                                        CheckBox checkbox1 = new CheckBox(mcont);
+                                        checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox1.setText(aux);
+                                        checkbox1.setClickable(false);
+                                        checkbox1.setEnabled(false);
+                                        liFormSecuenciaEstrati.addView(checkbox1);
 
                                         TextView tvSecuenciaEstratiOpt = new TextView(mcont);
                                         tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                                         tvSecuenciaEstratiOpt.setText(opciones3[j2]);
-                                        tvSecuenciaEstratiOpt.setEms(10);
+                                        tvSecuenciaEstratiOpt.setPadding(5, 0, 0, 0);
                                         tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
                                         liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+
+                                        String valorcito1 = CheckBoxAux.getString(tag1+j2+"check"+f);
+                                        if(valorcito1.equals("true")){
+                                            checkbox1.setChecked(true);
+                                        }
+                                        else{
+                                            checkbox1.setChecked(false);
+                                        }
 
                                         liFormAcordionDis.addView(liFormSecuenciaEstrati);
                                     }
@@ -1819,7 +1812,7 @@ public class GuardadasFragment extends Fragment {
 
                                     LinearLayout liHori2 = new LinearLayout(mcont);
                                     liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                    liHori2.setOrientation(LinearLayout.HORIZONTAL);
+                                    liHori2.setOrientation(LinearLayout.VERTICAL);
                                     liHori2.setPadding(20, 0, 0, 20);
 
                                     String valor = EditTextsAux.getString(tag1+f);
@@ -1853,7 +1846,7 @@ public class GuardadasFragment extends Fragment {
                         Button btnFormAcordion = new Button(mcont);
                         btnFormAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         btnFormAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
-                        btnFormAcordion.setText("Formato Catalogo MM "+aux);
+                        btnFormAcordion.setText("Formato Catalogo de MM "+aux);
                         btnFormAcordion.setTag(j);
                         liForm.addView(btnFormAcordion);
 
@@ -1904,12 +1897,12 @@ public class GuardadasFragment extends Fragment {
                             LinearLayout liHori = new LinearLayout(mcont);
                             liHori.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             liHori.setOrientation(LinearLayout.HORIZONTAL);
-                            liHori.setPadding(20, 0, 0, 20);
+                            liHori.setPadding(0, 0, 0, 20);
 
                             LinearLayout liVert = new LinearLayout(mcont);
                             liVert.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                             liVert.setOrientation(LinearLayout.VERTICAL);
-                            liVert.setPadding(20, 0, 0, 20);
+                            liVert.setPadding(0, 0, 0, 20);
 
                             String clase = ListaCATALOGO.get(k)[1];
                             String titulo = ListaCATALOGO.get(k)[0];
@@ -1924,21 +1917,40 @@ public class GuardadasFragment extends Fragment {
                                     valor = SpinnersAux.getString(tag);
                                 }
 
+                                if (tag.equals("REF_GEOGRF") || tag.equals("FTE_INFSEC") || tag.equals("LITOLOGIA") || tag.equals("SUBTIPO_1") || tag.equals("SUBTIPO_2") || tag.equals("sisclasificacion") || tag.equals("AN_GMF") || tag.equals("notas") || tag.equals("sensoresremotos") || tag.equals("SITIO") ){
+                                    TextView tvOpte = new TextView(mcont);
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setText(titulo+": ");
+                                    tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
+                                    tvOpte.setPadding(0, 20, 0, 0);
+                                    liVert.addView(tvOpte);
 
-                                TextView tvOpte = new TextView(mcont);
-                                tvOpte.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                tvOpte.setText(titulo+": ");
-                                tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
-                                tvOpte.setPadding(0, 20, 0, 0);
-                                liHori.addView(tvOpte);
+                                    TextView tvOpts = new TextView(mcont);
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setText(valor);
+                                    tvOpts.setTextAppearance(R.style.TituloItem);
+                                    tvOpts.setPadding(0, 20, 0, 0);
+                                    liVert.addView(tvOpts);
 
-                                TextView tvOpts = new TextView(mcont);
-                                tvOpts.setLayoutParams(new ActionBar.LayoutParams(450, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                tvOpts.setText(valor);
-                                tvOpts.setTextAppearance(R.style.TituloItem);
-                                tvOpts.setPadding(0, 20, 0, 0);
-                                liHori.addView(tvOpts);
-                                liVert.addView(liHori);
+
+                                }
+                                else{
+                                    TextView tvOpte = new TextView(mcont);
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setText(titulo+": ");
+                                    tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
+                                    tvOpte.setPadding(0, 20, 0, 0);
+                                    liHori.addView(tvOpte);
+
+                                    TextView tvOpts = new TextView(mcont);
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setText(valor);
+                                    tvOpts.setTextAppearance(R.style.TituloItem);
+                                    tvOpts.setPadding(0, 20, 0, 0);
+                                    liHori.addView(tvOpts);
+
+                                    liVert.addView(liHori);
+                                }
 
 
                             }
@@ -2066,7 +2078,580 @@ public class GuardadasFragment extends Fragment {
 
 
                     }
+                    for (int j = 0; j < contINVENTARIO; j++)  {
+                        JSONObject FromatoAux = Formularios.getJSONObject("Form_INVENTARIO_"+j);
+                        JSONObject SpinnersAux = FromatoAux.getJSONObject("Spinners");
+                        JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
+                        JSONObject RadioGrpAux = FromatoAux.getJSONObject("RadioGrp");
+                        JSONObject CheckBoxAux = FromatoAux.getJSONObject("CheckBox");
 
+                        int aux = j + 1;
+
+                        Button btnFormAcordion = new Button(mcont);
+                        btnFormAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        btnFormAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                        btnFormAcordion.setText("Formato Inventario de MM "+aux);
+                        btnFormAcordion.setTag(j);
+                        liForm.addView(btnFormAcordion);
+
+                        LinearLayout liFormAcordion = new LinearLayout(mcont);
+                        liFormAcordion.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        liFormAcordion.setOrientation(LinearLayout.VERTICAL);
+                        liFormAcordion.setBackgroundColor(0x22222200);
+                        liFormAcordion.setVisibility(View.GONE);
+                        liForm.addView(liFormAcordion);
+
+                        btnFormAcordion.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                if (liFormAcordion.getVisibility() == View.VISIBLE) {
+                                    ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                    animation.setDuration(220);
+                                    animation.setFillAfter(false);
+                                    animation.setAnimationListener(new Animation.AnimationListener() {
+                                        @Override
+                                        public void onAnimationStart(Animation animation) {
+                                        }
+                                        @Override
+                                        public void onAnimationEnd(Animation animation) {
+                                            liFormAcordion.setVisibility(View.GONE);
+                                            btnFormAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                        }
+                                        @Override
+                                        public void onAnimationRepeat(Animation animation) {
+                                        }
+                                    });
+                                    liFormAcordion.startAnimation(animation);
+
+                                }
+                                else {
+                                    ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                    animation.setDuration(220);
+                                    animation.setFillAfter(false);
+                                    liFormAcordion.startAnimation(animation);
+                                    liFormAcordion.setVisibility(View.VISIBLE);
+                                    btnFormAcordion.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                                }
+
+                            }
+                        });
+
+                        for (int k = 0; k < ListaINVENTARIO.size(); k++) {
+                            LinearLayout liHori = new LinearLayout(mcont);
+                            liHori.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            liHori.setOrientation(LinearLayout.HORIZONTAL);
+                            liHori.setPadding(0, 0, 0, 20);
+
+                            LinearLayout liVert = new LinearLayout(mcont);
+                            liVert.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            liVert.setOrientation(LinearLayout.VERTICAL);
+                            liVert.setPadding(0, 0, 0, 20);
+
+                            String clase = ListaINVENTARIO.get(k)[1];
+                            String titulo = ListaINVENTARIO.get(k)[0];
+                            String tag = ListaINVENTARIO.get(k)[2];
+
+                            if (clase.equals("edittext") || clase.equals("spinner")){
+                                String valor;
+
+                                if(clase.equals("edittext")){
+                                    valor = EditTextsAux.getString(tag);
+                                }else{
+                                    valor = SpinnersAux.getString(tag);
+                                }
+
+                                if (tag.equals("REF_GEOGRF") || tag.equals("FTE_INFSEC") || tag.equals("LITOLOGIA") || tag.equals("SUBTIPO_1") || tag.equals("SUBTIPO_2") || tag.equals("sisclasificacion") || tag.equals("AN_GMF") || tag.equals("notas") || tag.equals("apreciacionriesgo") || tag.equals("SITIO")){
+                                    TextView tvOpte = new TextView(mcont);
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setText(titulo+": ");
+                                    tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
+                                    tvOpte.setPadding(0, 20, 0, 0);
+                                    liVert.addView(tvOpte);
+
+                                    TextView tvOpts = new TextView(mcont);
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setText(valor);
+                                    tvOpts.setTextAppearance(R.style.TituloItem);
+                                    tvOpts.setPadding(0, 20, 0, 0);
+                                    liVert.addView(tvOpts);
+
+
+                                }
+                                else{
+                                    TextView tvOpte = new TextView(mcont);
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setText(titulo+": ");
+                                    tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
+                                    tvOpte.setPadding(0, 20, 0, 0);
+                                    liHori.addView(tvOpte);
+
+                                    TextView tvOpts = new TextView(mcont);
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setText(valor);
+                                    tvOpts.setTextAppearance(R.style.TituloItem);
+                                    tvOpts.setPadding(0, 20, 0, 0);
+                                    liHori.addView(tvOpts);
+
+                                    liVert.addView(liHori);
+                                }
+
+
+                            }
+                            if (clase.equals("titulito")){
+                                TextView tvGenerico = new TextView(mcont);
+                                tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvGenerico.setText(titulo);
+                                tvGenerico.setTextAppearance(R.style.TituloFormato);
+                                tvGenerico.setPadding(0, 30, 0, 0);
+                                liHori.addView(tvGenerico);
+                                liVert.addView(liHori);
+                            }
+                            if (clase.equals("radiobtn")){
+                                for (int l = 1; l < 3; l++) {
+                                    TextView tvGenerico = new TextView(mcont);
+                                    tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvGenerico.setText(titulo+" Litología "+l);
+                                    tvGenerico.setTextAppearance(R.style.TituloItemEncabezado);
+                                    tvGenerico.setPadding(0, 30, 0, 0);
+                                    liVert.addView(tvGenerico);
+
+                                    String valor = RadioGrpAux.getString(tag+l);
+
+                                    TextView etGenerico = new TextView(mcont);
+                                    etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    etGenerico.setText(valor);
+                                    etGenerico.setTextAppearance(R.style.TituloItem);
+                                    etGenerico.setPadding(0, 10, 0, 0);
+                                    etGenerico.setTag(valor);
+                                    liVert.addView(etGenerico);
+                                }
+                            }
+                            if (clase.equals("multitext")){
+                                TextView tvGenerico = new TextView(mcont);
+                                tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvGenerico.setText(titulo);
+                                tvGenerico.setTextAppearance(R.style.TituloItemEncabezado);
+                                tvGenerico.setPadding(0, 30, 0, 0);
+                                liVert.addView(tvGenerico);
+
+                                LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                                liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+
+                                liVert.addView(liradiobtnTitulo);
+
+                                String[] opciones1 = {};
+
+                                int auxWidth = 800;
+
+                                if (tag.equals("morfogeneral")){
+                                    opciones1 = res.getStringArray(R.array.GeneralMM);
+                                }
+                                if (tag.equals("morfodimensiones")){
+                                    opciones1 = res.getStringArray(R.array.DimenTerrenoMM);
+                                }
+                                if (tag.equals("cobertura")){
+                                    opciones1 = res.getStringArray(R.array.CoberturaSueloMM);
+                                }
+                                if (tag.equals("usosuelo")){
+                                    opciones1 = res.getStringArray(R.array.UsoSueloMM);
+                                }
+                                if (tag.equals("represamientomorfometria")){
+                                    opciones1 = res.getStringArray(R.array.MorfometriaPresaMM);
+                                }
+                                if (tag.equals("sismoMM")){
+                                    opciones1 = res.getStringArray(R.array.SismoMM);
+                                    auxWidth = 600;
+                                }
+                                if (tag.equals("lluviasMM")){
+                                    opciones1 = res.getStringArray(R.array.LluviasMM);
+                                    auxWidth = 200;
+                                }
+
+                                for (int j1 = 0; j1 < opciones1.length ; j1++) {
+
+                                    String valorcito1;
+                                    try {
+                                        valorcito1 = EditTextsAux.getString(tag+j1);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        valorcito1 = "";
+                                    }
+
+
+                                    LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                                    liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                                    TextView tvSecuenciaEstratiOpt = new TextView(mcont);
+                                    tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(auxWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvSecuenciaEstratiOpt.setText(opciones1[j1]+": ");
+                                    tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
+                                    liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+                                    TextView etSecuenciaEstratiOpt1Espesor = new TextView(mcont);
+                                    etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    etSecuenciaEstratiOpt1Espesor.setPadding(10, 0, 0, 0);
+                                    etSecuenciaEstratiOpt1Espesor.setText(valorcito1);
+                                    liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
+
+                                    liVert.addView(liFormSecuenciaEstrati);
+
+                                }
+                            }
+                            if (clase.equals("radiocheckMM")){
+
+                                String text2 = "2";
+                                String text1 = "1";
+
+                                if (titulo.equals("CONTRIBUYENTES - DETONANTES")){
+                                    text2 = "C";
+                                    text1 = "D";
+                                }
+
+                                TextView tvGenerico = new TextView(mcont);
+                                tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvGenerico.setText(titulo);
+                                tvGenerico.setTextAppearance(R.style.TituloItemEncabezado);
+                                tvGenerico.setPadding(0, 30, 0, 0);
+                                liVert.addView(tvGenerico);
+
+                                LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                                liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+                                TextView pruebatext = new TextView(mcont);
+                                pruebatext.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                pruebatext.setText(text2);
+                                pruebatext.setTextAppearance(R.style.TituloItem);
+                                pruebatext.setPadding(50, 10, 0, 0);
+                                liradiobtnTitulo.addView(pruebatext);
+
+                                TextView pruebatext1 = new TextView(mcont);
+                                pruebatext1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                pruebatext1.setText(text1);
+                                pruebatext1.setTextAppearance(R.style.TituloItem);
+                                pruebatext1.setPadding(30, 10, 0, 0);
+                                liradiobtnTitulo.addView(pruebatext1);
+
+                                liVert.addView(liradiobtnTitulo);
+
+
+                                int secuEstratiOrdenWidth = 150;
+                                int secuEstratiEspesorWidth = 150;
+
+                                String[] opciones2 = {};
+
+
+                                if (tag.equals("tipomaterial")){
+                                    opciones2 = res.getStringArray(R.array.TipoMaterialMM);
+                                }
+                                if (tag.equals("causascontrideto")){
+                                    opciones2 = res.getStringArray(R.array.ContriDetonantesMM);
+                                }
+
+                                for (int j1 = 0; j1 < opciones2.length ; j1++) {
+                                    LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                                    liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+
+                                    CheckBox checkbox2 = new CheckBox(mcont);
+                                    checkbox2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox2.setText(aux);
+                                    checkbox2.setClickable(false);
+                                    checkbox2.setEnabled(false);
+                                    liFormSecuenciaEstrati.addView(checkbox2);
+
+
+                                    CheckBox checkbox1 = new CheckBox(mcont);
+                                    checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox1.setText(aux);
+                                    checkbox1.setClickable(false);
+                                    checkbox1.setEnabled(false);
+                                    liFormSecuenciaEstrati.addView(checkbox1);
+
+
+                                    TextView tvSecuenciaEstratiOpt = new TextView(mcont);
+                                    tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvSecuenciaEstratiOpt.setText(opciones2[j1]);
+                                    tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
+                                    liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+
+                                    String valorcito2 = CheckBoxAux.getString(tag+j1+"check_2");
+                                    if(valorcito2.equals("true")){
+                                        checkbox2.setChecked(true);
+                                    }
+                                    else{
+                                        checkbox2.setChecked(false);
+                                    }
+                                    String valorcito1 = CheckBoxAux.getString(tag+j1+"check_1");
+                                    if(valorcito1.equals("true")){
+                                        checkbox1.setChecked(true);
+                                    }
+                                    else{
+                                        checkbox1.setChecked(false);
+                                    }
+
+                                    liVert.addView(liFormSecuenciaEstrati);
+
+                                }
+
+
+                            }
+                            if (clase.equals("radiocheck")){
+
+
+                                TextView tvGenerico = new TextView(mcont);
+                                tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                tvGenerico.setText(titulo);
+                                tvGenerico.setTextAppearance(R.style.TituloItemEncabezado);
+                                tvGenerico.setPadding(0, 30, 0, 0);
+                                liVert.addView(tvGenerico);
+
+                                LinearLayout liradiobtnTitulo = new LinearLayout(mcont);
+                                liradiobtnTitulo.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                liradiobtnTitulo.setOrientation(LinearLayout.HORIZONTAL);
+
+                                liVert.addView(liradiobtnTitulo);
+
+
+                                int secuEstratiOrdenWidth = 150;
+                                int secuEstratiEspesorWidth = 150;
+
+                                String[] opciones2 = {};
+
+
+                                if (tag.equals("causasinherentes")){
+                                    opciones2 = res.getStringArray(R.array.InherentesMM);
+                                }
+                                if (tag.equals("erosionsuperficial")){
+                                    opciones2 = res.getStringArray(R.array.ErosionSuperficialMM);
+                                }
+                                if (tag.equals("erosionsubsuperficial")){
+                                    opciones2 = res.getStringArray(R.array.ErosionSubsuperficialMM);
+                                }
+                                if (tag.equals("represamientocondiciones")){
+                                    opciones2 = res.getStringArray(R.array.CondicionesPresa);
+                                }
+                                if (tag.equals("represamientoefectos")){
+                                    opciones2 = res.getStringArray(R.array.EfectosPresa);
+                                }
+
+                                for (int j1 = 0; j1 < opciones2.length ; j1++) {
+                                    LinearLayout liFormSecuenciaEstrati = new LinearLayout(mcont);
+                                    liFormSecuenciaEstrati.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    liFormSecuenciaEstrati.setOrientation(LinearLayout.HORIZONTAL);
+
+                                    CheckBox checkbox1 = new CheckBox(mcont);
+                                    checkbox1.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                                    checkbox1.setText(aux);
+                                    checkbox1.setClickable(false);
+                                    checkbox1.setEnabled(false);
+                                    liFormSecuenciaEstrati.addView(checkbox1);
+
+                                    TextView tvSecuenciaEstratiOpt = new TextView(mcont);
+                                    tvSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvSecuenciaEstratiOpt.setText(opciones2[j1]);
+                                    tvSecuenciaEstratiOpt.setPadding(5, 0, 0, 0);
+                                    tvSecuenciaEstratiOpt.setTextAppearance(R.style.TituloItem);
+                                    liFormSecuenciaEstrati.addView(tvSecuenciaEstratiOpt);
+
+
+                                    String valorcito1 = CheckBoxAux.getString(tag+j1+"check");
+                                    if(valorcito1.equals("true")){
+                                        checkbox1.setChecked(true);
+                                    }
+                                    else{
+                                        checkbox1.setChecked(false);
+                                    }
+
+                                    liVert.addView(liFormSecuenciaEstrati);
+
+                                }
+
+
+                            }
+
+
+                            liFormAcordion.addView(liVert);
+
+                        }
+
+                        int contDANOS = Integer.parseInt(FromatoAux.getString("DANOS"));
+                        for (int f = 1; f <= contDANOS; f++) {
+                            Button btnFormAcordionDis = new Button(mcont);
+                            btnFormAcordionDis.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            btnFormAcordionDis.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                            btnFormAcordionDis.setText("DAÑO "+f);
+                            btnFormAcordionDis.setTag(f);
+                            liFormAcordion.addView(btnFormAcordionDis);
+
+                            LinearLayout liFormAcordionDis = new LinearLayout(mcont);
+                            liFormAcordionDis.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            liFormAcordionDis.setOrientation(LinearLayout.VERTICAL);
+                            liFormAcordionDis.setBackgroundColor(0x22222200);
+                            liFormAcordionDis.setVisibility(View.GONE);
+                            liFormAcordion.addView(liFormAcordionDis);
+
+                            btnFormAcordionDis.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    if (liFormAcordionDis.getVisibility() == View.VISIBLE) {
+                                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                        animation.setDuration(220);
+                                        animation.setFillAfter(false);
+                                        animation.setAnimationListener(new Animation.AnimationListener() {
+                                            @Override
+                                            public void onAnimationStart(Animation animation) {
+                                            }
+                                            @Override
+                                            public void onAnimationEnd(Animation animation) {
+                                                liFormAcordionDis.setVisibility(View.GONE);
+                                                btnFormAcordionDis.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                            }
+                                            @Override
+                                            public void onAnimationRepeat(Animation animation) {
+                                            }
+                                        });
+                                        liFormAcordionDis.startAnimation(animation);
+
+                                    }
+                                    else {
+                                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                        animation.setDuration(220);
+                                        animation.setFillAfter(false);
+                                        liFormAcordionDis.startAnimation(animation);
+                                        liFormAcordionDis.setVisibility(View.VISIBLE);
+                                        btnFormAcordionDis.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                                    }
+
+                                }
+                            });
+
+                            for (int h = 0; h < ListaDANOS.size(); h++) {
+                                String clase1 = ListaDANOS.get(h)[1];
+                                String titulo1 = ListaDANOS.get(h)[0];
+                                String tag1 = ListaDANOS.get(h)[2];
+
+                                if (clase1.equals("edittext") || clase1.equals("spinner")){
+                                    String valor;
+
+                                    if(clase1.equals("edittext")){
+                                        valor = EditTextsAux.getString(tag1+f);
+                                    }else{
+                                        valor = SpinnersAux.getString(tag1+f);
+                                    }
+
+
+                                    TextView tvOpte = new TextView(mcont);
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setText(titulo1+": ");
+                                    tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
+                                    tvOpte.setPadding(0, 20, 0, 0);
+                                    liFormAcordionDis.addView(tvOpte);
+
+                                    TextView tvOpts = new TextView(mcont);
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setText(valor);
+                                    tvOpts.setTextAppearance(R.style.TituloItem);
+                                    tvOpts.setPadding(0, 20, 0, 0);
+                                    liFormAcordionDis.addView(tvOpts);
+
+                                }
+
+                            }
+                        }
+
+                        int contFotosAnexas = Integer.parseInt(FromatoAux.getString("FotosAnexas"));
+                        for (int f = 1; f <= contFotosAnexas; f++) {
+                            Button btnFormAcordionDis = new Button(mcont);
+                            btnFormAcordionDis.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            btnFormAcordionDis.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                            btnFormAcordionDis.setText("Foto Anexa "+f);
+                            btnFormAcordionDis.setTag(f);
+                            liFormAcordion.addView(btnFormAcordionDis);
+
+                            LinearLayout liFormAcordionDis = new LinearLayout(mcont);
+                            liFormAcordionDis.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            liFormAcordionDis.setOrientation(LinearLayout.VERTICAL);
+                            liFormAcordionDis.setBackgroundColor(0x22222200);
+                            liFormAcordionDis.setVisibility(View.GONE);
+                            liFormAcordion.addView(liFormAcordionDis);
+
+                            btnFormAcordionDis.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    if (liFormAcordionDis.getVisibility() == View.VISIBLE) {
+                                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                        animation.setDuration(220);
+                                        animation.setFillAfter(false);
+                                        animation.setAnimationListener(new Animation.AnimationListener() {
+                                            @Override
+                                            public void onAnimationStart(Animation animation) {
+                                            }
+                                            @Override
+                                            public void onAnimationEnd(Animation animation) {
+                                                liFormAcordionDis.setVisibility(View.GONE);
+                                                btnFormAcordionDis.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
+                                            }
+                                            @Override
+                                            public void onAnimationRepeat(Animation animation) {
+                                            }
+                                        });
+                                        liFormAcordionDis.startAnimation(animation);
+
+                                    }
+                                    else {
+                                        ScaleAnimation animation = new ScaleAnimation(1f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
+                                        animation.setDuration(220);
+                                        animation.setFillAfter(false);
+                                        liFormAcordionDis.startAnimation(animation);
+                                        liFormAcordionDis.setVisibility(View.VISIBLE);
+                                        btnFormAcordionDis.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                                    }
+
+                                }
+                            });
+
+                            for (int h = 0; h < ListaFotosAnexasINV.size(); h++) {
+                                String clase1 = ListaFotosAnexasINV.get(h)[1];
+                                String titulo1 = ListaFotosAnexasINV.get(h)[0];
+                                String tag1 = ListaFotosAnexasINV.get(h)[2];
+
+                                if (clase1.equals("edittext")){
+
+                                    LinearLayout liHori2 = new LinearLayout(mcont);
+                                    liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    liHori2.setOrientation(LinearLayout.VERTICAL);
+                                    liHori2.setPadding(20, 0, 0, 20);
+
+                                    String valor = EditTextsAux.getString(tag1+f);
+
+                                    TextView tvOpte = new TextView(mcont);
+                                    tvOpte.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpte.setText(titulo1+": ");
+                                    tvOpte.setTextAppearance(R.style.TituloItemEncabezado);
+                                    tvOpte.setPadding(0, 20, 0, 0);
+                                    liHori2.addView(tvOpte);
+
+                                    TextView tvOpts = new TextView(mcont);
+                                    tvOpts.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    tvOpts.setText(valor);
+                                    tvOpts.setTextAppearance(R.style.TituloItem);
+                                    tvOpts.setPadding(0, 20, 0, 0);
+                                    liHori2.addView(tvOpts);
+                                    liFormAcordionDis.addView(liHori2);
+                                }
+                            }
+                        }
+
+                    }
 
 
                 } catch (JSONException e) {
@@ -2259,6 +2844,92 @@ public class GuardadasFragment extends Fragment {
         ListaDANOS.add(new String[]{"TIPO DAÑO", "spinner", "tiposdaño"});
         ListaDANOS.add(new String[]{"VALOR (US$)", "edittext", "valordaño"});
 
+        ListaINVENTARIO.add(new String[]{"ID PARTE del MM","edittext","ID_PARTE"});
+        ListaINVENTARIO.add(new String[]{"IMPORTANCIA","spinner","IMPORTANC"});
+        ListaINVENTARIO.add(new String[]{"ENCUESTADOR","edittext","ENCUESTAD"});
+        ListaINVENTARIO.add(new String[]{"FECHA EVENTO","edittext","FECHA_MOV"});
+        ListaINVENTARIO.add(new String[]{"FUENTE FECHA EVENTO","spinner","FECHA_FUENTE"});
+        ListaINVENTARIO.add(new String[]{"CONFIABILIDAD FECHA EVENTO","spinner","ConfiFechaMM"});
+        ListaINVENTARIO.add(new String[]{"FECHA REPORTE","edittext","FECHA_REP"});
+//      ListaINVENTARIO.add(new String[]{o("INSTITUCIÓN","edittext","INSTITUC"});
+        ListaINVENTARIO.add(new String[]{"SIMMA","edittext","COD_SIMMA"});
+        ListaINVENTARIO.add(new String[]{"Municipio",  "spinner",  "NOM_MUN"});
+        ListaINVENTARIO.add(new String[]{"Vereda",  "edittext",  "VEREDA"});
+        ListaINVENTARIO.add(new String[]{"Sitio","edittext","SITIO"});
+        ListaINVENTARIO.add(new String[]{"REFERENCIA GEOGRÁFICA","edittext","REF_GEOGRF"});
+        ListaINVENTARIO.add(new String[]{"DOCUMENTACIÓN",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"PLANCHAS","edittext","planchas"});
+        ListaINVENTARIO.add(new String[]{"SENSORES REMOTOS","edittext","sensoresremotos"});
+        ListaINVENTARIO.add(new String[]{"FOTOGRAFÍAS AÉREAS","edittext","FTE_INFSEC"});
+        ListaINVENTARIO.add(new String[]{"ACTIVIDAD DEL MOVIMIENTO",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"EDAD","spinner","edadmm"});
+        ListaINVENTARIO.add(new String[]{"ESTADO","spinner","ESTADO_ACT"});
+        ListaINVENTARIO.add(new String[]{"ESTILO","spinner","ESTILO"});
+        ListaINVENTARIO.add(new String[]{"DISTRIBUCIÓN","spinner","DISTRIBUC"});
+        ListaINVENTARIO.add(new String[]{"LITOLOGIA Y ESTRUCTURA",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"DESCRIPCIÓN (Incuir minimo origen de la roca,(I,M ó S) Edad, Fm, Litologia y estratigrafia, suelos)","edittext","LITOLOGIA"});
+        ListaINVENTARIO.add(new String[]{"ESTRUCTURA","estructuras","estructura"});
+        ListaINVENTARIO.add(new String[]{"CLASIFICACIÓN DEL MOVIMIENTO",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"TIPO MOVIMIENTO",  "radiobtn",  "TIPO_MOV"});
+        ListaINVENTARIO.add(new String[]{"SUBTIPO PRIMER MOVIMIENTO",  "spinner",  "SUBTIPO_1"});
+        ListaINVENTARIO.add(new String[]{"SUBTIPO SEGUNDO MOVIMIENTO",  "spinner",  "SUBTIPO_2"});
+        ListaINVENTARIO.add(new String[]{"TIPO MATERIAL",  "radiocheckMM",  "tipomaterial"});
+        ListaINVENTARIO.add(new String[]{"HUMEDAD",  "radiobtn",  "humedad"});
+        ListaINVENTARIO.add(new String[]{"PLASTICIDAD",  "radiobtn",  "plasticidad"});
+        ListaINVENTARIO.add(new String[]{"ORIGEN SUELO",  "origensuelo",  "origensuelo"});
+        ListaINVENTARIO.add(new String[]{"TIPO DE DEPOSITO (Origen suelo sedimentario)",  "radiocheck",  "tipodeposito"});
+        ListaINVENTARIO.add(new String[]{"VELOCIDAD",  "spinner",  "velocidad"});
+        ListaINVENTARIO.add(new String[]{"VELOCIDAD MÁXIMA","edittext","velocidadmax"});
+        ListaINVENTARIO.add(new String[]{"VELOCIDAD MÍNIMA","edittext","velocidadmin"});
+        ListaINVENTARIO.add(new String[]{"SISTEMA DE CLASIFICACIÓN",  "spinner",  "sisclasificacion"});
+        ListaINVENTARIO.add(new String[]{"MORFOMETRÍA",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"GENERAL",  "multitext",  "morfogeneral"});
+        ListaINVENTARIO.add(new String[]{"DIMENSIONES DEL TERRENO",  "multitext",  "morfodimensiones"});
+        ListaINVENTARIO.add(new String[]{"DEFORMACIÓN TERRENO",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"MODO",  "spinner",  "morfomodo"});
+        ListaINVENTARIO.add(new String[]{"SEVERIDAD",  "spinner",  "morfoseveridad"});
+        ListaINVENTARIO.add(new String[]{"GEOFORMA",  "edittext",  "AN_GMF"});
+        ListaINVENTARIO.add(new String[]{"CAUSAS DEL MOVIMIENTO",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"INHERENTES",  "radiocheck",  "causasinherentes"});
+        ListaINVENTARIO.add(new String[]{"CONTRIBUYENTES - DETONANTES",  "radiocheckMM",  "causascontrideto"});
+        ListaINVENTARIO.add(new String[]{"Sismo",  "multitext",  "sismoMM"});
+        ListaINVENTARIO.add(new String[]{"Lluvias",  "multitext",  "lluviasMM"});
+        ListaINVENTARIO.add(new String[]{"TIPO DE EROSIÓN",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"SUPERFICIAL",  "radiocheck",  "erosionsuperficial"});
+        ListaINVENTARIO.add(new String[]{"SUBSUPERFICIAL",  "radiocheck",  "erosionsubsuperficial"});
+        ListaINVENTARIO.add(new String[]{"EDAD",  "spinner",  "erosionedad"});
+        ListaINVENTARIO.add(new String[]{"ESTADO",  "spinner",  "erosionestado"});
+        ListaINVENTARIO.add(new String[]{"FLUVIAL",  "spinner",  "erosionfluvial"});
+        ListaINVENTARIO.add(new String[]{"EOLICA",  "spinner",  "erosioneolica"});
+        ListaINVENTARIO.add(new String[]{"COBERTURA Y USO DEL SUELO",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"COBERTURA DEL SUELO",  "multitext",  "cobertura"});
+        ListaINVENTARIO.add(new String[]{"USO DEL SUELO",  "multitext",  "usosuelo"});
+        ListaINVENTARIO.add(new String[]{"REFERENCIAS",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"AUTOR","edittext","referenciasautor"});
+        ListaINVENTARIO.add(new String[]{"AÑO","edittext","referenciasaño"});
+        ListaINVENTARIO.add(new String[]{"TITULO","edittext","referenciastitulo"});
+        ListaINVENTARIO.add(new String[]{"EDITOR","edittext","referenciaseditor"});
+        ListaINVENTARIO.add(new String[]{"CIUDAD","edittext","referenciasciudad"});
+        ListaINVENTARIO.add(new String[]{"PAGINAS","edittext","referenciaspaginas"});
+        ListaINVENTARIO.add(new String[]{"EFECTOS SECUNDARIOS: REPRESAMIENTO",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"TIPO (Costa & Schuster, 1988)",  "spinner",  "represamientotipo"});
+        ListaINVENTARIO.add(new String[]{"MORFOMETRÍA DE LA PRESA",  "multitext",  "represamientomorfometria"});
+        ListaINVENTARIO.add(new String[]{"CONDICIONES DE LA PRESA",  "radiocheck",  "represamientocondiciones"});
+        ListaINVENTARIO.add(new String[]{"EFECTOS",  "radiocheck",  "represamientoefectos"});
+        ListaINVENTARIO.add(new String[]{"POBLACION AFECTADA",  "titulo",  ""});
+        ListaINVENTARIO.add(new String[]{"HERIDOS","edittext","heridos"});
+        ListaINVENTARIO.add(new String[]{"VIDAS","edittext","vidas"});
+        ListaINVENTARIO.add(new String[]{"DESAPARECIDOS","edittext","desaparecidos"});
+        ListaINVENTARIO.add(new String[]{"PERSONAS","edittext","personas"});
+        ListaINVENTARIO.add(new String[]{"FAMILIAS","edittext","familias"});
+        ListaINVENTARIO.add(new String[]{"NOTAS","edittext","notas"});
+        ListaINVENTARIO.add(new String[]{"APRECIACIÓN DEL RIESGO","edittext","apreciacionriesgo"});
+        ListaINVENTARIO.add(new String[]{"DAÑOS A INFRASTRUCTURA, ACTIVIDADES ECONÓMICAS, DAÑOS AMBIENTALES:","titulo",""});
+
+        ListaFotosAnexasINV.add(new String[]{"Fecha",  "edittext",  "fechaFotosAnexas"});
+        ListaFotosAnexasINV.add(new String[]{"Nombre de la Foto",  "edittext",  "nombreFotosAnexasINV"});
+        ListaFotosAnexasINV.add(new String[]{"Autor/Derechos",  "edittext",  "autorFotosAnexas"});
+        ListaFotosAnexasINV.add(new String[]{"Observaciones",  "edittext",  "obsFotosAnexas"});
 
     }
 
