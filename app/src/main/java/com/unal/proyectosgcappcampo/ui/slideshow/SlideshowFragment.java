@@ -46,9 +46,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,6 +58,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.unal.proyectosgcappcampo.R;
 import com.unal.proyectosgcappcampo.databinding.FragmentSlideshowBinding;
 import com.google.firebase.database.DatabaseReference;
@@ -67,16 +70,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -150,6 +157,7 @@ public class SlideshowFragment extends Fragment {
 
 
     List<Uri> listFotosGeneral = new ArrayList<Uri>();
+    List<String> listNombresFotosGeneral = new ArrayList<String>();
 
 
     int idLinear;
@@ -261,7 +269,7 @@ public class SlideshowFragment extends Fragment {
 
         GenerarListas();
 
-//        btnFoto = binding.btnFoto;
+        btnFoto = binding.btnFoto;
         btnLocalization = binding.btnLocalization;
         liFotosGeneral = binding.liFotos;
         btnFormLoad = binding.btnFormLoad;
@@ -417,12 +425,12 @@ public class SlideshowFragment extends Fragment {
             formComplete = new JSONArray();
         }
 
-//        btnFoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                CargarImagen();
-//            }
-//        });
+        btnFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CargarImagen();
+            }
+        });
 
         btnLocalization.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -481,9 +489,16 @@ public class SlideshowFragment extends Fragment {
             locationStart();
         }
 
-        if (ActivityCompat.checkSelfPermission(mcont, Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mcont, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//            requestPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE,}, 1000);
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,}, 1000);
+//        if (ActivityCompat.checkSelfPermission(mcont, Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mcont, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+////            requestPermissions(new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE,}, 1000);
+//            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,}, 1000);
+//        }
+        int permissionCheck = ContextCompat.checkSelfPermission(mcont, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            Log.i("Mensaje", "No se tiene permiso para leer.");
+            requestPermissions( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 225);
+        } else {
+            Log.i("Mensaje", "Se tiene permiso para leer y escribir!");
         }
 
 
@@ -491,7 +506,8 @@ public class SlideshowFragment extends Fragment {
 
     private void ActivityResult() {
         intentLaucher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-           if (result.getResultCode() == Activity.RESULT_OK){
+            listNombresFotosGeneral = new ArrayList<String>();
+            if (result.getResultCode() == Activity.RESULT_OK){
                Uri imageUri;
                if (result.getData().getClipData() != null){
                    //Seleccionar multiples Imagenes
@@ -508,17 +524,18 @@ public class SlideshowFragment extends Fragment {
                }
 
                liFotosGeneral.removeAllViews();
-               String name = "";
+               StringBuilder name = new StringBuilder();
                for (int i = 0; i < listFotosGeneral.size(); i++) {
                    ImageView imagen = new ImageView(mcont);
                    imagen.setLayoutParams(new ActionBar.LayoutParams(400, 400));
                    imagen.setImageURI(listFotosGeneral.get(i));
                    String path = listFotosGeneral.get(i).getPath();
-
-                   name += path.substring(path.lastIndexOf('/') + 1) + ", ";
+                   listNombresFotosGeneral.add(path.substring(path.lastIndexOf('/') + 1));
+                   name.append(path.substring(path.lastIndexOf('/') + 1)).append(", ");
                    liFotosGeneral.addView(imagen);
                }
-               etFotos.setText(name);
+               Log.d("images", "ActivityResult: "+listNombresFotosGeneral);
+               etFotos.setText(name.toString());
            }
         });
     }
@@ -4429,51 +4446,13 @@ public class SlideshowFragment extends Fragment {
                                     String Observaciones = form.getString("Observaciones");
                                     String Fecha = form.getString("Fecha");
                                     String Propietario = form.getString("Propietario");
+                                    String ListFotosGenerales = form.getString("Fotos_Generales");
 
                                     FormFeature nuevaEstacion = new FormFeature(true, Estacion, TipoEstacion, Este, Norte, Altitud, Fotos, Observaciones, Fecha, Propietario);
 
                                     databaseReference.child("EstacionesCampo/estacion_"+cont).setValue(nuevaEstacion);
 
                                     int fotosCount = Integer.parseInt(form.getString("FotosCount"));
-
-//                                    for (int j = 0; j < fotosCount; j++) {
-//                                        String uriFoto = form.getString("Fotos_Generales_"+j);
-//                                        Uri urifotos = Uri.parse(uriFoto);
-//                                        Bitmap imagen = getBitmapFromUri (urifotos);
-//                                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                                        imagen.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//                                        byte[] data = baos.toByteArray();
-//                                        //Uri file = Uri.fromFile(new File(Uri.parse(uriFoto)));
-//                                        //String path = listFotosGeneral.get(i).getPath();
-//                                        String subpath = uriFoto.substring(uriFoto.lastIndexOf('/') + 1);
-//                                        StorageReference estacionRef = storageRef.child("FotosEstaciones/estacion_"+cont+"/"+subpath);
-////                                        UploadTask uploadTask = estacionRef.putFile(file);
-//                                        UploadTask uploadTask = estacionRef.putBytes(data);
-//                                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-//                                            @Override
-//                                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-//                                                if (!task.isSuccessful()) {
-//                                                    throw task.getException();
-//                                                }
-//
-//                                                // Continue with the task to get the download URL
-//                                                return estacionRef.getDownloadUrl();
-//                                            }
-//                                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-//                                            @Override
-//                                            public void onComplete(@NonNull Task<Uri> task) {
-//                                                if (task.isSuccessful()) {
-//                                                    Uri downloadUri = task.getResult();
-//
-//                                                    Log.d("jaaj", "onComplete: "+downloadUri);
-//                                                } else {
-//                                                    // Handle failures
-//                                                    // ...
-//                                                }
-//                                            }
-//                                        });
-//
-//                                    }
 
                                     JSONObject Formularios = form.getJSONObject("Formularios");
                                     JSONObject counts = Formularios.getJSONObject("counts");
@@ -4922,7 +4901,7 @@ public class SlideshowFragment extends Fragment {
                                         boolean activo = true;
                                         String IMPORTANC = SpinnersAux.getString("IMPORTANC");
                                         String FECHA_FUENTE = SpinnersAux.getString("FECHA_FUENTE");
-                                        String confiFechaMM = SpinnersAux.getString("ConfiFechaMM");
+                                        String ConfiFechaMM = SpinnersAux.getString("ConfiFechaMM");
                                         String NOM_MUN = SpinnersAux.getString("NOM_MUN");
                                         String SUBTIPO_1 = SpinnersAux.getString("SUBTIPO_1");
                                         String SUBTIPO_2 = SpinnersAux.getString("SUBTIPO_2");
@@ -4946,7 +4925,7 @@ public class SlideshowFragment extends Fragment {
                                         String TIPO_MOV1 = RadioGrpAux.getString("TIPO_MOV1");
 
 
-                                        FormatCAT nuevoFormatoCAT = new FormatCAT(activo,IMPORTANC,FECHA_FUENTE,confiFechaMM,NOM_MUN,SUBTIPO_1,SUBTIPO_2,ID_PARTE,ENCUESTAD,FECHA_MOV,FECHA_REP,COD_SIMMA,VEREDA,SITIO,REF_GEOGRF,HERIDOS,VIDAS,DESAPARECIDOS,PERSONAS,FAMILIAS,sensoresremotos,FTE_INFSEC,notas,TIPO_MOV2,TIPO_MOV1);
+                                        FormatCAT nuevoFormatoCAT = new FormatCAT(activo,IMPORTANC,FECHA_FUENTE,ConfiFechaMM,NOM_MUN,SUBTIPO_1,SUBTIPO_2,ID_PARTE,ENCUESTAD,FECHA_MOV,FECHA_REP,COD_SIMMA,VEREDA,SITIO,REF_GEOGRF,HERIDOS,VIDAS,DESAPARECIDOS,PERSONAS,FAMILIAS,sensoresremotos,FTE_INFSEC,notas,TIPO_MOV2,TIPO_MOV1);
 
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_CATALOGO/Form_CATALOGO_"+j).setValue(nuevoFormatoCAT);
 
@@ -5289,6 +5268,9 @@ public class SlideshowFragment extends Fragment {
                                     file.write(String.valueOf(formComplete));
                                     file.flush();
                                     file.close();
+
+                                    SubirFotos(cont, ListFotosGenerales, "General", 0);
+
                                     cont++;
                                 }
 
@@ -5325,12 +5307,63 @@ public class SlideshowFragment extends Fragment {
 
     }
 
-    private Bitmap getBitmapFromUri(Uri uri) throws IOException{
-        ParcelFileDescriptor parcelFileDescriptor = mcont.getContentResolver(). openFileDescriptor ( uri , "r" );
-        FileDescriptor fileDescriptor = parcelFileDescriptor . getFileDescriptor ();
-        Bitmap image = BitmapFactory. decodeFileDescriptor ( fileDescriptor );
-        parcelFileDescriptor . close ();
-        return image ;
+    private void SubirFotos(int cont, String listaFotos, String tipo, int form) {
+
+        List<String> myList = new ArrayList<String>(Arrays.asList(listaFotos.replace("[","").replace("]","").split(", ")));
+        databaseReference.child("EstacionesCampo/estacion_"+cont+"/FotosURL/count").setValue(myList.size());
+
+        for (int j = 0; j < myList.size(); j++) {
+            try {
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/"+ myList.get(j));
+                if (file.exists()){
+                    UploadTask uploadTask = storageRef.child("images/"+myList.get(j)).putFile(Uri.fromFile(file));
+                    String name = myList.get(j);
+                    int auxFoto = j;
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+
+                            // Continue with the task to get the download URL
+                            return storageRef.child("images/"+name).getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Uri downloadUri = task.getResult();
+                                Log.d("Err", "onComplete: "+downloadUri);
+                                if (tipo.equals("General")){
+                                    databaseReference.child("EstacionesCampo/estacion_"+cont+"/FotosURL/Foto_"+auxFoto).setValue(downloadUri.toString());
+                                    databaseReference.child("EstacionesCampo/estacion_"+cont+"/FotosURL/FotoActivo_"+auxFoto).setValue(true);
+                                }
+                            } else {
+                                // Handle failures
+                                // ...
+                            }
+                        }
+                    });
+                }
+
+            }catch (Exception ex){
+                Toast.makeText(mcont, "Ocurrió un error al subir las imágenes\n", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+    public byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 
     private void GuardarForm() throws JSONException, IOException {
@@ -5349,9 +5382,40 @@ public class SlideshowFragment extends Fragment {
                 .put("FotosCount", listFotosGeneral.size())
                 .put("Observaciones", etObservaciones.getText().toString())
                 .put("Fecha", s.toString())
-                .put("Propietario", userName);
+                .put("Propietario", userName)
+                .put("Fotos_Generales", listNombresFotosGeneral.toString());
+
+
         for (int i = 0; i < listFotosGeneral.size(); i++) {
-            attrForm.put("Fotos_Generales_"+i, listFotosGeneral.get(i).toString());
+            try {
+                InputStream iStream = mcont.getContentResolver().openInputStream(listFotosGeneral.get(i));
+                byte[] inputData = getBytes(iStream);
+
+                File rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                if (!rutaArchivo.exists()) { //sino existe, se crea
+                    rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                    rutaArchivo.mkdirs();//creamos
+                }
+
+                try {
+                    File files = new File(rutaArchivo, listNombresFotosGeneral.get(i));
+                    if (files.exists()) {
+                        files.delete();//si este archivo existe, con ese nombre, lo reemplazará
+                    }
+
+                    FileOutputStream  out = new FileOutputStream(files);
+                    out.write(inputData);
+                    out.close();
+
+                } catch (Exception ex) {
+                    Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                    Log.e("ErrorImagen1", "ex: " + ex);
+                }
+            }
+            catch (Exception e) {
+                Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                Log.e("ErrorImagen2", "e: " + e);
+            }
         }
 
         JSONObject FormatosList = new JSONObject();
@@ -5587,14 +5651,31 @@ public class SlideshowFragment extends Fragment {
         }
 
         try {
-            File rutaArchivo = new File(Environment.getExternalStorageDirectory() + "/documents/Estaciones/");
+            File rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Estaciones/");
             if (!rutaArchivo.exists()) { //sino existe, se crea
-                rutaArchivo = new File(Environment.getExternalStorageDirectory() + "/documents/Estaciones/");
+                rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Estaciones/");
                 rutaArchivo.mkdirs();//creamos
             }
 
             try {
-                File files = new File(rutaArchivo, "estaciones" + ".txt");
+                File files = new File(rutaArchivo, "DatosEstacionesSGC_"+s+ ".txt");
+//                File files = new File(rutaArchivo, "DatosEstaciones_"+s.toString() + "_NO-ES-UNA-IMAGEN.png");
+                if (files.exists()) {
+                    files.delete();//si este archivo existe, con ese nombre, lo reemplazará
+                }
+
+                FileOutputStream  out = new FileOutputStream(files);
+                PrintWriter pw = new PrintWriter(out);
+                pw.println(String.valueOf(formComplete));
+                pw.flush();
+                pw.close();
+                out.close();
+
+            } catch (Exception ex) {
+                Log.e("Error12", "ex: " + ex);
+            }
+            try {
+                File files = new File(rutaArchivo, "DatosEstaciones_"+s+ "_NO-ES-UNA-IMAGEN.png");
                 if (files.exists()) {
                     files.delete();//si este archivo existe, con ese nombre, lo reemplazará
                 }
