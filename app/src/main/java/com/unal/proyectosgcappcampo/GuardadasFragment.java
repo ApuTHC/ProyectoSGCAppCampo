@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -21,6 +23,8 @@ import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,10 +37,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -292,6 +298,27 @@ public class GuardadasFragment extends Fragment {
 
                         liForm.addView(liHori);
 
+                        if(opciones[j].equals("Fotos") || opciones[j].equals("FotosLib")){
+                            HorizontalScrollView hScrollView = new HorizontalScrollView(mcont);
+                            hScrollView.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                            LinearLayout liFormFotosAnexas = new LinearLayout(mcont);
+                            liFormFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            liFormFotosAnexas.setOrientation(LinearLayout.HORIZONTAL);
+                            hScrollView.addView(liFormFotosAnexas);
+                            String[] auxNameFotos = aux.split(", ");
+                            for (int k = 0; k < auxNameFotos.length; k++) {
+                                if (!auxNameFotos[k].equals("")){
+                                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/"+ auxNameFotos[k]);
+                                    ImageView imagen = new ImageView(mcont);
+                                    imagen.setLayoutParams(new ActionBar.LayoutParams(400, 400));
+                                    imagen.setImageURI(Uri.fromFile(file));
+                                    liFormFotosAnexas.addView(imagen);
+                                }
+                            }
+                            liForm.addView(hScrollView);
+                        }
+
                     }
 
                     JSONObject Formularios = form.getJSONObject("Formularios");
@@ -309,6 +336,7 @@ public class GuardadasFragment extends Fragment {
                         JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
                         JSONObject CheckBoxAux = FromatoAux.getJSONObject("CheckBox");
                         JSONObject RadioGrpAux = FromatoAux.getJSONObject("RadioGrp");
+                        String FotosAnexasForm = FromatoAux.getString("FotosAnexasForm");
 
                         int aux = j + 1;
 
@@ -828,6 +856,26 @@ public class GuardadasFragment extends Fragment {
                                     liHori2.addView(tvOpts);
                                     liFormAcordionDis.addView(liHori2);
                                 }
+                                if (clase1.equals("imageview")){
+
+                                    List<String> myList = new ArrayList<String>(Arrays.asList(FotosAnexasForm.replace("[","").replace("]","").split(", ")));
+                                    if (!FotosAnexasForm.equals("[]")) {
+                                        LinearLayout liHori2 = new LinearLayout(mcont);
+                                        liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        liHori2.setOrientation(LinearLayout.VERTICAL);
+                                        liHori2.setPadding(20, 0, 0, 20);
+
+                                        int auxcountfotos = f-1;
+
+                                        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/"+ myList.get(auxcountfotos));
+                                        ImageView imagen = new ImageView(mcont);
+                                        imagen.setLayoutParams(new ActionBar.LayoutParams(400, 400));
+                                        imagen.setImageURI(Uri.fromFile(file));
+                                        liHori2.addView(imagen);
+
+                                        liFormAcordionDis.addView(liHori2);
+                                    }
+                                }
                             }
                         }
                     }
@@ -837,6 +885,7 @@ public class GuardadasFragment extends Fragment {
                         JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
                         JSONObject CheckBoxAux = FromatoAux.getJSONObject("CheckBox");
                         JSONObject RadioGrpAux = FromatoAux.getJSONObject("RadioGrp");
+                        String FotosAnexasForm = FromatoAux.getString("FotosAnexasForm");
 
                         int aux = j + 1;
 
@@ -1419,6 +1468,26 @@ public class GuardadasFragment extends Fragment {
                                     liHori2.addView(tvOpts);
                                     liFormAcordionDis.addView(liHori2);
                                 }
+                                if (clase1.equals("imageview")){
+
+                                    List<String> myList = new ArrayList<String>(Arrays.asList(FotosAnexasForm.replace("[","").replace("]","").split(", ")));
+                                    if (!FotosAnexasForm.equals("[]")) {
+                                        LinearLayout liHori2 = new LinearLayout(mcont);
+                                        liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        liHori2.setOrientation(LinearLayout.VERTICAL);
+                                        liHori2.setPadding(20, 0, 0, 20);
+
+                                        int auxcountfotos = f-1;
+
+                                        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/"+ myList.get(auxcountfotos));
+                                        ImageView imagen = new ImageView(mcont);
+                                        imagen.setLayoutParams(new ActionBar.LayoutParams(400, 400));
+                                        imagen.setImageURI(Uri.fromFile(file));
+                                        liHori2.addView(imagen);
+
+                                        liFormAcordionDis.addView(liHori2);
+                                    }
+                                }
                             }
                         }
                     }
@@ -1427,6 +1496,7 @@ public class GuardadasFragment extends Fragment {
                         JSONObject SpinnersAux = FromatoAux.getJSONObject("Spinners");
                         JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
                         JSONObject CheckBoxAux = FromatoAux.getJSONObject("CheckBox");
+                        String FotosAnexasForm = FromatoAux.getString("FotosAnexasForm");
 
                         int aux = j + 1;
 
@@ -1832,6 +1902,26 @@ public class GuardadasFragment extends Fragment {
                                     liHori2.addView(tvOpts);
                                     liFormAcordionDis.addView(liHori2);
                                 }
+                                if (clase1.equals("imageview")){
+
+                                    List<String> myList = new ArrayList<String>(Arrays.asList(FotosAnexasForm.replace("[","").replace("]","").split(", ")));
+                                    if (!FotosAnexasForm.equals("[]")) {
+                                        LinearLayout liHori2 = new LinearLayout(mcont);
+                                        liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        liHori2.setOrientation(LinearLayout.VERTICAL);
+                                        liHori2.setPadding(20, 0, 0, 20);
+
+                                        int auxcountfotos = f-1;
+
+                                        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/"+ myList.get(auxcountfotos));
+                                        ImageView imagen = new ImageView(mcont);
+                                        imagen.setLayoutParams(new ActionBar.LayoutParams(400, 400));
+                                        imagen.setImageURI(Uri.fromFile(file));
+                                        liHori2.addView(imagen);
+
+                                        liFormAcordionDis.addView(liHori2);
+                                    }
+                                }
                             }
                         }
                     }
@@ -2084,6 +2174,7 @@ public class GuardadasFragment extends Fragment {
                         JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
                         JSONObject RadioGrpAux = FromatoAux.getJSONObject("RadioGrp");
                         JSONObject CheckBoxAux = FromatoAux.getJSONObject("CheckBox");
+                        String FotosAnexasForm = FromatoAux.getString("FotosAnexasForm");
 
                         int aux = j + 1;
 
@@ -2623,7 +2714,7 @@ public class GuardadasFragment extends Fragment {
                                 String clase1 = ListaFotosAnexasINV.get(h)[1];
                                 String titulo1 = ListaFotosAnexasINV.get(h)[0];
                                 String tag1 = ListaFotosAnexasINV.get(h)[2];
-
+                                Log.d("TAG", "onCreateView: "+clase1);
                                 if (clase1.equals("edittext")){
 
                                     LinearLayout liHori2 = new LinearLayout(mcont);
@@ -2647,6 +2738,26 @@ public class GuardadasFragment extends Fragment {
                                     tvOpts.setPadding(0, 20, 0, 0);
                                     liHori2.addView(tvOpts);
                                     liFormAcordionDis.addView(liHori2);
+                                }
+                                if (clase1.equals("imageview")){
+
+                                    List<String> myList = new ArrayList<String>(Arrays.asList(FotosAnexasForm.replace("[","").replace("]","").split(", ")));
+                                    if (!FotosAnexasForm.equals("[]")) {
+                                        LinearLayout liHori2 = new LinearLayout(mcont);
+                                        liHori2.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        liHori2.setOrientation(LinearLayout.VERTICAL);
+                                        liHori2.setPadding(20, 0, 0, 20);
+
+                                        int auxcountfotos = f-1;
+
+                                        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/"+ myList.get(auxcountfotos));
+                                        ImageView imagen = new ImageView(mcont);
+                                        imagen.setLayoutParams(new ActionBar.LayoutParams(400, 400));
+                                        imagen.setImageURI(Uri.fromFile(file));
+                                        liHori2.addView(imagen);
+
+                                        liFormAcordionDis.addView(liHori2);
+                                    }
                                 }
                             }
                         }
@@ -2719,6 +2830,7 @@ public class GuardadasFragment extends Fragment {
 
         ListaFotosAnexas.add(new String[]{"NombreFotosAnexas", "Nombre de la Foto",  "edittext"});
         ListaFotosAnexas.add(new String[]{"DescriFotosAnexas", "Descripción de la Foto",  "edittext"});
+        ListaFotosAnexas.add(new String[]{"Foto", "Foto",  "imageview"});
 
 
         ListaSuelos.add(new String[]{"noformato", "Número Formato",  "edittext"});
@@ -2930,6 +3042,7 @@ public class GuardadasFragment extends Fragment {
         ListaFotosAnexasINV.add(new String[]{"Nombre de la Foto",  "edittext",  "nombreFotosAnexasINV"});
         ListaFotosAnexasINV.add(new String[]{"Autor/Derechos",  "edittext",  "autorFotosAnexas"});
         ListaFotosAnexasINV.add(new String[]{"Observaciones",  "edittext",  "obsFotosAnexas"});
+        ListaFotosAnexasINV.add(new String[]{"Foto", "imageview",  "Foto"});
 
     }
 

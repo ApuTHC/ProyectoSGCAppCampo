@@ -5657,8 +5657,11 @@ public class SlideshowFragment extends Fragment {
             ruta = "EstacionesCampo/estacion_" + cont + "/Formularios/Form_INVENTARIO/Form_INVENTARIO_"+form+"/FotosAnexas";
         }
 
-
-        databaseReference.child(ruta +"/FotosURL/count").setValue(myList.size());
+        if (listaFotos.equals("[]")){
+            databaseReference.child(ruta +"/FotosURL/count").setValue(0);
+        }else{
+            databaseReference.child(ruta +"/FotosURL/count").setValue(myList.size());
+        }
 
         for (int j = 0; j < myList.size(); j++) {
             if (!listaFotos.equals("[]")){
