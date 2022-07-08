@@ -17,5 +17,13 @@
         <item name="android:textColor">#111111</item>
     </style>
 
+    <style name="BtnAgregarFotos" >
+
+        <item name="icon">@android:drawable/ic_menu_upload</item>
+<!--        <item name="android:iconTint">#000000</item>-->
+        <item name="android:layout_marginStart">50dp</item>
+        <item name="android:layout_marginEnd">50dp</item>
+    </style>
+
 
 </resources>

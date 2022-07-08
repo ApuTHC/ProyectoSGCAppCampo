@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,7 +14,6 @@ import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Editable;
@@ -33,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -72,14 +70,11 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -103,20 +98,26 @@ public class SlideshowFragment extends Fragment {
     boolean sismo1 = false;
     boolean sismo2 = false;
 
-    private ActivityResultLauncher<Intent> intentLaucher;
+    private ActivityResultLauncher<Intent> intentLaucherGeneral;
+    private ActivityResultLauncher<Intent> intentLaucherLib;
+    private ActivityResultLauncher<Intent> intentLaucherFormatos;
+
 
     Button btnFormLoad;
     Button btnFormSync;
     Button btnAddForm;
     Button btnFoto;
+    Button btnFotoLib;
     Button btnLocalization;
     LinearLayout liFotosGeneral;
+    LinearLayout liFotosLib;
     EditText etEstacion;
     EditText etTipoEstacion;
     EditText etEste;
     EditText etNorte;
     EditText etAltitud;
     EditText etFotos;
+    EditText etFotosLib;
     EditText etObservaciones;
     TextView tvEstadoGPS;
 
@@ -157,8 +158,29 @@ public class SlideshowFragment extends Fragment {
 
 
     List<Uri> listFotosGeneral = new ArrayList<Uri>();
+    List<Uri> listFotosLib = new ArrayList<Uri>();
+    List<Uri> listFotosAnexaSame = new ArrayList<Uri>();
+    List<List<Uri>> listFotosSame = new ArrayList<List<Uri>>();
+    List<List<Uri>> listFotosUGSR = new ArrayList<List<Uri>>();
+    List<List<Uri>> listFotosUGSS = new ArrayList<List<Uri>>();
+    List<List<Uri>> listFotosSGMF = new ArrayList<List<Uri>>();
+    List<List<Uri>> listFotosINV = new ArrayList<List<Uri>>();
     List<String> listNombresFotosGeneral = new ArrayList<String>();
+    List<String> listNombresFotosLib = new ArrayList<String>();
+    List<String> listNombresFotosSame = new ArrayList<String>();
+    List<List<String>> ListaNombresFotosSame = new ArrayList<List<String>>();
+    List<List<List<String>>> ListaNombresFotosFormatos = new ArrayList<List<List<String>>>();
 
+
+    List<List<List<Uri>>> ListaUriFotosAnexas = new ArrayList<List<List<Uri>>>();
+
+
+    List<LinearLayout> listLiFotosAnexas = new ArrayList<LinearLayout>();
+    List<List<LinearLayout>> ListaLiFotosAnexas = new ArrayList<List<LinearLayout>>();
+    List<EditText> listEtFotosAnexas = new ArrayList<EditText>();
+    List<List<EditText>> ListaEtFotosAnexas = new ArrayList<List<EditText>>();
+
+    String actualLiFotos = "";
 
     int idLinear;
 
@@ -270,8 +292,10 @@ public class SlideshowFragment extends Fragment {
         GenerarListas();
 
         btnFoto = binding.btnFoto;
+        btnFotoLib = binding.btnFotoLib;
         btnLocalization = binding.btnLocalization;
         liFotosGeneral = binding.liFotos;
+        liFotosLib = binding.liFotosLib;
         btnFormLoad = binding.btnFormLoad;
         btnFormSync = binding.btnFormSync;
         btnAddForm = binding.AddFormu;
@@ -281,10 +305,15 @@ public class SlideshowFragment extends Fragment {
         etEste = binding.etEste;
         etAltitud = binding.etAltitud;
         etFotos = binding.etFotos;
+        etFotosLib = binding.etFotosLib;
         etObservaciones = binding.etObservaciones;
         tvEstadoGPS = binding.tvEstadoGPS;
 
         ActivityResult();
+        listFotosGeneral = new ArrayList<Uri>();
+        listFotosLib = new ArrayList<Uri>();
+        ListaUriFotosAnexas = new ArrayList<List<List<Uri>>>();
+        ListaNombresFotosFormatos = new ArrayList<List<List<String>>>();
 
 
         liFormularios = binding.liFormularios;
@@ -428,7 +457,14 @@ public class SlideshowFragment extends Fragment {
         btnFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CargarImagen();
+                CargarImagen("General");
+            }
+        });
+
+        btnFotoLib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CargarImagen("Lib");
             }
         });
 
@@ -497,7 +533,8 @@ public class SlideshowFragment extends Fragment {
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             Log.i("Mensaje", "No se tiene permiso para leer.");
             requestPermissions( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 225);
-        } else {
+        }
+        else {
             Log.i("Mensaje", "Se tiene permiso para leer y escribir!");
         }
 
@@ -505,7 +542,7 @@ public class SlideshowFragment extends Fragment {
     }
 
     private void ActivityResult() {
-        intentLaucher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        intentLaucherGeneral = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             listNombresFotosGeneral = new ArrayList<String>();
             if (result.getResultCode() == Activity.RESULT_OK){
                Uri imageUri;
@@ -538,15 +575,99 @@ public class SlideshowFragment extends Fragment {
                etFotos.setText(name.toString());
            }
         });
+
+        intentLaucherLib = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            listNombresFotosLib = new ArrayList<String>();
+            if (result.getResultCode() == Activity.RESULT_OK){
+               Uri imageUri;
+               if (result.getData().getClipData() != null){
+                   //Seleccionar multiples Imagenes
+                   int count = result.getData().getClipData().getItemCount();
+                   for (int i = 0; i<count; i++){
+                       imageUri = result.getData().getClipData().getItemAt(i).getUri();
+                       listFotosLib.add(imageUri);
+                   }
+               }
+               else{
+                   //Seleccionar una imagen
+                   imageUri = result.getData().getData();
+                   listFotosLib.add(imageUri);
+               }
+
+               liFotosLib.removeAllViews();
+               StringBuilder name = new StringBuilder();
+               for (int i = 0; i < listFotosLib.size(); i++) {
+                   ImageView imagen = new ImageView(mcont);
+                   imagen.setLayoutParams(new ActionBar.LayoutParams(400, 400));
+                   imagen.setImageURI(listFotosLib.get(i));
+                   String path = listFotosLib.get(i).getPath();
+                   listNombresFotosLib.add(path.substring(path.lastIndexOf('/') + 1));
+                   name.append(path.substring(path.lastIndexOf('/') + 1)).append(", ");
+                   liFotosLib.addView(imagen);
+               }
+               Log.d("images", "ActivityResult: "+listNombresFotosLib);
+               etFotosLib.setText(name.toString());
+           }
+        });
+
+        intentLaucherFormatos = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            int auxIdForm = Integer.parseInt(actualLiFotos.split("-")[1]);
+            int auxIdFotoAnexa = Integer.parseInt(actualLiFotos.split("-")[2]);
+
+
+            ListaUriFotosAnexas.get(auxIdForm).set(auxIdFotoAnexa, new ArrayList<Uri>());
+            ListaNombresFotosFormatos.get(auxIdForm).set(auxIdFotoAnexa, new ArrayList<String>());
+
+            if (result.getResultCode() == Activity.RESULT_OK){
+               Uri imageUri;
+               if (result.getData().getClipData() != null){
+                   //Seleccionar multiples Imagenes
+                   int count = result.getData().getClipData().getItemCount();
+                   for (int i = 0; i<count; i++){
+                       imageUri = result.getData().getClipData().getItemAt(i).getUri();
+                       ListaUriFotosAnexas.get(auxIdForm).get(auxIdFotoAnexa).add(imageUri);
+                   }
+               }
+               else{
+                   //Seleccionar una imagen
+                   imageUri = result.getData().getData();
+                   ListaUriFotosAnexas.get(auxIdForm).get(auxIdFotoAnexa).add(imageUri);
+               }
+
+                ListaLiFotosAnexas.get(auxIdForm).get(auxIdFotoAnexa).removeAllViews();
+               StringBuilder name = new StringBuilder();
+               for (int i = 0; i < ListaUriFotosAnexas.get(auxIdForm).get(auxIdFotoAnexa).size(); i++) {
+                   ImageView imagen = new ImageView(mcont);
+                   imagen.setLayoutParams(new ActionBar.LayoutParams(400, 400));
+                   imagen.setImageURI(ListaUriFotosAnexas.get(auxIdForm).get(auxIdFotoAnexa).get(i));
+                   String path = ListaUriFotosAnexas.get(auxIdForm).get(auxIdFotoAnexa).get(i).getPath();
+                   ListaNombresFotosFormatos.get(auxIdForm).get(auxIdFotoAnexa).add(path.substring(path.lastIndexOf('/') + 1));
+                   name.append(path.substring(path.lastIndexOf('/') + 1)).append(", ");
+                   ListaLiFotosAnexas.get(auxIdForm).get(auxIdFotoAnexa).addView(imagen);
+               }
+               Log.d("images", "ActivityResult: "+ ListaNombresFotosFormatos);
+                ListaEtFotosAnexas.get(auxIdForm).get(auxIdFotoAnexa).setText(name.toString());
+           }
+        });
     }
 
-    private void CargarImagen() {
+    private void CargarImagen(String Tipo) {
 
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         //intent.setAction(Intent.ACTION_GET_CONTENT);
-        intentLaucher.launch(Intent.createChooser(intent, "Seleccione la aplicación"));
+        if (Tipo.equals("UGSR") || Tipo.equals("UGSS") || Tipo.equals("SGMF") || Tipo.equals("INV")){
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+            intentLaucherFormatos.launch(Intent.createChooser(intent, "Seleccione la aplicación"));
+        }
+        if (Tipo.equals("General")){
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intentLaucherGeneral.launch(Intent.createChooser(intent, "Seleccione la aplicación"));
+        }
+        if (Tipo.equals("Lib")){
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intentLaucherLib.launch(Intent.createChooser(intent, "Seleccione la aplicación"));
+        }
 
     }
 
@@ -600,6 +721,17 @@ public class SlideshowFragment extends Fragment {
         listRadioBtn2Gruesos = new ArrayList<RadioButton>();
         listRadioGrp = new ArrayList<RadioGroup>();
 
+        listLiFotosAnexas = new ArrayList<LinearLayout>();
+        listEtFotosAnexas = new ArrayList<EditText>();
+        listFotosSame = new ArrayList<List<Uri>>();
+        listFotosUGSR = new ArrayList<List<Uri>>();
+        listFotosUGSS = new ArrayList<List<Uri>>();
+        listFotosSGMF = new ArrayList<List<Uri>>();
+        listFotosINV = new ArrayList<List<Uri>>();
+        ListaNombresFotosSame = new ArrayList<List<String>>();
+
+
+
 
         ListaFotosAnexasINV.add(listFotosAnexasINV);
         ListaFotosAnexas.add(listFotosAnexas);
@@ -627,6 +759,8 @@ public class SlideshowFragment extends Fragment {
         listContDiscontinuidades.add(discontinuidades);
         listContSGMF.add(sgmf);
         listContDANOS.add(daños);
+        ListaUriFotosAnexas.add(listFotosSame);
+        ListaNombresFotosFormatos.add(ListaNombresFotosSame);
 
         if (formType.equals("UGS Rocas")) {
             Button bAcordion = new Button(mcont);
@@ -1170,6 +1304,8 @@ public class SlideshowFragment extends Fragment {
             liFormFotosAnexasSuelos.setOrientation(LinearLayout.VERTICAL);
             liForm.addView(liFormFotosAnexasSuelos);
 
+            ListaEtFotosAnexas.add(listEtFotosAnexas);
+            ListaLiFotosAnexas.add(listLiFotosAnexas);
 
             Button bFotosAnexasSuelos = new Button(mcont);
             bFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -1179,6 +1315,10 @@ public class SlideshowFragment extends Fragment {
             bFotosAnexasSuelos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listFotosAnexaSame = new ArrayList<Uri>();
+                    listNombresFotosSame = new ArrayList<String>();
+                    listFotosUGSR.add(listFotosAnexaSame);
+                    ListaNombresFotosSame.add(listNombresFotosSame);
                     listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
 
                     Button bFotosAnexasAcordion = new Button(mcont);
@@ -1265,6 +1405,45 @@ public class SlideshowFragment extends Fragment {
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liFotosAnexas.addView(etGenerico);
+
+                            if (tagElemento.equals("NombreFotosAnexas")){
+                                listEtFotosAnexas.add(etGenerico);
+                                ListaEtFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listEtFotosAnexas);
+                            }
+                        }
+                        if (claseElemento.equals("button")){
+                            HorizontalScrollView hScrollView = new HorizontalScrollView(mcont);
+                            hScrollView.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                            LinearLayout liFormFotosAnexas = new LinearLayout(mcont);
+                            liFormFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            liFormFotosAnexas.setOrientation(LinearLayout.HORIZONTAL);
+                            listLiFotosAnexas.add(liFormFotosAnexas);
+                            hScrollView.addView(liFormFotosAnexas);
+                            liFotosAnexas.addView(hScrollView);
+
+                            ListaLiFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listLiFotosAnexas);
+                            ListaUriFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listFotosUGSR);
+                            ListaNombresFotosFormatos.set(Integer.parseInt(v.getTag().toString()), ListaNombresFotosSame);
+
+
+                            Button tvGenerico = new Button(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            int auxIDFOTO =listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()))-1;
+                            tvGenerico.setTag("Tag-"+idLinear+"-"+auxIDFOTO);
+                            tvGenerico.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_circle, 0, 0, 0);
+                            tvGenerico.setTextAppearance(R.style.BtnAgregarFotos);
+                            liFotosAnexas.addView(tvGenerico);
+
+                            tvGenerico.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View vi) {
+                                    CargarImagen("UGSR");
+                                    actualLiFotos = vi.getTag().toString();
+                                    Log.d("TAG", "onClick: "+actualLiFotos);
+                                }
+                            });
                         }
                     }
 
@@ -2085,6 +2264,8 @@ public class SlideshowFragment extends Fragment {
             liFormFotosAnexasSuelos.setOrientation(LinearLayout.VERTICAL);
             liForm.addView(liFormFotosAnexasSuelos);
 
+            ListaEtFotosAnexas.add(listEtFotosAnexas);
+            ListaLiFotosAnexas.add(listLiFotosAnexas);
 
             Button bFotosAnexasSuelos = new Button(mcont);
             bFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -2094,6 +2275,10 @@ public class SlideshowFragment extends Fragment {
             bFotosAnexasSuelos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listFotosAnexaSame = new ArrayList<Uri>();
+                    listNombresFotosSame = new ArrayList<String>();
+                    listFotosUGSS.add(listFotosAnexaSame);
+                    ListaNombresFotosSame.add(listNombresFotosSame);
                     listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
 
                     Button bFotosAnexasAcordion = new Button(mcont);
@@ -2180,6 +2365,45 @@ public class SlideshowFragment extends Fragment {
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liFotosAnexas.addView(etGenerico);
+
+                            if (tagElemento.equals("NombreFotosAnexas")){
+                                listEtFotosAnexas.add(etGenerico);
+                                ListaEtFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listEtFotosAnexas);
+                            }
+                        }
+                        if (claseElemento.equals("button")){
+                            HorizontalScrollView hScrollView = new HorizontalScrollView(mcont);
+                            hScrollView.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                            LinearLayout liFormFotosAnexas = new LinearLayout(mcont);
+                            liFormFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            liFormFotosAnexas.setOrientation(LinearLayout.HORIZONTAL);
+                            listLiFotosAnexas.add(liFormFotosAnexas);
+                            hScrollView.addView(liFormFotosAnexas);
+                            liFotosAnexas.addView(hScrollView);
+
+                            ListaLiFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listLiFotosAnexas);
+                            ListaUriFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listFotosUGSS);
+                            ListaNombresFotosFormatos.set(Integer.parseInt(v.getTag().toString()), ListaNombresFotosSame);
+
+
+                            Button tvGenerico = new Button(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            int auxIDFOTO =listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()))-1;
+                            tvGenerico.setTag("Tag-"+idLinear+"-"+auxIDFOTO);
+                            tvGenerico.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_circle, 0, 0, 0);
+                            tvGenerico.setTextAppearance(R.style.BtnAgregarFotos);
+                            liFotosAnexas.addView(tvGenerico);
+
+                            tvGenerico.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View vi) {
+                                    CargarImagen("UGSS");
+                                    actualLiFotos = vi.getTag().toString();
+                                    Log.d("TAG", "onClick: "+actualLiFotos);
+                                }
+                            });
                         }
                     }
 
@@ -2589,6 +2813,8 @@ public class SlideshowFragment extends Fragment {
             liFormFotosAnexasSuelos.setOrientation(LinearLayout.VERTICAL);
             liForm.addView(liFormFotosAnexasSuelos);
 
+            ListaEtFotosAnexas.add(listEtFotosAnexas);
+            ListaLiFotosAnexas.add(listLiFotosAnexas);
 
             Button bFotosAnexasSuelos = new Button(mcont);
             bFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -2598,6 +2824,10 @@ public class SlideshowFragment extends Fragment {
             bFotosAnexasSuelos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listFotosAnexaSame = new ArrayList<Uri>();
+                    listNombresFotosSame = new ArrayList<String>();
+                    listFotosSGMF.add(listFotosAnexaSame);
+                    ListaNombresFotosSame.add(listNombresFotosSame);
                     listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
 
                     Button bFotosAnexasAcordion = new Button(mcont);
@@ -2684,6 +2914,45 @@ public class SlideshowFragment extends Fragment {
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liFotosAnexas.addView(etGenerico);
+
+                            if (tagElemento.equals("NombreFotosAnexas")){
+                                listEtFotosAnexas.add(etGenerico);
+                                ListaEtFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listEtFotosAnexas);
+                            }
+                        }
+                        if (claseElemento.equals("button")){
+                            HorizontalScrollView hScrollView = new HorizontalScrollView(mcont);
+                            hScrollView.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                            LinearLayout liFormFotosAnexas = new LinearLayout(mcont);
+                            liFormFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            liFormFotosAnexas.setOrientation(LinearLayout.HORIZONTAL);
+                            listLiFotosAnexas.add(liFormFotosAnexas);
+                            hScrollView.addView(liFormFotosAnexas);
+                            liFotosAnexas.addView(hScrollView);
+
+                            ListaLiFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listLiFotosAnexas);
+                            ListaUriFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listFotosSGMF);
+                            ListaNombresFotosFormatos.set(Integer.parseInt(v.getTag().toString()), ListaNombresFotosSame);
+
+
+                            Button tvGenerico = new Button(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            int auxIDFOTO =listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()))-1;
+                            tvGenerico.setTag("Tag-"+idLinear+"-"+auxIDFOTO);
+                            tvGenerico.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_circle, 0, 0, 0);
+                            tvGenerico.setTextAppearance(R.style.BtnAgregarFotos);
+                            liFotosAnexas.addView(tvGenerico);
+
+                            tvGenerico.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View vi) {
+                                    CargarImagen("SGMF");
+                                    actualLiFotos = vi.getTag().toString();
+                                    Log.d("TAG", "onClick: "+actualLiFotos);
+                                }
+                            });
                         }
                     }
 
@@ -3179,6 +3448,8 @@ public class SlideshowFragment extends Fragment {
             });
             liForm.addView(bAnadirDiscont);
 
+            ListaEtFotosAnexas.add(listEtFotosAnexas);
+            ListaLiFotosAnexas.add(listLiFotosAnexas);
 
             listLiForm.add(liForm);
             liFormularios.addView(liForm);
@@ -4293,6 +4564,8 @@ public class SlideshowFragment extends Fragment {
             liFormFotosAnexasSuelos.setOrientation(LinearLayout.VERTICAL);
             liForm.addView(liFormFotosAnexasSuelos);
 
+            ListaEtFotosAnexas.add(listEtFotosAnexas);
+            ListaLiFotosAnexas.add(listLiFotosAnexas);
 
             Button bFotosAnexasSuelos = new Button(mcont);
             bFotosAnexasSuelos.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -4302,6 +4575,10 @@ public class SlideshowFragment extends Fragment {
             bFotosAnexasSuelos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    listFotosAnexaSame = new ArrayList<Uri>();
+                    listNombresFotosSame = new ArrayList<String>();
+                    listFotosINV.add(listFotosAnexaSame);
+                    ListaNombresFotosSame.add(listNombresFotosSame);
                     listContFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listContFotosAnexas.get(Integer.parseInt(v.getTag().toString())) + 1);
 
                     Button bFotosAnexasAcordion = new Button(mcont);
@@ -4388,6 +4665,45 @@ public class SlideshowFragment extends Fragment {
                             etGenerico.setTag(tagElemento+aux);
                             ListaEditText.get(Integer.parseInt(v.getTag().toString())).add(etGenerico);
                             liFotosAnexas.addView(etGenerico);
+
+                            if (tagElemento.equals("nombreFotosAnexasINV")){
+                                listEtFotosAnexas.add(etGenerico);
+                                ListaEtFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listEtFotosAnexas);
+                            }
+                        }
+                        if (claseElemento.equals("button")){
+                            HorizontalScrollView hScrollView = new HorizontalScrollView(mcont);
+                            hScrollView.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                            LinearLayout liFormFotosAnexas = new LinearLayout(mcont);
+                            liFormFotosAnexas.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            liFormFotosAnexas.setOrientation(LinearLayout.HORIZONTAL);
+                            listLiFotosAnexas.add(liFormFotosAnexas);
+                            hScrollView.addView(liFormFotosAnexas);
+                            liFotosAnexas.addView(hScrollView);
+
+                            ListaLiFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listLiFotosAnexas);
+                            ListaUriFotosAnexas.set(Integer.parseInt(v.getTag().toString()), listFotosINV);
+                            ListaNombresFotosFormatos.set(Integer.parseInt(v.getTag().toString()), ListaNombresFotosSame);
+
+
+                            Button tvGenerico = new Button(mcont);
+                            tvGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            tvGenerico.setText(nombreElemento);
+                            int auxIDFOTO =listContFotosAnexas.get(Integer.parseInt(v.getTag().toString()))-1;
+                            tvGenerico.setTag("Tag-"+idLinear+"-"+auxIDFOTO);
+                            tvGenerico.setCompoundDrawablesWithIntrinsicBounds(R.drawable.plus_circle, 0, 0, 0);
+                            tvGenerico.setTextAppearance(R.style.BtnAgregarFotos);
+                            liFotosAnexas.addView(tvGenerico);
+
+                            tvGenerico.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View vi) {
+                                    CargarImagen("INV");
+                                    actualLiFotos = vi.getTag().toString();
+                                    Log.d("TAG", "onClick: "+actualLiFotos);
+                                }
+                            });
                         }
                     }
 
@@ -4443,16 +4759,17 @@ public class SlideshowFragment extends Fragment {
                                     String Norte = form.getString("Norte");
                                     String Altitud = form.getString("Altitud");
                                     String Fotos = form.getString("Fotos");
+                                    String FotosLib = form.getString("FotosLib");
                                     String Observaciones = form.getString("Observaciones");
                                     String Fecha = form.getString("Fecha");
                                     String Propietario = form.getString("Propietario");
                                     String ListFotosGenerales = form.getString("Fotos_Generales");
+                                    String ListFotosLib = form.getString("Fotos_Lib");
 
-                                    FormFeature nuevaEstacion = new FormFeature(true, Estacion, TipoEstacion, Este, Norte, Altitud, Fotos, Observaciones, Fecha, Propietario);
+                                    FormFeature nuevaEstacion = new FormFeature(true, Estacion, TipoEstacion, Este, Norte, Altitud, Fotos, Observaciones, Fecha, Propietario, FotosLib);
 
                                     databaseReference.child("EstacionesCampo/estacion_"+cont).setValue(nuevaEstacion);
 
-                                    int fotosCount = Integer.parseInt(form.getString("FotosCount"));
 
                                     JSONObject Formularios = form.getJSONObject("Formularios");
                                     JSONObject counts = Formularios.getJSONObject("counts");
@@ -4476,6 +4793,7 @@ public class SlideshowFragment extends Fragment {
                                         JSONObject EditTextsAux = FromatoAux.getJSONObject("EditText");
                                         JSONObject CheckBoxAux = FromatoAux.getJSONObject("CheckBox");
                                         JSONObject RadioGrpAux = FromatoAux.getJSONObject("RadioGrp");
+
                                         String municipios = SpinnersAux.getString("municipios");
                                         String claseaflor = SpinnersAux.getString("claseaflor");
                                         String gsi = SpinnersAux.getString("gsi");
@@ -4571,6 +4889,8 @@ public class SlideshowFragment extends Fragment {
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
 
                                         }
+                                        String FotosAnexasForm = FromatoAux.getString("FotosAnexasForm");
+                                        SubirFotos(cont, FotosAnexasForm, "UGSR", j);
 
                                     }
 
@@ -4782,8 +5102,9 @@ public class SlideshowFragment extends Fragment {
 
                                             FormatFotosAnexas nuevoFormatoFotosAnexas = new FormatFotosAnexas(true, NombreFotosAnexas, DescriFotosAnexas);
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
-
                                         }
+                                        String FotosAnexasForm = FromatoAux.getString("FotosAnexasForm");
+                                        SubirFotos(cont, FotosAnexasForm, "UGSS", j);
 
                                     }
 
@@ -4889,6 +5210,8 @@ public class SlideshowFragment extends Fragment {
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_SGMF/Form_SGMF_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexas);
 
                                         }
+                                        String FotosAnexasForm = FromatoAux.getString("FotosAnexasForm");
+                                        SubirFotos(cont, FotosAnexasForm, "SGMF", j);
 
                                     }
 
@@ -5259,6 +5582,8 @@ public class SlideshowFragment extends Fragment {
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_INVENTARIO/Form_INVENTARIO_"+j+"/FotosAnexas/FotoAnexa_"+k).setValue(nuevoFormatoFotosAnexasINV);
 
                                         }
+                                        String FotosAnexasForm = FromatoAux.getString("FotosAnexasForm");
+                                        SubirFotos(cont, FotosAnexasForm, "INV", j);
 
                                     }
 
@@ -5270,6 +5595,7 @@ public class SlideshowFragment extends Fragment {
                                     file.close();
 
                                     SubirFotos(cont, ListFotosGenerales, "General", 0);
+                                    SubirFotos(cont, ListFotosLib, "Lib", 0);
 
                                     cont++;
                                 }
@@ -5310,49 +5636,131 @@ public class SlideshowFragment extends Fragment {
     private void SubirFotos(int cont, String listaFotos, String tipo, int form) {
 
         List<String> myList = new ArrayList<String>(Arrays.asList(listaFotos.replace("[","").replace("]","").split(", ")));
-        databaseReference.child("EstacionesCampo/estacion_"+cont+"/FotosURL/count").setValue(myList.size());
+
+        String ruta = "";
+        if (tipo.equals("General")) {
+            ruta = "EstacionesCampo/estacion_" + cont + "/FotosGenerales" ;
+        }
+        if (tipo.equals("Lib")) {
+            ruta = "EstacionesCampo/estacion_" + cont + "/FotosLibreta" ;
+        }
+        if (tipo.equals("UGSR")) {
+            ruta = "EstacionesCampo/estacion_" + cont + "/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+form+"/FotosAnexas";
+        }
+        if (tipo.equals("UGSS")) {
+            ruta = "EstacionesCampo/estacion_" + cont + "/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+form+"/FotosAnexas";
+        }
+        if (tipo.equals("SGMF")) {
+            ruta = "EstacionesCampo/estacion_" + cont + "/Formularios/Form_SGMF/Form_SGMF_"+form+"/FotosAnexas";
+        }
+        if (tipo.equals("INV")) {
+            ruta = "EstacionesCampo/estacion_" + cont + "/Formularios/Form_INVENTARIO/Form_INVENTARIO_"+form+"/FotosAnexas";
+        }
+
+
+        databaseReference.child(ruta +"/FotosURL/count").setValue(myList.size());
 
         for (int j = 0; j < myList.size(); j++) {
-            try {
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/"+ myList.get(j));
-                if (file.exists()){
-                    UploadTask uploadTask = storageRef.child("images/"+myList.get(j)).putFile(Uri.fromFile(file));
-                    String name = myList.get(j);
-                    int auxFoto = j;
-                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                        @Override
-                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                            if (!task.isSuccessful()) {
-                                throw task.getException();
-                            }
-
-                            // Continue with the task to get the download URL
-                            return storageRef.child("images/"+name).getDownloadUrl();
+            if (!listaFotos.equals("[]")){
+                try {
+                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/"+ myList.get(j));
+                    if (file.exists()){
+                        String rutaStorage = "";
+                        if (tipo.equals("General")) {
+                            rutaStorage = "/FotosGenerales/";
                         }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
-                                Log.d("Err", "onComplete: "+downloadUri);
-                                if (tipo.equals("General")){
-                                    databaseReference.child("EstacionesCampo/estacion_"+cont+"/FotosURL/Foto_"+auxFoto).setValue(downloadUri.toString());
-                                    databaseReference.child("EstacionesCampo/estacion_"+cont+"/FotosURL/FotoActivo_"+auxFoto).setValue(true);
+                        if (tipo.equals("Lib")) {
+                            rutaStorage = "/FotosLibreta/";
+                        }
+                        if (tipo.equals("UGSR")) {
+                            rutaStorage = "/Form_UGS_Rocas_"+form+"/";
+                        }
+                        if (tipo.equals("UGSS")) {
+                            rutaStorage = "/Form_UGS_Suelos_"+form+"/";
+                        }
+                        if (tipo.equals("SGMF")) {
+                            rutaStorage = "/Form_SGMF_"+form+"/";
+                        }
+                        if (tipo.equals("INV")) {
+                            rutaStorage = "/Form_INVENTARIO_"+form+"/";
+                        }
+
+                        UploadTask uploadTask = storageRef.child("EstacionesCampo/estacion_"+cont+ rutaStorage + myList.get(j)).putFile(Uri.fromFile(file));
+
+                        String name = myList.get(j);
+                        int auxFoto = j;
+                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                            @Override
+                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                if (!task.isSuccessful()) {
+                                    throw task.getException();
                                 }
-                            } else {
-                                // Handle failures
-                                // ...
-                            }
-                        }
-                    });
-                }
+                                // Continue with the task to get the download URL
+                                String rutaStorage1 = "";
+                                if (tipo.equals("General")) {
+                                    rutaStorage1 = "/FotosGenerales/";
+                                }
+                                if (tipo.equals("Lib")) {
+                                    rutaStorage1 = "/FotosLibreta/";
+                                }
+                                if (tipo.equals("UGSR")) {
+                                    rutaStorage1 = "/Form_UGS_Rocas_"+form+"/";
+                                }
+                                if (tipo.equals("UGSS")) {
+                                    rutaStorage1 = "/Form_UGS_Suelos_"+form+"/";
+                                }
+                                if (tipo.equals("SGMF")) {
+                                    rutaStorage1 = "/Form_SGMF_"+form+"/";
+                                }
+                                if (tipo.equals("INV")) {
+                                    rutaStorage1 = "/Form_INVENTARIO_"+form+"/";
+                                }
 
-            }catch (Exception ex){
-                Toast.makeText(mcont, "Ocurrió un error al subir las imágenes\n", Toast.LENGTH_LONG).show();
+                                return storageRef.child("EstacionesCampo/estacion_"+cont+ rutaStorage1 + name).getDownloadUrl();
+
+                            }
+                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                if (task.isSuccessful()) {
+                                    Uri downloadUri = task.getResult();
+                                    Log.d("Err", "onComplete: "+downloadUri);
+                                    String rutaFotos = "";
+                                    if (tipo.equals("General")){
+                                        rutaFotos = "/FotosGenerales";
+                                    }
+                                    if (tipo.equals("Lib")){
+                                        rutaFotos = "/FotosLibreta";
+                                    }
+                                    if (tipo.equals("UGSR")){
+                                        rutaFotos = "/Formularios/Form_UGS_Rocas/Form_UGS_Rocas_"+form+"/FotosAnexas";
+                                    }
+                                    if (tipo.equals("UGSS")){
+                                        rutaFotos = "/Formularios/Form_UGS_Suelos/Form_UGS_Suelos_"+form+"/FotosAnexas";
+                                    }
+                                    if (tipo.equals("SGMF")){
+                                        rutaFotos = "/Formularios/Form_SGMF/Form_SGMF_"+form+"/FotosAnexas";
+                                    }
+                                    if (tipo.equals("INV")){
+                                        rutaFotos = "/Formularios/Form_INVENTARIO/Form_INVENTARIO_"+form+"/FotosAnexas";
+                                    }
+
+                                    databaseReference.child("EstacionesCampo/estacion_"+cont+rutaFotos+"/FotosURL/Foto_"+auxFoto).setValue(downloadUri.toString());
+                                    databaseReference.child("EstacionesCampo/estacion_"+cont+rutaFotos+"/FotosURL/FotoActivo_"+auxFoto).setValue(true);
+                                } else {
+                                    // Handle failures
+                                    // ...
+                                }
+                            }
+                        });
+                    }
+
+                }catch (Exception ex){
+                    Toast.makeText(mcont, "Ocurrió un error al subir las imágenes\n", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
-
 
     public byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
@@ -5380,10 +5788,13 @@ public class SlideshowFragment extends Fragment {
                 .put("Altitud", etAltitud.getText().toString())
                 .put("Fotos", etFotos.getText().toString())
                 .put("FotosCount", listFotosGeneral.size())
+                .put("Fotos_Generales", listNombresFotosGeneral.toString())
+                .put("FotosLib", etFotosLib.getText().toString())
+                .put("FotosLibCount", listFotosLib.size())
+                .put("Fotos_Lib", listNombresFotosLib.toString())
                 .put("Observaciones", etObservaciones.getText().toString())
                 .put("Fecha", s.toString())
-                .put("Propietario", userName)
-                .put("Fotos_Generales", listNombresFotosGeneral.toString());
+                .put("Propietario", userName);
 
 
         for (int i = 0; i < listFotosGeneral.size(); i++) {
@@ -5399,6 +5810,37 @@ public class SlideshowFragment extends Fragment {
 
                 try {
                     File files = new File(rutaArchivo, listNombresFotosGeneral.get(i));
+                    if (files.exists()) {
+                        files.delete();//si este archivo existe, con ese nombre, lo reemplazará
+                    }
+
+                    FileOutputStream  out = new FileOutputStream(files);
+                    out.write(inputData);
+                    out.close();
+
+                } catch (Exception ex) {
+                    Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                    Log.e("ErrorImagen1", "ex: " + ex);
+                }
+            }
+            catch (Exception e) {
+                Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                Log.e("ErrorImagen2", "e: " + e);
+            }
+        }
+        for (int i = 0; i < listFotosLib.size(); i++) {
+            try {
+                InputStream iStream = mcont.getContentResolver().openInputStream(listFotosLib.get(i));
+                byte[] inputData = getBytes(iStream);
+
+                File rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                if (!rutaArchivo.exists()) { //sino existe, se crea
+                    rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                    rutaArchivo.mkdirs();//creamos
+                }
+
+                try {
+                    File files = new File(rutaArchivo, listNombresFotosLib.get(i));
                     if (files.exists()) {
                         files.delete();//si este archivo existe, con ese nombre, lo reemplazará
                     }
@@ -5460,6 +5902,45 @@ public class SlideshowFragment extends Fragment {
                 }
                 FormatoTemp.put("RadioGrp", radioGrp);
 
+                List<String> auxNombresFotos = new ArrayList<String>();
+                for (int j = 0; j < ListaUriFotosAnexas.get(i).size(); j++) {
+                    for (int k = 0; k < ListaUriFotosAnexas.get(i).get(j).size(); k++) {
+                        try {
+                            auxNombresFotos.add(ListaNombresFotosFormatos.get(i).get(j).get(k));
+
+                            InputStream iStream = mcont.getContentResolver().openInputStream(ListaUriFotosAnexas.get(i).get(j).get(k));
+                            byte[] inputData = getBytes(iStream);
+
+                            File rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                            if (!rutaArchivo.exists()) { //sino existe, se crea
+                                rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                                rutaArchivo.mkdirs();//creamos
+                            }
+
+                            try {
+                                File files = new File(rutaArchivo, ListaNombresFotosFormatos.get(i).get(j).get(k));
+                                if (files.exists()) {
+                                    files.delete();//si este archivo existe, con ese nombre, lo reemplazará
+                                }
+
+                                FileOutputStream  out = new FileOutputStream(files);
+                                out.write(inputData);
+                                out.close();
+
+                            } catch (Exception ex) {
+                                Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                                Log.e("ErrorImagen1", "ex: " + ex);
+                            }
+                        }
+                        catch (Exception e) {
+                            Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                            Log.e("ErrorImagen2", "e: " + e);
+                        }
+                    }
+                }
+
+                FormatoTemp.put("FotosAnexasForm", auxNombresFotos.toString());
+
                 FormatosList.put("Form_UGS_Rocas_"+countFormatosUGSRocas, FormatoTemp);
 
                 countFormatosUGSRocas++;
@@ -5512,6 +5993,45 @@ public class SlideshowFragment extends Fragment {
                 }
                 FormatoTemp.put("RadioGrp", radioGrp);
 
+                List<String> auxNombresFotos = new ArrayList<String>();
+                for (int j = 0; j < ListaUriFotosAnexas.get(i).size(); j++) {
+                    for (int k = 0; k < ListaUriFotosAnexas.get(i).get(j).size(); k++) {
+                        try {
+                            auxNombresFotos.add(ListaNombresFotosFormatos.get(i).get(j).get(k));
+
+                            InputStream iStream = mcont.getContentResolver().openInputStream(ListaUriFotosAnexas.get(i).get(j).get(k));
+                            byte[] inputData = getBytes(iStream);
+
+                            File rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                            if (!rutaArchivo.exists()) { //sino existe, se crea
+                                rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                                rutaArchivo.mkdirs();//creamos
+                            }
+
+                            try {
+                                File files = new File(rutaArchivo, ListaNombresFotosFormatos.get(i).get(j).get(k));
+                                if (files.exists()) {
+                                    files.delete();//si este archivo existe, con ese nombre, lo reemplazará
+                                }
+
+                                FileOutputStream  out = new FileOutputStream(files);
+                                out.write(inputData);
+                                out.close();
+
+                            } catch (Exception ex) {
+                                Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                                Log.e("ErrorImagen1", "ex: " + ex);
+                            }
+                        }
+                        catch (Exception e) {
+                            Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                            Log.e("ErrorImagen2", "e: " + e);
+                        }
+                    }
+                }
+
+                FormatoTemp.put("FotosAnexasForm", auxNombresFotos.toString());
+
                 FormatosList.put("Form_UGS_Suelos_"+countFormatosUGSSuelos, FormatoTemp);
 
                 countFormatosUGSSuelos++;
@@ -5541,6 +6061,45 @@ public class SlideshowFragment extends Fragment {
                     checkBox.put(ListaCheckBox.get(i).get(k).getTag().toString().split("_")[0], ListaCheckBox.get(i).get(k).isChecked());
                 }
                 FormatoTemp.put("CheckBox", checkBox);
+
+                List<String> auxNombresFotos = new ArrayList<String>();
+                for (int j = 0; j < ListaUriFotosAnexas.get(i).size(); j++) {
+                    for (int k = 0; k < ListaUriFotosAnexas.get(i).get(j).size(); k++) {
+                        try {
+                            auxNombresFotos.add(ListaNombresFotosFormatos.get(i).get(j).get(k));
+
+                            InputStream iStream = mcont.getContentResolver().openInputStream(ListaUriFotosAnexas.get(i).get(j).get(k));
+                            byte[] inputData = getBytes(iStream);
+
+                            File rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                            if (!rutaArchivo.exists()) { //sino existe, se crea
+                                rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                                rutaArchivo.mkdirs();//creamos
+                            }
+
+                            try {
+                                File files = new File(rutaArchivo, ListaNombresFotosFormatos.get(i).get(j).get(k));
+                                if (files.exists()) {
+                                    files.delete();//si este archivo existe, con ese nombre, lo reemplazará
+                                }
+
+                                FileOutputStream  out = new FileOutputStream(files);
+                                out.write(inputData);
+                                out.close();
+
+                            } catch (Exception ex) {
+                                Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                                Log.e("ErrorImagen1", "ex: " + ex);
+                            }
+                        }
+                        catch (Exception e) {
+                            Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                            Log.e("ErrorImagen2", "e: " + e);
+                        }
+                    }
+                }
+
+                FormatoTemp.put("FotosAnexasForm", auxNombresFotos.toString());
 
 
                 FormatosList.put("Form_SGMF_"+countFormatosSGMF, FormatoTemp);
@@ -5614,6 +6173,45 @@ public class SlideshowFragment extends Fragment {
                     checkBox.put(ListaCheckBox.get(i).get(k).getTag().toString(), ListaCheckBox.get(i).get(k).isChecked());
                 }
                 FormatoTemp.put("CheckBox", checkBox);
+
+                List<String> auxNombresFotos = new ArrayList<String>();
+                for (int j = 0; j < ListaUriFotosAnexas.get(i).size(); j++) {
+                    for (int k = 0; k < ListaUriFotosAnexas.get(i).get(j).size(); k++) {
+                        try {
+                            auxNombresFotos.add(ListaNombresFotosFormatos.get(i).get(j).get(k));
+
+                            InputStream iStream = mcont.getContentResolver().openInputStream(ListaUriFotosAnexas.get(i).get(j).get(k));
+                            byte[] inputData = getBytes(iStream);
+
+                            File rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                            if (!rutaArchivo.exists()) { //sino existe, se crea
+                                rutaArchivo = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Estaciones/");
+                                rutaArchivo.mkdirs();//creamos
+                            }
+
+                            try {
+                                File files = new File(rutaArchivo, ListaNombresFotosFormatos.get(i).get(j).get(k));
+                                if (files.exists()) {
+                                    files.delete();//si este archivo existe, con ese nombre, lo reemplazará
+                                }
+
+                                FileOutputStream  out = new FileOutputStream(files);
+                                out.write(inputData);
+                                out.close();
+
+                            } catch (Exception ex) {
+                                Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                                Log.e("ErrorImagen1", "ex: " + ex);
+                            }
+                        }
+                        catch (Exception e) {
+                            Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
+                            Log.e("ErrorImagen2", "e: " + e);
+                        }
+                    }
+                }
+
+                FormatoTemp.put("FotosAnexasForm", auxNombresFotos.toString());
 
 
                 FormatosList.put("Form_INVENTARIO_"+countFormatosINV, FormatoTemp);
@@ -5774,6 +6372,7 @@ public class SlideshowFragment extends Fragment {
 
         listaElementosUGSFotosAnexas.add(new ElementoFormato( "Nombre de la Foto",  "edittext",  "NombreFotosAnexas", 0));
         listaElementosUGSFotosAnexas.add(new ElementoFormato( "Descripción de la Foto",  "edittext",  "DescriFotosAnexas", 0));
+        listaElementosUGSFotosAnexas.add(new ElementoFormato( "Subir Foto",  "button",  "SubirFotosAnexas", 0));
 
 
         //----------> Formato UGSS
@@ -5988,6 +6587,8 @@ public class SlideshowFragment extends Fragment {
         listaElementosINVFotosAnexas.add(new ElementoFormato( "Nombre de la Foto",  "edittext",  "nombreFotosAnexasINV", 0));
         listaElementosINVFotosAnexas.add(new ElementoFormato( "Autor/Derechos",  "edittext",  "autorFotosAnexas", 0));
         listaElementosINVFotosAnexas.add(new ElementoFormato( "Observaciones",  "edittext",  "obsFotosAnexas", 0));
+        listaElementosINVFotosAnexas.add(new ElementoFormato( "Agregar Foto",  "button",  "SubirFotosAnexas", 0));
+
 
     }
 

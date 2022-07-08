@@ -208,7 +208,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Fotografías"
+                android:text="Fotografías Estación"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="20sp"
@@ -245,6 +245,57 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Agregar Fotografía"
+                android:layout_marginEnd="50dp"
+                android:layout_marginStart="50dp"
+                app:icon="@drawable/plus_circle"
+                app:iconTint="#38363A"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fotografías Libreta"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_FotosLib"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Nombre de las Fotografías"
+                android:inputType="text"
+                android:textColor="#000000" />
+
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/liFotosLib"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <Button
+                android:id="@+id/btn_fotoLib"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Agregar Fotografía"
+                android:layout_marginEnd="50dp"
+                android:layout_marginStart="50dp"
                 app:icon="@drawable/plus_circle"
                 app:iconTint="#38363A"/>
 
@@ -303,6 +354,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Agregar Formulario"
+                android:layout_marginEnd="50dp"
+                android:layout_marginStart="50dp"
                 app:icon="@drawable/plus_circle"
                 app:iconTint="#38363A" />
 
@@ -323,6 +376,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Guardar Estación Localmente"
+                android:layout_marginEnd="50dp"
+                android:layout_marginStart="50dp"
                 app:icon="@android:drawable/ic_menu_save"
                 app:iconTint="#000000" />
 
@@ -335,6 +390,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Subir Estaciones a la Base de Datos"
+                android:layout_marginEnd="50dp"
+                android:layout_marginStart="50dp"
                 app:icon="@android:drawable/ic_menu_upload"
                 app:iconTint="#000000" />
 
