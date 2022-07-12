@@ -13,6 +13,10 @@
             android:icon="@drawable/ic_save"
             android:title="@string/menu_guardadas" />
         <item
+            android:id="@+id/planillasCoberturas"
+            android:icon="@drawable/ic_registration"
+            android:title="@string/menu_planillas" />
+        <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_database"
             android:title="@string/menu_gallery" />

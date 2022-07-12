@@ -15,12 +15,14 @@
     <string name="menu_slideshow">Registro de Estaciones</string>
     <string name="menu_login">Perfil</string>
     <string name="menu_guardadas">Estaciones Guardadas</string>
+    <string name="menu_planillas">Coberturas y Uso del Suelo</string>
 
 
     <string name="title_ipm">Capa de IPM</string>
 
     <string name="title_form_ipm">Registro de Estaciones de Campo</string>
     <string name="title_form_guardadas">Historial de Estaciones Guardadas</string>
+    <string name="title_form_planillas">Planillas de Verificación de Coberturas y Uso del Suelo</string>
 
 
     <string-array name="Formularios">
@@ -774,7 +776,6 @@
     </string-array>
 
 
-
     <string-array name="Importancia">
         <item>Alta</item>
         <item>Media</item>
@@ -1199,11 +1200,6 @@
         <item>Sismo</item>
         <item>Inundacion</item>
     </string-array>
-
-
-
-
-
 
 
     <!-- TODO: Remove or change this placeholder text -->
