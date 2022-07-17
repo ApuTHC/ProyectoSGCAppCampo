@@ -4,9 +4,11 @@ import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,6 +23,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +46,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -57,6 +61,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.unal.proyectosgcappcampo.MainActivity;
 import com.unal.proyectosgcappcampo.R;
 import com.unal.proyectosgcappcampo.databinding.FragmentSlideshowBinding;
 import com.google.firebase.database.DatabaseReference;
@@ -107,7 +112,9 @@ public class SlideshowFragment extends Fragment {
     Button btnFormSync;
     Button btnAddForm;
     Button btnFoto;
+    Button btnFotoBorrar;
     Button btnFotoLib;
+    Button btnFotoLibBorrar;
     Button btnLocalization;
     LinearLayout liFotosGeneral;
     LinearLayout liFotosLib;
@@ -292,7 +299,9 @@ public class SlideshowFragment extends Fragment {
         GenerarListas();
 
         btnFoto = binding.btnFoto;
+        btnFotoBorrar = binding.btnFotoBorrar;
         btnFotoLib = binding.btnFotoLib;
+        btnFotoLibBorrar = binding.btnFotolibBorrar;
         btnLocalization = binding.btnLocalization;
         liFotosGeneral = binding.liFotos;
         liFotosLib = binding.liFotosLib;
@@ -460,11 +469,24 @@ public class SlideshowFragment extends Fragment {
                 CargarImagen("General");
             }
         });
+        btnFotoBorrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CargarImagen("GeneralBorrar");
+            }
+        });
 
         btnFotoLib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CargarImagen("Lib");
+            }
+        });
+
+        btnFotoLibBorrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CargarImagen("LibBorrar");
             }
         });
 
@@ -667,6 +689,18 @@ public class SlideshowFragment extends Fragment {
         if (Tipo.equals("Lib")){
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             intentLaucherLib.launch(Intent.createChooser(intent, "Seleccione la aplicación"));
+        }
+        if (Tipo.equals("GeneralBorrar")){
+            listNombresFotosGeneral = new ArrayList<String>();
+            listFotosGeneral = new ArrayList<Uri>();
+            liFotosGeneral.removeAllViews();
+            etFotos.setText("");
+        }
+        if (Tipo.equals("LibBorrar")){
+            listNombresFotosLib = new ArrayList<String>();
+            listFotosLib = new ArrayList<Uri>();
+            liFotosLib.removeAllViews();
+            etFotosLib.setText("");
         }
 
     }
@@ -3076,11 +3110,19 @@ public class SlideshowFragment extends Fragment {
                     etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     etGenerico.setHint(hintElemento);
                     etGenerico.setTag(tagElemento);
-                    try {
-                        etGenerico.setText(properties.getString(tagElemento));
-                        Log.d("pruebis", "EditTextOPT: "+properties.getString(tagElemento));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+
+                    if (tagElemento.equals("ID_PARTE") && !auxMM){
+                        tvGenerico.setText("ID asigando al MM");
+                        etGenerico.setHint("ID asignado al MM ");
+                    }
+
+                    if (auxMM) {
+                        try {
+                            etGenerico.setText(properties.getString(tagElemento));
+                            Log.d("pruebis", "EditTextOPT: " + properties.getString(tagElemento));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                     ListaEditText.get(idLinear).add(etGenerico);
                     liForm.addView(etGenerico);
@@ -3108,11 +3150,13 @@ public class SlideshowFragment extends Fragment {
                     String[] opciones = res.getStringArray(idStringArrayElemento);
                     int indexSpinner = 120;
                     String opc = "1";
-                    try {
-                        opc = properties.getString(tagElemento).toString();
-                        Log.d("pruebis", "SpinnerOPT: "+opc);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (auxMM) {
+                        try {
+                            opc = properties.getString(tagElemento).toString();
+                            Log.d("pruebis", "SpinnerOPT: " + opc);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     if (opc.equals("Rotacional")){
@@ -3234,11 +3278,13 @@ public class SlideshowFragment extends Fragment {
                     String[] opciones = res2.getStringArray(idStringArrayElemento);
                     int indexSpinner2 = 0;
                     String opc = "0";
-                    try {
-                        opc = properties.getString(tagElemento+2).toString();
-                        Log.d("pruebis", "SpinnerOPT: "+opc);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (auxMM) {
+                        try {
+                            opc = properties.getString(tagElemento + 2).toString();
+                            Log.d("pruebis", "SpinnerOPT: " + opc);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (opc.split("")[0].equals("C")) {
                         opc = "Caída";
@@ -3275,14 +3321,15 @@ public class SlideshowFragment extends Fragment {
 
                     int indexSpinner1=0;
                     String opc1 = "1";
-                    try {
-                        opc1 = properties.getString(tagElemento+1);
-                        indexSpinner1 = Integer.parseInt(opc1);
-                        Log.d("pruebis", "RadioBtnOPT: "+opc1);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (auxMM) {
+                        try {
+                            opc1 = properties.getString(tagElemento + 1);
+                            indexSpinner1 = Integer.parseInt(opc1);
+                            Log.d("pruebis", "RadioBtnOPT: " + opc1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-
 
                     RadioButton primerRadio1 = (RadioButton) radioGroup1.getChildAt(indexSpinner1);
                     primerRadio1.setChecked(true);
@@ -3567,11 +3614,19 @@ public class SlideshowFragment extends Fragment {
                     etGenerico.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     etGenerico.setHint(hintElemento);
                     etGenerico.setTag(tagElemento);
-                    try {
-                        etGenerico.setText(properties.getString(tagElemento));
-                        Log.d("pruebis", "EditTextOPT: "+properties.getString(tagElemento));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+
+                    if (tagElemento.equals("ID_PARTE") && !auxMM){
+                        tvGenerico.setText("ID asigando al MM");
+                        etGenerico.setHint("ID asignado al MM ");
+                    }
+
+                    if (auxMM) {
+                        try {
+                            etGenerico.setText(properties.getString(tagElemento));
+                            Log.d("pruebis", "EditTextOPT: " + properties.getString(tagElemento));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                     ListaEditText.get(idLinear).add(etGenerico);
                     liForm.addView(etGenerico);
@@ -3599,11 +3654,13 @@ public class SlideshowFragment extends Fragment {
                     String[] opciones = res.getStringArray(idStringArrayElemento);
                     int indexSpinner = 120;
                     String opc = "1";
-                    try {
-                        opc = properties.getString(tagElemento).toString();
-                        Log.d("pruebis", "SpinnerOPT: "+opc);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (auxMM) {
+                        try {
+                            opc = properties.getString(tagElemento).toString();
+                            Log.d("pruebis", "SpinnerOPT: " + opc);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     if (opc.equals("Rotacional")){
@@ -3725,11 +3782,13 @@ public class SlideshowFragment extends Fragment {
                     String[] opciones = res2.getStringArray(idStringArrayElemento);
                     int indexSpinner2 = 0;
                     String opc = "0";
-                    try {
-                        opc = properties.getString(tagElemento+2).toString();
-                        Log.d("pruebis", "SpinnerOPT: "+opc);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (auxMM) {
+                        try {
+                            opc = properties.getString(tagElemento + 2).toString();
+                            Log.d("pruebis", "SpinnerOPT: " + opc);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (opc.split("")[0].equals("C")) {
                         opc = "Caída";
@@ -3766,12 +3825,14 @@ public class SlideshowFragment extends Fragment {
 
                     int indexSpinner1=0;
                     String opc1 = "1";
-                    try {
-                        opc1 = properties.getString(tagElemento+1);
-                        indexSpinner1 = Integer.parseInt(opc1);
-                        Log.d("pruebis", "RadioBtnOPT: "+opc1);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (auxMM) {
+                        try {
+                            opc1 = properties.getString(tagElemento + 1);
+                            indexSpinner1 = Integer.parseInt(opc1);
+                            Log.d("pruebis", "RadioBtnOPT: " + opc1);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
 
@@ -5833,6 +5894,7 @@ public class SlideshowFragment extends Fragment {
                     Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
                     Log.e("ErrorImagen1", "ex: " + ex);
                 }
+
             }
             catch (Exception e) {
                 Toast.makeText(mcont, "Ocurrió un error al guardar la imagen\n", Toast.LENGTH_LONG).show();
@@ -6254,7 +6316,8 @@ public class SlideshowFragment extends Fragment {
             file.flush();
             file.close();
             Toast.makeText(mcont, "Formulario Guardado\n", Toast.LENGTH_LONG).show();
-        }catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Toast.makeText(mcont, "Ocurrió un error y no se pudo guardar el formulario\n", Toast.LENGTH_LONG).show();
             Log.e("Error12", "ex: " + ex);
         }
@@ -6299,7 +6362,8 @@ public class SlideshowFragment extends Fragment {
             } catch (Exception ex) {
                 Log.e("Error12", "ex: " + ex);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Log.e("Error13", "e: " + e);
         }
     }
@@ -6664,5 +6728,7 @@ public class SlideshowFragment extends Fragment {
             }
         }
     }
+
+
 
 }

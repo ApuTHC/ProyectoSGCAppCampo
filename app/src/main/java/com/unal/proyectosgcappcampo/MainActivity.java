@@ -1,8 +1,11 @@
 package com.unal.proyectosgcappcampo;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -11,8 +14,12 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -113,4 +120,86 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if(keyCode == event.KEYCODE_BACK){
+//            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//            builder.setTitle("¡ Un Momento !");
+//            builder.setMessage("¿Desea salir de la Aplicación?")
+//                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            Intent intent = new Intent(Intent.ACTION_MAIN);
+//                            intent.addCategory(Intent.CATEGORY_HOME);
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            startActivity(intent);
+//                            dialog.dismiss();
+//                            MainActivity.this.finish();
+//                        }
+//                    })
+//                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss();
+//                        }
+//                    });
+//            builder.show();
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+
+        Log.d("TAGis", "onBackPressed: "+navController.getCurrentDestination().getDisplayName());
+
+        if (navController.getCurrentDestination().getDisplayName().toString().equals("com.unal.proyectosgcappcampo:id/nav_slideshow")){
+            doExit();
+        }else{
+            super.onBackPressed();
+        }
+
+
+//        int count = getFragmentManager().getBackStackEntryCount();
+//
+//            Log.d("TAGis", "onBackPressed: "+count);
+//        if (count == 0) {
+//            super.onBackPressed();
+//            getFragmentManager().popBackStack();
+//        } else {
+//            getFragmentManager().popBackStack();//No se porqué puse lo mismo O.o
+//        }
+
+    }
+
+    public void doExit() {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("¡Un Momento!");
+            builder.setMessage("¿Desea salir de la Aplicación?")
+                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Intent.ACTION_MAIN);
+                            intent.addCategory(Intent.CATEGORY_HOME);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            dialog.dismiss();
+                            MainActivity.this.finish();
+                        }
+                    })
+                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            builder.show();
+
+
+    }
 }

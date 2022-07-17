@@ -23,8 +23,11 @@
         <activity
             android:name=".ui.splash.InitActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:exported="true">
-            <intent-filter>
+            android:exported="true"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+
+
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -33,12 +36,15 @@
         <activity
             android:name=".ui.profile.ProfileActivity"
             android:exported="false"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="Perfil de Usuario" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:label="@string/app_name"
-            android:theme="@style/Theme.ProyectoSGCAppCampo.NoActionBar">
+            android:theme="@style/Theme.ProyectoSGCAppCampo.NoActionBar"
+            android:configChanges="keyboardHidden|orientation|screenSize">
+
 
         </activity>
     </application>
