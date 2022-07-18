@@ -1649,7 +1649,7 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setHint("Espesor (m)");
-                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+aux+"espesor");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
@@ -1717,7 +1717,7 @@ public class SlideshowFragment extends Fragment {
                                             EditText etSecuenciaEstratiSueloREspesor = new EditText(mcont);
                                             etSecuenciaEstratiSueloREspesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                                             etSecuenciaEstratiSueloREspesor.setHint("Espesor (m)");
-                                            etSecuenciaEstratiSueloREspesor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                            etSecuenciaEstratiSueloREspesor.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                                             etSecuenciaEstratiSueloREspesor.setTag(tagElemento+ aux +"espesor");
                                             ListaEditText.get(idLinear).add(etSecuenciaEstratiSueloREspesor);
                                             liFormSecuenciaEstratiSueloR1.addView(etSecuenciaEstratiSueloREspesor);
@@ -1769,7 +1769,7 @@ public class SlideshowFragment extends Fragment {
                         EditText etLitologia = new EditText(mcont);
                         etLitologia.setLayoutParams(new ActionBar.LayoutParams(300, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etLitologia.setHint("Espesor (m)");
-                        etLitologia.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etLitologia.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         etLitologia.setTag(tagElemento+j+"espesor");
                         ListaEditText.get(idLinear).add(etLitologia);
                         liFormLitologias.addView(etLitologia);
@@ -1849,14 +1849,14 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt = new EditText(mcont);
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt.setTag(tag+2);
-                        etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
 
                         EditText etSecuenciaEstratiOpt1Espesor = new EditText(mcont);
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setTag(tag+1);
-                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
 
@@ -2195,7 +2195,7 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt = new EditText(mcont);
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(secuEstratiOrdenWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt.setHint("2");
-                        etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         etSecuenciaEstratiOpt.setTag(tagElemento+j+"_2");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
@@ -2204,7 +2204,7 @@ public class SlideshowFragment extends Fragment {
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setHint("1");
                         etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+j+"_1");
-                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
 
@@ -3925,7 +3925,7 @@ public class SlideshowFragment extends Fragment {
                         EditText etSecuenciaEstratiOpt = new EditText(mcont);
                         etSecuenciaEstratiOpt.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt.setHint("DB");
-                        etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etSecuenciaEstratiOpt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         etSecuenciaEstratiOpt.setTag(tagElemento+j+"dirbuz");
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt);
@@ -3934,7 +3934,7 @@ public class SlideshowFragment extends Fragment {
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(150, ViewGroup.LayoutParams.WRAP_CONTENT));
                         etSecuenciaEstratiOpt1Espesor.setHint("BZ");
                         etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+j+"buz");
-                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
 
@@ -4456,7 +4456,7 @@ public class SlideshowFragment extends Fragment {
                         etSecuenciaEstratiOpt1Espesor.setLayoutParams(new ActionBar.LayoutParams(secuEstratiEspesorWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
 //                        etSecuenciaEstratiOpt1Espesor.setHint();
                         etSecuenciaEstratiOpt1Espesor.setTag(tagElemento+j);
-                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        etSecuenciaEstratiOpt1Espesor.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         ListaEditText.get(idLinear).add(etSecuenciaEstratiOpt1Espesor);
                         liFormSecuenciaEstrati.addView(etSecuenciaEstratiOpt1Espesor);
 
@@ -5296,6 +5296,9 @@ public class SlideshowFragment extends Fragment {
                                         String COD_SIMMA = EditTextsAux.getString("COD_SIMMA");
                                         String VEREDA = EditTextsAux.getString("VEREDA");
                                         String SITIO = EditTextsAux.getString("SITIO");
+                                        String latitudMM = EditTextsAux.getString("latitudMM");
+                                        String longitudMM = EditTextsAux.getString("longitudMM");
+                                        String alturaMM = EditTextsAux.getString("alturaMM");
                                         String REF_GEOGRF = EditTextsAux.getString("REF_GEOGRF");
                                         String HERIDOS = EditTextsAux.getString("HERIDOS");
                                         String VIDAS = EditTextsAux.getString("VIDAS");
@@ -5309,7 +5312,7 @@ public class SlideshowFragment extends Fragment {
                                         String TIPO_MOV1 = RadioGrpAux.getString("TIPO_MOV1");
 
 
-                                        FormatCAT nuevoFormatoCAT = new FormatCAT(activo,IMPORTANC,FECHA_FUENTE,ConfiFechaMM,NOM_MUN,SUBTIPO_1,SUBTIPO_2,ID_PARTE,ENCUESTAD,FECHA_MOV,FECHA_REP,COD_SIMMA,VEREDA,SITIO,REF_GEOGRF,HERIDOS,VIDAS,DESAPARECIDOS,PERSONAS,FAMILIAS,sensoresremotos,FTE_INFSEC,notas,TIPO_MOV2,TIPO_MOV1);
+                                        FormatCAT nuevoFormatoCAT = new FormatCAT(activo,IMPORTANC,FECHA_FUENTE,ConfiFechaMM,NOM_MUN,SUBTIPO_1,SUBTIPO_2,ID_PARTE,ENCUESTAD,FECHA_MOV,FECHA_REP,COD_SIMMA,VEREDA,SITIO,REF_GEOGRF,HERIDOS,VIDAS,DESAPARECIDOS,PERSONAS,FAMILIAS,sensoresremotos,FTE_INFSEC,notas,TIPO_MOV2,TIPO_MOV1,latitudMM,longitudMM,alturaMM);
 
                                             databaseReference.child("EstacionesCampo/estacion_"+cont+"/Formularios/Form_CATALOGO/Form_CATALOGO_"+j).setValue(nuevoFormatoCAT);
 
@@ -6545,6 +6548,9 @@ public class SlideshowFragment extends Fragment {
         listaElementosCAT.add(new ElementoFormato("Municipio",  "spinnerMM",  "NOM_MUN", R.array.Municipios));
         listaElementosCAT.add(new ElementoFormato("Vereda",  "edittextMM",  "VEREDA", 0));
         listaElementosCAT.add(new ElementoFormato("SITIO","edittext","SITIO",0));
+        listaElementosCAT.add(new ElementoFormato("Latitud","edittext","latitudMM",0));
+        listaElementosCAT.add(new ElementoFormato("Longitud","edittext","longitudMM",0));
+        listaElementosCAT.add(new ElementoFormato("Altura","edittext","alturaMM",0));
         listaElementosCAT.add(new ElementoFormato("REFERENCIA GEOGRÁFICA","edittextMM","REF_GEOGRF",0));
         listaElementosCAT.add(new ElementoFormato("CLASIFICACIÓN DEL MOVIMIENTO",  "titulo",  "", 0));
         listaElementosCAT.add(new ElementoFormato("TIPO MOVIMIENTO",  "radiobtnMM",  "TIPO_MOV", R.array.TipoMovimiento));

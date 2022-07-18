@@ -27,8 +27,11 @@ public class FormatCAT {
    public String notas;
    public String TIPO_MOV2;
    public String TIPO_MOV1;
+   public String latitudMM;
+   public String longitudMM;
+   public String alturaMM;
 
-    public FormatCAT(boolean activo, String IMPORTANC, String FECHA_FUENTE, String ConfiFechaMM, String NOM_MUN, String SUBTIPO_1, String SUBTIPO_2, String ID_PARTE, String ENCUESTAD, String FECHA_MOV, String FECHA_REP, String COD_SIMMA, String VEREDA, String SITIO, String REF_GEOGRF, String HERIDOS, String VIDAS, String DESAPARECIDOS, String PERSONAS, String FAMILIAS, String sensoresremotos, String FTE_INFSEC, String notas, String TIPO_MOV2, String TIPO_MOV1) {
+    public FormatCAT(boolean activo, String IMPORTANC, String FECHA_FUENTE, String ConfiFechaMM, String NOM_MUN, String SUBTIPO_1, String SUBTIPO_2, String ID_PARTE, String ENCUESTAD, String FECHA_MOV, String FECHA_REP, String COD_SIMMA, String VEREDA, String SITIO, String REF_GEOGRF, String HERIDOS, String VIDAS, String DESAPARECIDOS, String PERSONAS, String FAMILIAS, String sensoresremotos, String FTE_INFSEC, String notas, String TIPO_MOV2, String TIPO_MOV1, String latitudMM, String longitudMM, String alturaMM) {
         this.activo = activo;
         this.IMPORTANC = IMPORTANC;
         this.FECHA_FUENTE = FECHA_FUENTE;
@@ -54,5 +57,8 @@ public class FormatCAT {
         this.notas = notas;
         this.TIPO_MOV2 = TIPO_MOV2;
         this.TIPO_MOV1 = TIPO_MOV1;
+        this.latitudMM = latitudMM;
+        this.longitudMM = longitudMM;
+        this.alturaMM = alturaMM;
     }
 }

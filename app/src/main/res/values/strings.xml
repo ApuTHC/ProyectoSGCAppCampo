@@ -856,6 +856,7 @@
     </string-array>
 
     <string-array name="FuenteFechaEvento">
+        <item>Incierta al Momento</item>
         <item>Sensores remotos</item>
         <item>Reportada por terceros</item>
         <item>Consultada en pagina web</item>
