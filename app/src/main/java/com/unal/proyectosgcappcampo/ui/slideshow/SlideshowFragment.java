@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -116,10 +117,13 @@ public class SlideshowFragment extends Fragment {
     Button btnFotoLib;
     Button btnFotoLibBorrar;
     Button btnLocalization;
+    Button btnNewEstacion;
     LinearLayout liFotosGeneral;
     LinearLayout liFotosLib;
     EditText etEstacion;
     EditText etTipoEstacion;
+    Spinner spTipoEstacion;
+    int iCurrentSelection;
     EditText etEste;
     EditText etNorte;
     EditText etAltitud;
@@ -303,6 +307,7 @@ public class SlideshowFragment extends Fragment {
         btnFotoLib = binding.btnFotoLib;
         btnFotoLibBorrar = binding.btnFotolibBorrar;
         btnLocalization = binding.btnLocalization;
+        btnNewEstacion = binding.btnNewEstacion;
         liFotosGeneral = binding.liFotos;
         liFotosLib = binding.liFotosLib;
         btnFormLoad = binding.btnFormLoad;
@@ -310,6 +315,7 @@ public class SlideshowFragment extends Fragment {
         btnAddForm = binding.AddFormu;
         etEstacion = binding.etEstacion;
         etTipoEstacion = binding.etTipoEstacion;
+        spTipoEstacion = binding.spTipoEstacion;
         etNorte = binding.etNorte;
         etEste = binding.etEste;
         etAltitud = binding.etAltitud;
@@ -318,11 +324,42 @@ public class SlideshowFragment extends Fragment {
         etObservaciones = binding.etObservaciones;
         tvEstadoGPS = binding.tvEstadoGPS;
 
+        ArrayAdapter<CharSequence> adaptercito = ArrayAdapter.createFromResource(mcont, R.array.TipoEstaciones, android.R.layout.simple_spinner_item);
+        adaptercito.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spTipoEstacion.setAdapter(adaptercito);
+
+        iCurrentSelection = spTipoEstacion.getSelectedItemPosition();
+
+        spTipoEstacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (iCurrentSelection != position){
+                    String auxTipoEstacion = "";
+                    if (etTipoEstacion.getText().toString().equals("")){
+                        auxTipoEstacion = spTipoEstacion.getSelectedItem().toString();
+                    }
+                    else{
+                        auxTipoEstacion = etTipoEstacion.getText().toString() + ", "+ spTipoEstacion.getSelectedItem().toString();
+                    }
+                    etTipoEstacion.setText(auxTipoEstacion);
+                    iCurrentSelection = position;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
         ActivityResult();
         listFotosGeneral = new ArrayList<Uri>();
         listFotosLib = new ArrayList<Uri>();
         ListaUriFotosAnexas = new ArrayList<List<List<Uri>>>();
         ListaNombresFotosFormatos = new ArrayList<List<List<String>>>();
+
 
 
         liFormularios = binding.liFormularios;
@@ -537,6 +574,25 @@ public class SlideshowFragment extends Fragment {
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        btnNewEstacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listFormularios = new ArrayList<String>();
+                listLiForm = new ArrayList<LinearLayout>();
+                liFotosGeneral.removeAllViews();
+                liFotosLib.removeAllViews();
+                etEstacion.setText("");
+                etFotos.setText("");
+                etFotosLib.setText("");
+                etObservaciones.setText("");
+                listFotosGeneral = new ArrayList<Uri>();
+                listFotosLib = new ArrayList<Uri>();
+                ListaUriFotosAnexas = new ArrayList<List<List<Uri>>>();
+                ListaNombresFotosFormatos = new ArrayList<List<List<String>>>();
+                liFormularios.removeAllViews();
             }
         });
 

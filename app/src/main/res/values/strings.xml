@@ -1284,6 +1284,16 @@
         <item>Inundacion</item>
     </string-array>
 
+    <string-array name="TipoEstaciones">
+        <item>Seleccione un Tipo</item>
+        <item>Caracterización UGS</item>
+        <item>Punto de control UGS</item>
+        <item>Caracterización SGMF</item>
+        <item>Punto de control SGMF</item>
+        <item>Caracterización de CMM</item>
+        <item>Caracterización de IMM</item>
+    </string-array>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

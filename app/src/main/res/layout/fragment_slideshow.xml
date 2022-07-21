@@ -36,15 +36,29 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="40dp" />
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Estación"
+                android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre de la Estación"
+                android:layout_weight="1"
                 android:textAlignment="center"
                 android:textColor="#000000"
-                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
+            <Button
+                android:id="@+id/btn_newEstacion"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Nueva Estación"
+                android:layout_weight="3"
+                app:iconTint="#38363A"/>
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/et_Estacion"
@@ -68,18 +82,29 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/et_TipoEstacion"
+            <Spinner
+                android:id="@+id/sp_TipoEstacion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Tipo de Estación"
+                android:layout_marginTop="10dp"
                 android:inputType="text"
                 android:textColor="#000000" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="20dp" />
+            <EditText
+                android:id="@+id/et_TipoEstacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Seleccione entre los tipos de Estación"
+                android:inputType="text"
+                android:textColor="#000000" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
 
 
             <TextView
